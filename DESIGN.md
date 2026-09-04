@@ -279,15 +279,15 @@ Les composants sont précis et sobres. Leur état courant reste lumineux; la cou
 
 ### Indicator Cards
 
-Les variantes mini et étendue partagent le même en-tête sémantique, l'identifiant, les badges de liste et de typologie, puis un pied regroupant maturité et mode VTT principal proposé. La variante étendue ajoute les métadonnées de mesure dans un corps blanc. La carte entière est le contrôle d'ouverture du panneau latéral.
+Les variantes mini et étendue partagent le même en-tête sémantique, l'identifiant, les badges de liste et de typologie, puis un pied regroupant maturité et mode d’action VTT principal proposé. La variante étendue ajoute les métadonnées de mesure dans un corps blanc. La carte entière est le contrôle d'ouverture du panneau latéral.
 
 ### Side Panel
 
-`components.side-panel` se superpose à un voile ardoise translucide et conserve un fond clair. Sa largeur est bornée par le viewport; son en-tête reprend la couleur du pôle, son corps défile et ses blocs de métadonnées restent sur fond blanc. Le rattachement VTT y distingue le mode principal, sa question évaluative et le mode secondaire proposé ; toute valeur hors des six modes est signalée comme à confirmer.
+`components.side-panel` se superpose à un voile ardoise translucide et conserve un fond clair. Sa largeur est bornée par le viewport; son en-tête reprend la couleur du pôle, son corps défile et ses blocs de métadonnées restent sur fond blanc. Le rattachement VTT y distingue le mode d’action principal, sa question évaluative et le mode d’action secondaire proposé ; toute valeur hors des six modes d’action est signalée comme à confirmer.
 
-### Lecture des modes VTT
+### Lecture des modes d’action VTT
 
-La section des modes VTT suit une hiérarchie stable : les boutons permettent d’abord de choisir le mode, puis son nom, sa définition et son axe forment une introduction sobre placée hors de la carte. La carte est réservée aux trois leviers territoriaux synthétisés à partir des planches VTT et aux indicateurs associés. L’accès au catalogue constitue une action distincte placée sous la carte. Une ligne introductive relie Environnement, Mobilité et Urbanisation pour rendre visible la lecture transversale. Les indicateurs associés apparaissent dans une liste compacte qui affiche leur pôle, la nature principale ou secondaire du rattachement et leur niveau de maturité provisoire avec chiffre et libellé, sans décompte intermédiaire. Les boutons de mode ne portent ni numéro de nomenclature ni décompte.
+La section des modes d’action VTT suit une hiérarchie stable : les boutons permettent d’abord de choisir un mode d’action, puis son nom, sa définition et son axe forment une introduction sobre placée hors de la carte. La carte est réservée aux trois leviers territoriaux synthétisés à partir des planches VTT et aux indicateurs associés. L’accès au catalogue constitue une action distincte placée sous la carte. Une ligne introductive relie Environnement, Mobilité et Urbanisation pour rendre visible la lecture transversale. Les indicateurs associés apparaissent dans une liste compacte qui affiche leur pôle, la nature principale ou secondaire du rattachement et leur niveau de maturité provisoire avec chiffre et libellé, sans décompte intermédiaire. Les boutons de mode d’action ne portent ni numéro de nomenclature ni décompte.
 
 ### Matrice de mise en œuvre
 
@@ -303,7 +303,7 @@ Les quatre points matérialisent une échelle ordonnée. Les points atteints pre
 
 - **Do** utiliser les variables sémantiques existantes pour toute couleur, plutôt que des valeurs dispersées dans un composant.
 - **Do** réserver le bleu lac aux actions, états actifs et repères fonctionnels.
-- **Do** associer les couleurs de pôle, de mode VTT et de maturité à un libellé, un identifiant ou une forme.
+- **Do** associer les couleurs de pôle, de mode d’action VTT et de maturité à un libellé, un identifiant ou une forme.
 - **Do** présenter les six modes d'action par leur nom : Préservation, Reconnexion, Revitalisation, Régénération, Mise en réseau et Circularité.
 - **Do** conserver des surfaces claires, des bordures fines et des ombres ambiantes.
 - **Do** préserver les cibles tactiles de 44 px, le focus visible et la réduction des mouvements.

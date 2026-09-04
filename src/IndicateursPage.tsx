@@ -414,23 +414,23 @@ function Sidebar({ ind, onClose }: { ind: Indicateur; onClose: () => void }) {
             </div>
           </SidebarSection>
 
-          {/* Modes VTT proposés */}
+          {/* Modes d’action VTT proposés */}
           {vtt && (
             <SidebarSection label="Rattachement VTT proposé">
               <div className="flex flex-col gap-2">
                 <div className="rounded-xl px-4 py-3" style={{ background: vtt.bg, border: "1px solid var(--color-border-subtle)" }}>
                   <div>
-                    <span className="block text-[11px] uppercase tracking-wide" style={{ color: vtt.accent, opacity: 0.65 }}>Mode principal</span>
+                    <span className="block text-[11px] uppercase tracking-wide" style={{ color: vtt.accent, opacity: 0.65 }}>Mode d’action principal</span>
                     <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 17, color: vtt.accent }}>{vtt.label}</span>
                   </div>
                   <p className="mt-2 text-xs leading-relaxed" style={{ color: vtt.accent }}>{vtt.question}</p>
                 </div>
                 <div className="rounded-xl px-4 py-3" style={{ background: vttSecondaire?.bg ?? "var(--color-border-faint)", border: "1px solid var(--color-border-subtle)" }}>
-                  <span className="block text-[11px] uppercase tracking-wide" style={{ color: vttSecondaire?.accent ?? "var(--color-text-muted)" }}>Mode secondaire</span>
+                  <span className="block text-[11px] uppercase tracking-wide" style={{ color: vttSecondaire?.accent ?? "var(--color-text-muted)" }}>Mode d’action secondaire</span>
                   <span className="text-sm font-semibold" style={{ color: vttSecondaire?.accent ?? "var(--color-primary-strong)" }}>{ind.lienVTTSecondaire}</span>
                   {!vttSecondaire && (
                     <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-                      À confirmer : ce libellé ne correspond pas à l’un des six modes VTT.
+                      À confirmer : ce libellé ne correspond pas à l’un des six modes d’action VTT.
                     </p>
                   )}
                 </div>
@@ -623,7 +623,7 @@ function MatriceView({
         <thead>
           <tr>
             <th className="text-left py-3 pr-4 text-xs font-semibold" style={{ color: "var(--color-text)", opacity: 0.5, width: 180 }}>
-              Mode VTT principal proposé
+              Mode d’action VTT principal proposé
             </th>
             {MATURITES.map((m) => (
               <th key={m} className="py-3 px-2 text-center" style={{ width: "20%" }}>
@@ -857,7 +857,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
             Fiches indicateurs
           </h1>
           <p className="mt-2 text-sm" style={{ color: "var(--color-text)", maxWidth: 520 }}>
-            Portefeuille de travail L1 + L2 : {indicateurs.length} indicateurs explorables par grille, mode VTT principal proposé ou matrice VTT × maturité.
+            Portefeuille de travail L1 + L2 : {indicateurs.length} indicateurs explorables par grille, mode d’action VTT principal proposé ou matrice VTT × maturité.
           </p>
           <p className="mt-3 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
             Les rattachements VTT sont un préclassement à synchroniser avec le tableur consolidé. Les 21 indicateurs L3 et les 47 indicateurs L4 restent dans la feuille de route et la traçabilité de l’étude.

@@ -682,7 +682,7 @@ const characters: Character[] = [
   {
     name: "Référent POPGG",
     role: "Documente",
-    desc: "Relie l’indicateur à un objectif politique, à un niveau L1–L4 et aux modes VTT proposés.",
+    desc: "Relie l’indicateur à un objectif politique, à un niveau L1–L4 et aux modes d’action VTT proposés.",
     avatar: { icon: "reference", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-violet)", accent: "var(--color-violet-strong)", hairStyle: "bun", glasses: true },
     bg: "var(--color-violet-soft)",
     badge: "Référence",
@@ -769,7 +769,7 @@ const valueChain = [
   {
     title: "Référentiel",
     action: "Documenter",
-    desc: "Relier l’indicateur à un objectif, à un niveau L1–L4 et aux modes VTT proposés.",
+    desc: "Relier l’indicateur à un objectif, à un niveau L1–L4 et aux modes d’action VTT proposés.",
     owner: "Référent POPGG",
     color: "var(--color-violet-soft)",
     accent: "var(--color-violet-strong)",
@@ -1011,7 +1011,7 @@ export default function App() {
         </div>
         <div className="flex gap-5 text-sm font-medium" style={{ color: "var(--color-text)" }}>
           <a href="#acteurs" className="hover:text-[var(--color-primary)] transition-colors">Acteurs</a>
-          <a href="#vtt" className="hover:text-[var(--color-primary)] transition-colors">Modes VTT</a>
+          <a href="#vtt" className="hover:text-[var(--color-primary)] transition-colors">Modes d’action</a>
           <button
             onClick={() => setPage("indicateurs")}
             className="flex items-center gap-1 hover:text-[var(--color-primary)] transition-colors font-semibold"
@@ -1231,7 +1231,7 @@ export default function App() {
               </p>
               <ul className="mt-3 pl-5 list-disc space-y-2">
                 <li>
-                  Le narratif fournit l’ossature générale : objectifs politiques, modes VTT, portefeuille d’indicateurs, données et métadonnées, calculs et contrôles, tableau de bord, décision et réorientation.
+                  Le narratif fournit l’ossature générale : objectifs politiques, modes d’action VTT, portefeuille d’indicateurs, données et métadonnées, calculs et contrôles, tableau de bord, décision et réorientation.
                 </li>
                 <li>
                   Le rapport final et la note stratégique précisent les fonctions nécessaires, de la source à la maintenance, et proposent une adaptation du RACI : Fournit, Collecte, Produit, Valide, Consulte, Publie, Maintient.
@@ -1336,16 +1336,16 @@ export default function App() {
               lineHeight: 1.2,
               letterSpacing: "-0.02em",
             }}>
-              Six modes d'action
+              Six modes d’action
             </h2>
             <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 690 }}>
-              Les modes VTT décrivent des transformations territoriales attendues à l’horizon 2050. Chaque mode associe une orientation, des leviers concrets et des indicateurs susceptibles de documenter leur mise en œuvre.
+              Les modes d’action de la VTT décrivent des transformations territoriales attendues à l’horizon 2050. Chacun associe une orientation, des leviers concrets et des indicateurs susceptibles de documenter leur mise en œuvre.
             </p>
           </div>
 
           <div className="vtt-transversal-row flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 mb-7" style={{ borderTop: "1px solid var(--color-border)", borderBottom: "1px solid var(--color-border)" }}>
             <p className="text-sm leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 620 }}>
-              La VTT propose une lecture transversale : un même mode permet de relier les transformations observées dans plusieurs pôles.
+              La VTT propose une lecture transversale : un même mode d’action permet de relier les transformations observées dans plusieurs pôles.
             </p>
             <div className="flex flex-wrap gap-2" aria-label="Pôles d’observation reliés par la VTT">
               {transversalPoles.map((pole) => (
@@ -1501,7 +1501,7 @@ export default function App() {
                 Mise en œuvre par horizon
               </h2>
               <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 700 }}>
-                Cette première matrice relie les modes VTT aux pôles d’observation et aux deux horizons du portefeuille. Elle permet de repérer les sujets déjà inscrits dans la feuille de route et ceux qui restent à cadrer.
+                Cette première matrice relie les modes d’action VTT aux pôles d’observation et aux deux horizons du portefeuille. Elle permet de repérer les sujets déjà inscrits dans la feuille de route et ceux qui restent à cadrer.
               </p>
             </div>
             <span className="self-start lg:self-auto text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: "var(--color-primary-soft)", color: "var(--color-primary-strong)" }}>
@@ -1519,13 +1519,13 @@ export default function App() {
           <div
             className="implementation-matrix-scroll rounded-2xl overflow-x-auto"
             role="region"
-            aria-label="Matrice de mise en œuvre des modes VTT"
+            aria-label="Matrice de mise en œuvre des modes d’action VTT"
             tabIndex={0}
             style={{ border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
           >
             <table className="implementation-matrix w-full border-collapse">
               <caption className="sr-only">
-                Liens proposés entre les six modes VTT, les pôles d’observation et les horizons L1 et L2 du portefeuille d’indicateurs.
+                Liens proposés entre les six modes d’action VTT, les pôles d’observation et les horizons L1 et L2 du portefeuille d’indicateurs.
               </caption>
               <thead>
                 <tr>
