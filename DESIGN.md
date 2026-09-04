@@ -285,6 +285,10 @@ Les variantes mini et étendue partagent le même en-tête sémantique, l'identi
 
 `components.side-panel` se superpose à un voile ardoise translucide et conserve un fond clair. Sa largeur est bornée par le viewport; son en-tête reprend la couleur du pôle, son corps défile et ses blocs de métadonnées restent sur fond blanc. Le rattachement VTT y distingue le mode principal, sa question évaluative et le mode secondaire proposé ; toute valeur hors des six modes est signalée comme à confirmer.
 
+### Lecture des modes VTT
+
+La section des modes VTT suit une hiérarchie stable : le nom du mode porte le titre principal, son axe est un repère secondaire, puis trois leviers territoriaux synthétisés à partir des planches VTT explicitent son contenu. Une ligne introductive relie Environnement, Mobilité et Urbanisation pour rendre visible la lecture transversale. Les indicateurs associés viennent ensuite dans une liste compacte qui affiche leur pôle et la nature principale ou secondaire du rattachement. Les onglets ne portent ni numéro de nomenclature ni décompte.
+
 ### Maturity Dots
 
 Les quatre points matérialisent une échelle ordonnée. Les points atteints prennent la couleur du niveau courant, les autres utilisent le bleu-gris de bordure. Le chiffre et le libellé de maturité accompagnent cette forme dans les vues où une interprétation autonome est nécessaire.

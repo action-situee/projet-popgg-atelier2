@@ -198,6 +198,54 @@ summary {
   border-top: 1px solid var(--color-border-subtle);
 }
 
+.vtt-mode-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+#vtt {
+  scroll-margin-top: 72px;
+}
+
+.vtt-mode-levers {
+  border-left: 1px solid var(--color-border);
+  background: var(--color-surface-translucent);
+}
+
+.vtt-lever + .vtt-lever {
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.vtt-indicator-examples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vtt-indicator-example {
+  min-width: 0;
+  padding: 0 20px;
+}
+
+.vtt-indicator-example:first-child {
+  padding-left: 0;
+}
+
+.vtt-indicator-example + .vtt-indicator-example {
+  border-left: 1px solid var(--color-border-subtle);
+}
+
+.vtt-indicator-example:last-child {
+  padding-right: 0;
+}
+
+.vtt-indicator-strip button:hover {
+  border-color: var(--color-primary) !important;
+  background: var(--color-primary-soft);
+}
+
 @media (max-width: 899px) {
   .value-chain {
     grid-template-columns: 1fr;
@@ -209,6 +257,61 @@ summary {
     right: calc(50% - 4px);
     bottom: -12px;
     transform: rotate(135deg);
+  }
+
+  .vtt-mode-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vtt-mode-levers {
+    border-top: 1px solid var(--color-border);
+    border-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .vtt-mode-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-right: -24px;
+    margin-left: -24px;
+    padding-right: 24px;
+    padding-left: 24px;
+    scroll-padding-inline: 24px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  .vtt-mode-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .vtt-mode-tabs button {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .vtt-indicator-examples {
+    grid-template-columns: 1fr;
+  }
+
+  .vtt-indicator-example,
+  .vtt-indicator-example:first-child,
+  .vtt-indicator-example:last-child {
+    padding: 14px 0;
+  }
+
+  .vtt-indicator-example:first-child {
+    padding-top: 0;
+  }
+
+  .vtt-indicator-example:last-child {
+    padding-bottom: 0;
+  }
+
+  .vtt-indicator-example + .vtt-indicator-example {
+    border-top: 1px solid var(--color-border-subtle);
+    border-left: 0;
   }
 }
 

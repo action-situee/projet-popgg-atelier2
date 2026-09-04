@@ -817,13 +817,13 @@ const vttModes = [
     label: "Préservation",
     color: "var(--color-sage-soft)",
     accent: "var(--color-sage-strong)",
-    headline: "Primauté du socle du vivant",
-    description:
-      "Les ressources et espaces structurants du Grand Genève sont-ils ménagés et sécurisés ?",
-    cards: [
-      { title: "ENV-10 · Infrastructure écologique", body: "Rattachement principal proposé, avec Reconnexion comme mode secondaire.", tag: "L1" },
-      { title: "ENV-19 · Artificialisation des sols", body: "Rattachement principal proposé, avec Régénération comme mode secondaire.", tag: "L1" },
-      { title: "ENV-14 · État des masses d’eau", body: "Rattachement principal proposé, avec Revitalisation comme mode secondaire.", tag: "L2" },
+    axis: "Primauté du socle du vivant",
+    vision:
+      "Préserver le socle du vivant en garantissant la qualité des milieux naturels, agricoles, forestiers et urbains.",
+    levers: [
+      { title: "Réseau hydrographique", body: "Préserver les cours d’eau, leurs espaces de fonctionnement, les zones humides et les nappes stratégiques." },
+      { title: "Infrastructure écologique", body: "Protéger les espaces structurants et restaurer les sols naturels dans les territoires bâtis, agricoles et forestiers." },
+      { title: "Corridors biologiques", body: "Maintenir les continuités entre les sites de valeur et les passages nécessaires aux déplacements de la faune." },
     ],
   },
   {
@@ -832,13 +832,13 @@ const vttModes = [
     label: "Reconnexion",
     color: "var(--color-primary-soft)",
     accent: "var(--color-primary)",
-    headline: "Primauté du socle du vivant",
-    description:
-      "Les continuités écologiques, paysagères, sociales et actives sont-elles restaurées ou renforcées ?",
-    cards: [
-      { title: "Aucun rattachement principal", body: "Le préclassement actuel ne place aucun indicateur L1 ou L2 dans ce mode principal.", tag: "À confirmer" },
-      { title: "ENV-10 · Infrastructure écologique", body: "Reconnexion est proposée comme mode secondaire de cet indicateur L1.", tag: "Secondaire" },
-      { title: "MOB-14 · Réseau cyclable", body: "Reconnexion est proposée comme mode secondaire de cet indicateur L1.", tag: "Secondaire" },
+    axis: "Primauté du socle du vivant",
+    vision:
+      "Réduire les ruptures produites par les infrastructures et les tissus bâtis afin de rétablir les continuités écologiques et les parcours humains.",
+    levers: [
+      { title: "Franchissement des infrastructures", body: "Créer ou réaménager des corridors et des écoponts pour rendre les grandes coupures plus perméables." },
+      { title: "Franges et tissus urbains", body: "Restaurer les pénétrantes de verdure et retisser les interfaces entre espaces bâtis, agricoles et naturels." },
+      { title: "Réseau socio-écologique", body: "Relier les lieux naturels, paysagers, culturels et de loisirs par des cheminements renaturés de proximité." },
     ],
   },
   {
@@ -847,12 +847,13 @@ const vttModes = [
     label: "Revitalisation",
     color: "var(--color-accent-soft)",
     accent: "var(--color-accent-strong)",
-    headline: "Primauté du socle du vivant",
-    description:
-      "Les milieux bâtis, agricoles, forestiers et hydrographiques gagnent-ils en qualité, résilience et habitabilité ?",
-    cards: [
-      { title: "ENV-03 · Qualité de l’air", body: "Rattachement principal proposé, avec Mise en réseau comme mode secondaire.", tag: "L1" },
-      { title: "ENV-12 · Îlots de chaleur", body: "Rattachement principal proposé, avec Régénération comme mode secondaire.", tag: "L1" },
+    axis: "Primauté du socle du vivant",
+    vision:
+      "Adapter le territoire au dérèglement climatique et renforcer la biodiversité par une gestion renouvelée des sols, de la nature et de l’eau.",
+    levers: [
+      { title: "Espaces bâtis", body: "Désimperméabiliser, infiltrer les eaux pluviales, renforcer la canopée et remettre certains cours d’eau à ciel ouvert." },
+      { title: "Espaces agricoles et forestiers", body: "Améliorer la rétention des sols, développer les pratiques agroécologiques et diversifier les lisières et essences." },
+      { title: "Réseau hydrographique", body: "Restaurer les dynamiques naturelles et les continuités hydrologiques, piscicoles et sédimentaires." },
     ],
   },
   {
@@ -861,13 +862,13 @@ const vttModes = [
     label: "Régénération",
     color: "var(--color-violet-soft)",
     accent: "var(--color-violet-strong)",
-    headline: "Rééquilibrage multipolaire de l’agglomération",
-    description:
-      "Les tissus et polarités existants accueillent-ils mieux habitants, emplois, logements, services et équipements ?",
-    cards: [
-      { title: "URB-01 · Densité urbaine", body: "Rattachement principal proposé, avec Préservation comme mode secondaire.", tag: "L1" },
-      { title: "URB-07 · Équilibre emplois-habitants", body: "Rattachement principal proposé, avec Mise en réseau comme mode secondaire.", tag: "L1" },
-      { title: "URB-17 · Accessibilité du logement", body: "Le mode secondaire « Gouvernance territoriale » reste à confirmer hors des six modes VTT.", tag: "L1" },
+    axis: "Rééquilibrage multipolaire de l’agglomération",
+    vision:
+      "Améliorer le cadre de vie et accueillir le développement attendu en renouvelant les polarités et les tissus déjà urbanisés.",
+    levers: [
+      { title: "Polarités diversifiées", body: "Moduler l’équilibre entre habitants, emplois, services et équipements selon la nature de chaque polarité." },
+      { title: "Tissus bâtis transformés", body: "Intensifier et renouveler l’existant selon les caractéristiques locales, en limitant fortement l’extension urbaine." },
+      { title: "Quartiers de proximité", body: "Renforcer la diversité des services, des opportunités économiques et des formes d’habiter à l’échelle des bassins de vie." },
     ],
   },
   {
@@ -876,13 +877,13 @@ const vttModes = [
     label: "Mise en réseau",
     color: "var(--color-primary-soft)",
     accent: "var(--color-primary-strong)",
-    headline: "Rééquilibrage multipolaire de l’agglomération",
-    description:
-      "Les polarités et bassins de vie sont-ils reliés par des mobilités décarbonées et adaptées aux contextes territoriaux ?",
-    cards: [
-      { title: "MOB-04 · Parts modales", body: "Rattachement principal proposé, avec Revitalisation comme mode secondaire.", tag: "L1" },
-      { title: "MOB-13 · Desserte en transports publics", body: "Rattachement principal proposé, avec Régénération comme mode secondaire.", tag: "L1" },
-      { title: "MOB-22 · Parts modales aux frontières", body: "Rattachement principal proposé, avec Régénération comme mode secondaire.", tag: "L2" },
+    axis: "Rééquilibrage multipolaire de l’agglomération",
+    vision:
+      "Organiser un maillage multimodal qui privilégie les mobilités actives et les transports publics tout en requalifiant les espaces publics.",
+    levers: [
+      { title: "Maillage multimodal décarboné", body: "Articuler marche, réseaux cyclables, transports publics et liaisons tangentielles selon les situations territoriales." },
+      { title: "Interfaces et rabattement", body: "Coordonner les gares, plateformes multimodales, transports à la demande et services de mobilité partagée." },
+      { title: "Espaces publics requalifiés", body: "Adapter rues, places, routes et voies vertes aux usages, au paysage, au climat et à la végétalisation." },
     ],
   },
   {
@@ -891,13 +892,13 @@ const vttModes = [
     label: "Circularité",
     color: "var(--color-ochre-soft)",
     accent: "var(--color-ochre-strong)",
-    headline: "Rééquilibrage multipolaire de l’agglomération",
-    description:
-      "Les ressources, flux et filières locales sont-ils mieux bouclés à l’échelle du bassin de vie ?",
-    cards: [
-      { title: "ENV-01 · Empreinte carbone", body: "Rattachement principal proposé, avec Mise en réseau comme mode secondaire.", tag: "L2" },
-      { title: "ENV-18 · Consommation d’énergie", body: "Rattachement principal proposé, avec Régénération comme mode secondaire.", tag: "L2" },
-      { title: "URB-06 · Surface productive", body: "Rattachement principal proposé, avec Régénération comme mode secondaire.", tag: "L2" },
+    axis: "Rééquilibrage multipolaire de l’agglomération",
+    vision:
+      "Réduire l’usage des ressources et rapprocher production, transformation, distribution et consommation à l’échelle des bassins de vie.",
+    levers: [
+      { title: "Ressources et filières locales", body: "Développer les filières agricoles, industrielles et de réemploi des matériaux en privilégiant la sobriété." },
+      { title: "Distribution décarbonée", body: "Hiérarchiser plateformes régionales, centres urbains et micro-hubs pour organiser une logistique de proximité." },
+      { title: "Énergies renouvelables", body: "Mobiliser les potentiels solaire, géothermique, lacustre, éolien et les réseaux de chaleur." },
     ],
   },
 ];
@@ -909,7 +910,6 @@ export default function App() {
   const [page, setPage] = useState<"home" | "indicateurs">("home");
   const [actorView, setActorView] = useState<"responsabilites" | "chaine">("responsabilites");
   const current = vttModes.find((m) => m.id === activeMode)!;
-  const currentCount = indicateurs.filter((i) => i.lienVTT === current.key).length;
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -926,6 +926,26 @@ export default function App() {
   const statsL1 = indicateurs.filter((i) => i.liste === "L1").length;
   const statsL2 = indicateurs.filter((i) => i.liste === "L2").length;
   const poles = ["Environnement", "Mobilité", "Urbanisation", "Gouvernance"] as const;
+  const transversalPoles = ["Environnement", "Mobilité", "Urbanisation"] as const;
+  const currentPrimaryIndicators = indicateurs.filter((i) => i.lienVTT === current.key);
+  const currentSecondaryIndicators = indicateurs.filter((i) => i.lienVTTSecondaire === current.label);
+  const relatedIndicators = [
+    ...currentPrimaryIndicators.map((ind) => ({ ind, relation: "Principal" as const })),
+    ...currentSecondaryIndicators
+      .filter((ind) => !currentPrimaryIndicators.some((primary) => primary.id === ind.id))
+      .map((ind) => ({ ind, relation: "Secondaire" as const })),
+  ];
+  const currentExamples = relatedIndicators.reduce<typeof relatedIndicators>((examples, item) => {
+    if (examples.length < 3 && !examples.some((example) => example.ind.pole === item.ind.pole)) {
+      examples.push(item);
+    }
+    return examples;
+  }, []);
+  relatedIndicators.forEach((item) => {
+    if (currentExamples.length < 3 && !currentExamples.some((example) => example.ind.id === item.ind.id)) {
+      currentExamples.push(item);
+    }
+  });
 
   return (
     <div className="min-h-full" style={{ fontFamily: "'Public Sans', sans-serif", background: "var(--color-canvas)" }}>
@@ -1261,7 +1281,7 @@ export default function App() {
       {/* VTT Modes */}
       <section id="vtt" style={{ background: "var(--color-canvas-cool)", borderTop: "1px solid var(--color-border)" }} className="py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="mb-10">
+          <div className="mb-8">
             <h2 style={{
               fontFamily: "'Newsreader', serif",
               fontWeight: 700,
@@ -1272,13 +1292,30 @@ export default function App() {
             }}>
               Six modes d'action
             </h2>
-            <p className="mt-2 text-sm" style={{ color: "var(--color-text-muted)", maxWidth: 500 }}>
-              La VTT 2050 articule deux axes et six modes d’action. Le rattachement des 30 indicateurs L1 et L2 présenté ici est un préclassement de travail à confirmer dans le tableur consolidé.
+            <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 690 }}>
+              Les modes VTT décrivent des transformations territoriales attendues à l’horizon 2050. Chaque mode associe une orientation, des leviers concrets et des indicateurs susceptibles de documenter leur mise en œuvre.
             </p>
           </div>
 
+          <div className="vtt-transversal-row flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 mb-7" style={{ borderTop: "1px solid var(--color-border)", borderBottom: "1px solid var(--color-border)" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 620 }}>
+              La VTT propose une lecture transversale : un même mode permet de relier les transformations observées dans plusieurs pôles.
+            </p>
+            <div className="flex flex-wrap gap-2" aria-label="Pôles d’observation reliés par la VTT">
+              {transversalPoles.map((pole) => (
+                <span
+                  key={pole}
+                  className="text-xs font-semibold px-3 py-1.5 rounded-full"
+                  style={{ background: poleColors[pole].bg, color: poleColors[pole].accent }}
+                >
+                  {pole}
+                </span>
+              ))}
+            </div>
+          </div>
+
           {/* Mode tabs */}
-          <div className="flex gap-2 flex-wrap mb-10">
+          <nav className="vtt-mode-tabs flex gap-2 flex-wrap mb-7" aria-label="Choisir un mode d’action VTT">
             {vttModes.map((m) => (
               <button
                 key={m.id}
@@ -1293,74 +1330,101 @@ export default function App() {
                 }}
               >
                 {m.label}
-                <span className="text-[11px]" style={{ opacity: 0.65 }}>{indicateurs.filter((i) => i.lienVTT === m.key).length}</span>
               </button>
             ))}
-          </div>
+          </nav>
 
           {/* Active mode panel */}
-          <div
-            className="rounded-2xl p-7 mb-6"
-            style={{ background: current.color, border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
+          <article
+            id={`vtt-mode-${current.id}`}
+            className="rounded-2xl overflow-hidden"
+            style={{ border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
+            aria-live="polite"
           >
-            <div className="flex items-baseline gap-3 mb-2">
+            <div className="vtt-mode-grid" style={{ background: current.color }}>
+              <div className="p-7 sm:p-8">
               <h3 style={{
                 fontFamily: "'Newsreader', serif",
                 fontWeight: 700,
-                fontSize: "clamp(1.3rem, 2.5vw, 1.9rem)",
+                  fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
                 color: current.accent,
-                lineHeight: 1.15,
-                letterSpacing: "-0.01em",
+                  lineHeight: 1.1,
+                  letterSpacing: "-0.02em",
               }}>
-                {current.headline}
+                  {current.label}
               </h3>
-              <span className="text-xs font-semibold px-2 py-0.5 rounded-full" style={{ background: "var(--color-surface-translucent)", color: current.accent }}>
-                {currentCount} {currentCount === 1 ? "rattachement principal" : "rattachements principaux"}
-              </span>
-            </div>
-            <p style={{ color: current.accent, fontSize: 14, lineHeight: 1.7, maxWidth: 620, opacity: 0.85 }}>
-              {current.description}
-            </p>
-          </div>
-
-          {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {current.cards.map((card) => (
-              <div
-                key={card.title}
-                className="rounded-xl p-5 flex flex-col gap-3"
-                style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
-              >
-                <span
-                  className="text-xs font-semibold px-2 py-0.5 rounded-full self-start"
-                  style={{ background: current.color, color: current.accent }}
-                >
-                  {card.tag}
-                </span>
-                <h4 style={{
-                  fontFamily: "'Newsreader', serif",
-                  fontWeight: 700,
-                  fontSize: 17,
-                  color: "var(--color-primary-strong)",
-                  lineHeight: 1.25,
-                }}>
-                  {card.title}
-                </h4>
-                <p className="text-sm leading-relaxed" style={{ color: "var(--color-text)", opacity: 0.85 }}>{card.body}</p>
+                <p className="mt-4 text-base leading-relaxed" style={{ color: current.accent, maxWidth: 540 }}>
+                  {current.vision}
+                </p>
+                <p className="mt-6 pt-4 text-xs leading-relaxed" style={{ color: current.accent, borderTop: "1px solid color-mix(in srgb, currentColor 18%, transparent)" }}>
+                  <span className="font-semibold">Axe VTT :</span> {current.axis}
+                </p>
               </div>
-            ))}
-          </div>
 
-          {/* Horizon chips */}
-          <div className="flex flex-wrap gap-3 mt-8 items-center">
-            <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Feuille de route :</span>
-            {["L1 · démarrage 2026–27", "L2 · consolidation 2028", "L3 · réserve stratégique"].map((h) => (
-              <span key={h} className="text-xs font-semibold px-3 py-1 rounded-full"
-                style={{ background: "var(--color-surface)", color: "var(--color-primary)", border: "1px solid var(--color-border)" }}>
-                {h}
-              </span>
-            ))}
-          </div>
+              <div className="vtt-mode-levers p-7 sm:p-8">
+                <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: current.accent }}>
+                  Leviers territoriaux
+                </h4>
+                <ul className="mt-3">
+                  {current.levers.map((lever) => (
+                    <li key={lever.title} className="vtt-lever py-3 first:pt-0 last:pb-0">
+                      <h5 className="text-sm font-semibold" style={{ color: current.accent }}>{lever.title}</h5>
+                      <p className="mt-1 text-sm leading-relaxed" style={{ color: current.accent, opacity: 0.82 }}>{lever.body}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="vtt-indicator-strip px-6 py-5 sm:px-8 sm:py-6" style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
+                <div>
+                  <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: "var(--color-primary-strong)" }}>
+                    Indicateurs associés
+                  </h4>
+                  <p className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>
+                    {currentPrimaryIndicators.length > 0
+                      ? `${currentPrimaryIndicators.length} rattachement${currentPrimaryIndicators.length > 1 ? "s" : ""} principal${currentPrimaryIndicators.length > 1 ? "aux" : ""} dans le préclassement de travail.`
+                      : "Aucun rattachement principal ; les exemples ci-dessous sont proposés comme liens secondaires."}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setPage("indicateurs")}
+                  className="inline-flex items-center gap-2 self-start sm:self-auto text-sm font-semibold rounded-full px-4 py-2 transition-colors"
+                  style={{ color: "var(--color-primary)", border: "1px solid var(--color-border)" }}
+                >
+                  Explorer les fiches
+                  <svg aria-hidden="true" width="13" height="13" viewBox="0 0 14 14" fill="none">
+                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </div>
+
+              {currentExamples.length > 0 ? (
+                <ul className="vtt-indicator-examples">
+                  {currentExamples.map(({ ind, relation }) => {
+                    const pole = poleColors[ind.pole];
+                    return (
+                      <li key={`${ind.id}-${relation}`} className="vtt-indicator-example">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-[11px] font-bold tracking-wide" style={{ color: pole.accent }}>{ind.id}</span>
+                          <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: pole.bg, color: pole.accent }}>{ind.pole}</span>
+                          <span className="text-[11px]" style={{ color: "var(--color-text-muted)" }}>{relation}</span>
+                        </div>
+                        <p className="mt-2 text-sm font-semibold leading-snug" style={{ color: "var(--color-primary-strong)" }}>{ind.nom}</p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>Aucun indicateur associé dans le préclassement actuel.</p>
+              )}
+            </div>
+          </article>
+
+          <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
+            Leviers synthétisés à partir des planches de la Vision territoriale transfrontalière 2050. Les rattachements d’indicateurs restent à confirmer dans le tableur consolidé.
+          </p>
         </div>
       </section>
 
