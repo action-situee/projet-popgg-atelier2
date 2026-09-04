@@ -1,5 +1,20 @@
 import { useLayoutEffect, useState } from "react";
-import { Building2, Leaf, Link2, Recycle, Sprout, Waypoints } from "lucide-react";
+import {
+  Building2,
+  Calculator,
+  ClipboardCheck,
+  Database,
+  Leaf,
+  Link2,
+  MessageSquareCheck,
+  Radio,
+  Recycle,
+  RefreshCw,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sprout,
+  Waypoints,
+} from "lucide-react";
 import homeIllustration from "@/imports/home.481ab0667bd5.svg";
 import IndicateursPage from "@/IndicateursPage";
 import { indicateurs, poleColors, maturiteColor, maturiteLabel } from "@/data/indicators";
@@ -495,7 +510,19 @@ const Renovatrice = () => (
 
 // ─── Characters roster ───────────────────────────────────────────────────────
 
-type RoleIconName = "source" | "collecte" | "reference" | "calcul" | "qualite" | "methode" | "metier" | "publication" | "maintenance";
+const roleIcons = {
+  source: Database,
+  collecte: ClipboardCheck,
+  reference: Waypoints,
+  calcul: Calculator,
+  qualite: ShieldCheck,
+  methode: SlidersHorizontal,
+  metier: MessageSquareCheck,
+  publication: Radio,
+  maintenance: RefreshCw,
+} as const;
+
+type RoleIconName = keyof typeof roleIcons;
 type HairStyle = "bob" | "short" | "bun" | "curly" | "waves" | "close" | "braids" | "grey";
 
 type RoleAvatarProps = {
@@ -508,88 +535,8 @@ type RoleAvatarProps = {
   glasses?: boolean;
 };
 
-const RoleSymbol = ({ icon, color }: { icon: RoleIconName; color: string }) => {
-  const strokeProps = {
-    fill: "none",
-    stroke: color,
-    strokeWidth: 2,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-
-  switch (icon) {
-    case "source":
-      return (
-        <g {...strokeProps}>
-          <ellipse cx="134" cy="67" rx="10" ry="4" />
-          <path d="M124 67v8c0 2.2 4.5 4 10 4s10-1.8 10-4v-8" />
-          <path d="M124 75v8c0 2.2 4.5 4 10 4s10-1.8 10-4v-8" />
-        </g>
-      );
-    case "collecte":
-      return (
-        <g {...strokeProps}>
-          <rect x="125" y="64" width="18" height="23" rx="2" />
-          <path d="M130 62h8v5h-8zM129 76l3 3 6-7M129 83h9" />
-        </g>
-      );
-    case "reference":
-      return (
-        <g {...strokeProps}>
-          <path d="M126 82l8-14 9 14M126 82h17" />
-          <circle cx="134" cy="68" r="3" fill="var(--color-surface)" />
-          <circle cx="126" cy="82" r="3" fill="var(--color-surface)" />
-          <circle cx="143" cy="82" r="3" fill="var(--color-surface)" />
-        </g>
-      );
-    case "calcul":
-      return (
-        <g {...strokeProps}>
-          <path d="M124 86V65M124 86h22" />
-          <path d="M129 82v-7M135 82V68M141 82V72" strokeWidth="4" />
-        </g>
-      );
-    case "qualite":
-      return (
-        <g {...strokeProps}>
-          <path d="M134 62l10 4v7c0 7-4.2 12-10 15-5.8-3-10-8-10-15v-7z" />
-          <path d="M129 74l4 4 7-8" />
-        </g>
-      );
-    case "methode":
-      return (
-        <g {...strokeProps}>
-          <path d="M124 68h20M124 76h20M124 84h20" />
-          <circle cx="130" cy="68" r="2.5" fill="var(--color-surface)" />
-          <circle cx="139" cy="76" r="2.5" fill="var(--color-surface)" />
-          <circle cx="133" cy="84" r="2.5" fill="var(--color-surface)" />
-        </g>
-      );
-    case "metier":
-      return (
-        <g {...strokeProps}>
-          <path d="M124 65h20v16h-10l-6 6v-6h-4z" />
-          <path d="M129 73l3 3 7-7" />
-        </g>
-      );
-    case "publication":
-      return (
-        <g {...strokeProps}>
-          <circle cx="128" cy="76" r="2.5" fill={color} stroke="none" />
-          <path d="M133 71c3 2.5 3 7.5 0 10M138 67c6 5 6 13 0 18M123 71c-3 2.5-3 7.5 0 10" />
-        </g>
-      );
-    case "maintenance":
-      return (
-        <g {...strokeProps}>
-          <path d="M126 70a10 10 0 0 1 17 3M143 73v-6M143 73h-6" />
-          <path d="M142 82a10 10 0 0 1-17-3M125 79v6M125 79h6" />
-        </g>
-      );
-  }
-};
-
 const RoleAvatar = ({ icon, skin, hair, clothing, accent, hairStyle, glasses = false }: RoleAvatarProps) => {
+  const RoleIcon = roleIcons[icon];
   const hairShape = (() => {
     switch (hairStyle) {
       case "bob":
@@ -629,27 +576,32 @@ const RoleAvatar = ({ icon, skin, hair, clothing, accent, hairStyle, glasses = f
   })();
 
   return (
-    <svg viewBox="0 0 180 132" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true" focusable="false">
-      <circle cx="70" cy="67" r="58" fill="var(--color-surface-translucent)" />
-      <path d="M19 132c3-29 18-45 51-45s48 16 51 45z" fill={clothing} />
-      <path d="M55 91l15 15 15-15-6-5H61z" fill="var(--color-surface)" opacity="0.82" />
+    <svg viewBox="0 0 180 132" xmlns="http://www.w3.org/2000/svg" className="role-avatar w-full h-full" aria-hidden="true" focusable="false">
+      <circle cx="70" cy="66" r="58" fill="var(--color-surface-translucent)" />
+      <circle cx="70" cy="66" r="58" fill="none" stroke={accent} strokeWidth="1" opacity="0.16" />
+      <path d="M17 132c3-30 20-46 53-46s50 16 53 46z" fill={clothing} />
       <rect x="59" y="71" width="22" height="23" rx="8" fill={skin} />
       <circle cx="43" cy="53" r="6" fill={skin} />
       <circle cx="97" cy="53" r="6" fill={skin} />
       <ellipse cx="70" cy="51" rx="28" ry="32" fill={skin} />
       {hairShape}
-      <circle cx="59" cy="52" r="2.4" fill="var(--color-text-strong)" />
-      <circle cx="81" cy="52" r="2.4" fill="var(--color-text-strong)" />
-      <path d="M66 62c2.5 2 5.5 2 8 0" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M54.5 47.5c2-1.2 4.5-1.3 7-.2M78.5 47.3c2.5-1.1 5-.9 7 .3" fill="none" stroke={hair} strokeWidth="1.5" strokeLinecap="round" opacity="0.72" />
+      <circle cx="59" cy="52.5" r="2.2" fill="var(--color-text-strong)" />
+      <circle cx="81" cy="52.5" r="2.2" fill="var(--color-text-strong)" />
+      <path d="M70 54.5v4l2 1" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.42" />
+      <path d="M65 63c3 2.8 7 2.8 10 0" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.7" strokeLinecap="round" />
       {glasses && (
-        <g fill="none" stroke="var(--color-text-strong)" strokeWidth="1.8">
+        <g fill="var(--color-surface)" fillOpacity="0.08" stroke="var(--color-text-strong)" strokeWidth="1.7">
           <rect x="50" y="45" width="17" height="13" rx="5" />
           <rect x="73" y="45" width="17" height="13" rx="5" />
           <path d="M67 50h6" />
         </g>
       )}
-      <circle cx="134" cy="76" r="27" fill="var(--color-surface)" stroke="var(--color-border)" strokeWidth="1.5" />
-      <RoleSymbol icon={icon} color={accent} />
+      <path d="m55 91 15 15 15-15" fill="none" stroke="var(--color-surface)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
+      <path d="M70 106v26" fill="none" stroke={accent} strokeWidth="1.2" opacity="0.28" />
+      <circle cx="136" cy="75" r="25" fill="var(--color-surface)" stroke="var(--color-border)" strokeWidth="1.2" />
+      <circle cx="136" cy="75" r="21" fill="none" stroke={accent} strokeWidth="1" opacity="0.14" />
+      <RoleIcon x={124} y={63} width={24} height={24} color={accent} strokeWidth={1.8} />
     </svg>
   );
 };

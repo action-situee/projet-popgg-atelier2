@@ -179,7 +179,7 @@ La palette lémanique et minérale combine des neutres lumineux, un bleu fonctio
 
 ### Avatars de responsabilité
 
-Les cartes d'acteurs utilisent une même grammaire de portrait vectoriel : cadrage en buste, formes simples, fond pâle et médaillon fonctionnel. Le portrait varie sans attribuer un métier à un genre ou à une apparence. Le médaillon porte l'information distinctive avec un pictogramme propre à chaque responsabilité : source, collecte, référentiel, calcul, qualité, méthode, usage métier, publication ou maintenance. Comme le rôle est déjà écrit dans la carte, l'avatar et son pictogramme restent décoratifs pour les technologies d'assistance.
+Les cartes d'acteurs utilisent une même grammaire de portrait vectoriel : cadrage en buste, formes simples, fond pâle, détails du visage discrets et médaillon fonctionnel. Le portrait varie sans attribuer un métier à un genre ou à une apparence. Le médaillon porte l'information distinctive avec un pictogramme Lucide propre à chaque responsabilité : source, collecte, référentiel, calcul, qualité, méthode, usage métier, publication ou maintenance. Comme le rôle est déjà écrit dans la carte, l'avatar et son pictogramme restent décoratifs pour les technologies d'assistance.
 
 La provenance de la chaîne reste accessible dans un volet discret. Son contenu distingue trois apports courts : chaîne de valeur, responsabilités et hypothèses de travail. Les sources du corpus sont regroupées sur une ligne séparée afin de conserver la traçabilité sans alourdir la lecture principale.
 
