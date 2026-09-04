@@ -287,7 +287,7 @@ Les variantes mini et étendue partagent le même en-tête sémantique, l'identi
 
 ### Lecture des modes VTT
 
-La section des modes VTT suit une hiérarchie stable : le nom du mode porte le titre principal, son axe est un repère secondaire, puis trois leviers territoriaux synthétisés à partir des planches VTT explicitent son contenu. Une ligne introductive relie Environnement, Mobilité et Urbanisation pour rendre visible la lecture transversale. Les indicateurs associés viennent ensuite dans une liste compacte qui affiche leur pôle et la nature principale ou secondaire du rattachement. Les onglets ne portent ni numéro de nomenclature ni décompte.
+La section des modes VTT suit une hiérarchie stable : les boutons permettent d’abord de choisir le mode, puis son nom, sa définition et son axe forment une introduction sobre placée hors de la carte. La carte est réservée aux trois leviers territoriaux synthétisés à partir des planches VTT et aux indicateurs associés. Une ligne introductive relie Environnement, Mobilité et Urbanisation pour rendre visible la lecture transversale. Les indicateurs associés apparaissent dans une liste compacte qui affiche leur pôle et la nature principale ou secondaire du rattachement. Les boutons ne portent ni numéro de nomenclature ni décompte.
 
 ### Matrice de mise en œuvre
 

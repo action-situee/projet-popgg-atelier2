@@ -1380,6 +1380,29 @@ export default function App() {
             ))}
           </nav>
 
+          <header className="vtt-mode-intro mb-6" aria-live="polite" aria-atomic="true">
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
+              <div>
+                <h3 style={{
+                  fontFamily: "'Newsreader', serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.65rem, 3vw, 2.2rem)",
+                  color: current.accent,
+                  lineHeight: 1.1,
+                  letterSpacing: "-0.02em",
+                }}>
+                  {current.label}
+                </h3>
+                <p className="mt-2 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 720 }}>
+                  {current.vision}
+                </p>
+              </div>
+              <p className="text-xs leading-relaxed lg:text-right" style={{ color: "var(--color-text-muted)", maxWidth: 330 }}>
+                <span className="font-semibold">Axe VTT :</span> {current.axis}
+              </p>
+            </div>
+          </header>
+
           {/* Active mode panel */}
           <article
             id={`vtt-mode-${current.id}`}
@@ -1387,39 +1410,18 @@ export default function App() {
             style={{ border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
             aria-live="polite"
           >
-            <div className="vtt-mode-grid" style={{ background: current.color }}>
-              <div className="p-7 sm:p-8">
-              <h3 style={{
-                fontFamily: "'Newsreader', serif",
-                fontWeight: 700,
-                  fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
-                color: current.accent,
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.02em",
-              }}>
-                  {current.label}
-              </h3>
-                <p className="mt-4 text-base leading-relaxed" style={{ color: current.accent, maxWidth: 540 }}>
-                  {current.vision}
-                </p>
-                <p className="mt-6 pt-4 text-xs leading-relaxed" style={{ color: current.accent, borderTop: "1px solid color-mix(in srgb, currentColor 18%, transparent)" }}>
-                  <span className="font-semibold">Axe VTT :</span> {current.axis}
-                </p>
-              </div>
-
-              <div className="vtt-mode-levers p-7 sm:p-8">
-                <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: current.accent }}>
-                  Leviers territoriaux
-                </h4>
-                <ul className="mt-3">
-                  {current.levers.map((lever) => (
-                    <li key={lever.title} className="vtt-lever py-3 first:pt-0 last:pb-0">
-                      <h5 className="text-sm font-semibold" style={{ color: current.accent }}>{lever.title}</h5>
-                      <p className="mt-1 text-sm leading-relaxed" style={{ color: current.accent, opacity: 0.82 }}>{lever.body}</p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="vtt-mode-levers p-7 sm:p-8" style={{ background: current.color }}>
+              <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: current.accent }}>
+                Leviers territoriaux
+              </h4>
+              <ul className="vtt-lever-list">
+                {current.levers.map((lever) => (
+                  <li key={lever.title} className="vtt-lever">
+                    <h5 className="text-sm font-semibold" style={{ color: current.accent }}>{lever.title}</h5>
+                    <p className="mt-1 text-sm leading-relaxed" style={{ color: current.accent, opacity: 0.82 }}>{lever.body}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="vtt-indicator-strip px-6 py-5 sm:px-8 sm:py-6" style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>

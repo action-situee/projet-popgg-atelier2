@@ -198,11 +198,6 @@ summary {
   border-top: 1px solid var(--color-border-subtle);
 }
 
-.vtt-mode-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-}
-
 #vtt {
   scroll-margin-top: 72px;
 }
@@ -212,12 +207,25 @@ summary {
 }
 
 .vtt-mode-levers {
-  border-left: 1px solid var(--color-border);
   background: var(--color-surface-translucent);
 }
 
+.vtt-lever-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vtt-lever {
+  min-width: 0;
+  padding-right: 24px;
+}
+
 .vtt-lever + .vtt-lever {
-  border-top: 1px solid var(--color-border-subtle);
+  padding-left: 24px;
+  border-left: 1px solid var(--color-border-subtle);
 }
 
 .vtt-indicator-examples {
@@ -408,12 +416,24 @@ summary {
     transform: rotate(135deg);
   }
 
-  .vtt-mode-grid {
+  .vtt-lever-list {
     grid-template-columns: 1fr;
   }
 
-  .vtt-mode-levers {
-    border-top: 1px solid var(--color-border);
+  .vtt-lever {
+    padding: 16px 0;
+  }
+
+  .vtt-lever:first-child {
+    padding-top: 0;
+  }
+
+  .vtt-lever:last-child {
+    padding-bottom: 0;
+  }
+
+  .vtt-lever + .vtt-lever {
+    border-top: 1px solid var(--color-border-subtle);
     border-left: 0;
   }
 }
