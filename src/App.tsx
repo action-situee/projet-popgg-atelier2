@@ -1588,10 +1588,6 @@ export default function App() {
             </span>
             <span>Les libellés d’horizon indiquent la présence d’au moins un indicateur L1 ou L2.</span>
           </div>
-
-          <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 760 }}>
-            Cette vue est générée à partir du préclassement actuel des 30 indicateurs. Elle ne constitue pas encore une programmation opérationnelle et pourra être révisée après arbitrage collectif.
-          </p>
         </div>
       </section>
 
