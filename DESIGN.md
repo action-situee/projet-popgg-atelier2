@@ -296,6 +296,7 @@ Les quatre points matérialisent une échelle ordonnée. Les points atteints pre
 - **Do** utiliser les variables sémantiques existantes pour toute couleur, plutôt que des valeurs dispersées dans un composant.
 - **Do** réserver le bleu lac aux actions, états actifs et repères fonctionnels.
 - **Do** associer les couleurs de pôle, de mode VTT et de maturité à un libellé, un identifiant ou une forme.
+- **Do** présenter les six modes d'action par leur nom : Préservation, Reconnexion, Revitalisation, Régénération, Mise en réseau et Circularité.
 - **Do** conserver des surfaces claires, des bordures fines et des ombres ambiantes.
 - **Do** préserver les cibles tactiles de 44 px, le focus visible et la réduction des mouvements.
 
@@ -306,3 +307,4 @@ Les quatre points matérialisent une échelle ordonnée. Les points atteints pre
 - **Don't** remplacer la hiérarchie éditoriale par une esthétique de tableau de bord technique dense et fermé.
 - **Don't** ajouter d'ombres lourdes, de bordures épaisses, de déplacement de mise en page au survol ou d'animation décorative.
 - **Don't** employer des icônes Unicode lorsqu'un pictogramme SVG est disponible.
+- **Don't** afficher les numéros 1.1 à 2.3 devant les modes d'action ; ces codes restent réservés aux clés internes et à la traçabilité du corpus.

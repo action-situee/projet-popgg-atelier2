@@ -136,7 +136,7 @@ function MiniCard({ ind, onClick }: { ind: Indicateur; onClick: () => void }) {
         <div className="flex items-center gap-1.5">
           {vtt && (
             <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: vtt.bg, color: vtt.accent }}>
-              {vtt.num} {vtt.label}
+              {vtt.label}
             </span>
           )}
           <svg width="11" height="11" viewBox="0 0 12 12" fill="none" className="opacity-0 group-hover:opacity-40 transition-opacity">
@@ -221,7 +221,7 @@ function EtendueCard({ ind, onClick }: { ind: Indicateur; onClick: () => void })
           <div className="flex items-center gap-1.5">
             {vtt && (
               <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded-full" style={{ background: vtt.bg, color: vtt.accent }}>
-                {vtt.num} {vtt.label}
+                {vtt.label}
               </span>
             )}
             <svg
@@ -419,12 +419,9 @@ function Sidebar({ ind, onClose }: { ind: Indicateur; onClose: () => void }) {
             <SidebarSection label="Rattachement VTT proposé">
               <div className="flex flex-col gap-2">
                 <div className="rounded-xl px-4 py-3" style={{ background: vtt.bg, border: "1px solid var(--color-border-subtle)" }}>
-                  <div className="flex items-center gap-3">
-                    <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 800, fontSize: 13, color: vtt.accent, opacity: 0.4 }}>{vtt.num}</span>
-                    <div>
-                      <span className="block text-[11px] uppercase tracking-wide" style={{ color: vtt.accent, opacity: 0.65 }}>Mode principal</span>
-                      <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 17, color: vtt.accent }}>{vtt.label}</span>
-                    </div>
+                  <div>
+                    <span className="block text-[11px] uppercase tracking-wide" style={{ color: vtt.accent, opacity: 0.65 }}>Mode principal</span>
+                    <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 17, color: vtt.accent }}>{vtt.label}</span>
                   </div>
                   <p className="mt-2 text-xs leading-relaxed" style={{ color: vtt.accent }}>{vtt.question}</p>
                 </div>
@@ -538,24 +535,9 @@ function VTTView({
           >
             {/* Section header */}
             <div
-              className="px-6 py-5 flex items-center gap-5"
+              className="px-6 py-5 flex items-center gap-4"
               style={{ background: section.bg, borderBottom: "1px solid var(--color-border-subtle)" }}
             >
-              <span
-                style={{
-                  fontFamily: "'Newsreader', serif",
-                  fontWeight: 900,
-                  fontSize: 32,
-                  color: section.accent,
-                  opacity: 0.18,
-                  lineHeight: 1,
-                  letterSpacing: "-0.04em",
-                  userSelect: "none",
-                  minWidth: 48,
-                }}
-              >
-                {section.num}
-              </span>
               <div className="flex-1">
                 <h3
                   style={{
@@ -667,18 +649,13 @@ function MatriceView({
                 }}
               >
                 <td className="py-4 pr-4 align-top">
-                  <div className="flex items-start gap-2">
-                    <span className="mt-0.5 shrink-0 text-[11px] font-black" style={{ color: section.accent, opacity: 0.5 }}>
-                      {section.num}
+                  <div>
+                    <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 14, color: section.accent, display: "block" }}>
+                      {section.label}
                     </span>
-                    <div>
-                      <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 14, color: section.accent, display: "block" }}>
-                        {section.label}
-                      </span>
-                      <span className="text-[11px]" style={{ color: section.accent }}>
-                        {rowItems.length} indicateur{rowItems.length !== 1 ? "s" : ""}
-                      </span>
-                    </div>
+                    <span className="text-[11px]" style={{ color: section.accent }}>
+                      {rowItems.length} indicateur{rowItems.length !== 1 ? "s" : ""}
+                    </span>
                   </div>
                 </td>
                 {MATURITES.map((m) => {
@@ -988,7 +965,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
               const m = activeMatrixCell.m as 1|2|3|4;
               return (
                 <div className="inline-flex items-center gap-2 text-xs rounded-full px-3 py-1" style={{ background: vs.bg }}>
-                  <span style={{ color: vs.accent, fontWeight: 600 }}>{vs.num} {vs.label}</span>
+                  <span style={{ color: vs.accent, fontWeight: 600 }}>{vs.label}</span>
                   <span style={{ color: "var(--color-text)", opacity: 0.35 }}>×</span>
                   <span style={{ color: maturiteColor[m], fontWeight: 600 }}>Maturité {m} — {maturiteLabel[m]}</span>
                   <button

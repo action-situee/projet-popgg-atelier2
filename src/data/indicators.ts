@@ -938,7 +938,6 @@ export const indicateurs: Indicateur[] = [
 export interface VTTSection {
   key: string;
   label: string;
-  num: string;
   bg: string;
   accent: string;
   light: string;
@@ -947,12 +946,12 @@ export interface VTTSection {
 }
 
 export const vttSections: VTTSection[] = [
-  { key: "1.1 Préservation", label: "Préservation", num: "1.1", bg: "var(--color-sage-soft)", accent: "var(--color-sage-strong)", light: "var(--color-sage-medium)", axe: "Primauté du socle du vivant", question: "Les ressources et espaces structurants du Grand Genève sont-ils ménagés et sécurisés ?" },
-  { key: "1.2 Reconnexion", label: "Reconnexion", num: "1.2", bg: "var(--color-primary-soft)", accent: "var(--color-primary)", light: "var(--color-primary)", axe: "Primauté du socle du vivant", question: "Les continuités écologiques, paysagères, sociales et actives sont-elles restaurées ou renforcées ?" },
-  { key: "1.3 Revitalisation", label: "Revitalisation", num: "1.3", bg: "var(--color-accent-soft)", accent: "var(--color-accent-strong)", light: "var(--color-coral)", axe: "Primauté du socle du vivant", question: "Les milieux bâtis, agricoles, forestiers et hydrographiques gagnent-ils en qualité, résilience et habitabilité ?" },
-  { key: "2.1 Régénération", label: "Régénération", num: "2.1", bg: "var(--color-violet-soft)", accent: "var(--color-violet-strong)", light: "var(--color-violet)", axe: "Rééquilibrage multipolaire de l’agglomération", question: "Les tissus et polarités existants accueillent-ils mieux habitants, emplois, logements, services et équipements ?" },
-  { key: "2.2 Mise en réseau", label: "Mise en réseau", num: "2.2", bg: "var(--color-primary-soft)", accent: "var(--color-primary-strong)", light: "var(--color-primary)", axe: "Rééquilibrage multipolaire de l’agglomération", question: "Les polarités et bassins de vie sont-ils reliés par des mobilités décarbonées et adaptées aux contextes territoriaux ?" },
-  { key: "2.3 Circularité", label: "Circularité", num: "2.3", bg: "var(--color-ochre-soft)", accent: "var(--color-ochre-strong)", light: "var(--color-ochre)", axe: "Rééquilibrage multipolaire de l’agglomération", question: "Les ressources, flux et filières locales sont-ils mieux bouclés à l’échelle du bassin de vie ?" },
+  { key: "1.1 Préservation", label: "Préservation", bg: "var(--color-sage-soft)", accent: "var(--color-sage-strong)", light: "var(--color-sage-medium)", axe: "Primauté du socle du vivant", question: "Les ressources et espaces structurants du Grand Genève sont-ils ménagés et sécurisés ?" },
+  { key: "1.2 Reconnexion", label: "Reconnexion", bg: "var(--color-primary-soft)", accent: "var(--color-primary)", light: "var(--color-primary)", axe: "Primauté du socle du vivant", question: "Les continuités écologiques, paysagères, sociales et actives sont-elles restaurées ou renforcées ?" },
+  { key: "1.3 Revitalisation", label: "Revitalisation", bg: "var(--color-accent-soft)", accent: "var(--color-accent-strong)", light: "var(--color-coral)", axe: "Primauté du socle du vivant", question: "Les milieux bâtis, agricoles, forestiers et hydrographiques gagnent-ils en qualité, résilience et habitabilité ?" },
+  { key: "2.1 Régénération", label: "Régénération", bg: "var(--color-violet-soft)", accent: "var(--color-violet-strong)", light: "var(--color-violet)", axe: "Rééquilibrage multipolaire de l’agglomération", question: "Les tissus et polarités existants accueillent-ils mieux habitants, emplois, logements, services et équipements ?" },
+  { key: "2.2 Mise en réseau", label: "Mise en réseau", bg: "var(--color-primary-soft)", accent: "var(--color-primary-strong)", light: "var(--color-primary)", axe: "Rééquilibrage multipolaire de l’agglomération", question: "Les polarités et bassins de vie sont-ils reliés par des mobilités décarbonées et adaptées aux contextes territoriaux ?" },
+  { key: "2.3 Circularité", label: "Circularité", bg: "var(--color-ochre-soft)", accent: "var(--color-ochre-strong)", light: "var(--color-ochre)", axe: "Rééquilibrage multipolaire de l’agglomération", question: "Les ressources, flux et filières locales sont-ils mieux bouclés à l’échelle du bassin de vie ?" },
 ];
 
 export const poleColors: Record<string, { bg: string; accent: string; light: string }> = {

@@ -817,7 +817,6 @@ const vttModes = [
     label: "Préservation",
     color: "var(--color-sage-soft)",
     accent: "var(--color-sage-strong)",
-    num: "1.1",
     headline: "Primauté du socle du vivant",
     description:
       "Les ressources et espaces structurants du Grand Genève sont-ils ménagés et sécurisés ?",
@@ -833,7 +832,6 @@ const vttModes = [
     label: "Reconnexion",
     color: "var(--color-primary-soft)",
     accent: "var(--color-primary)",
-    num: "1.2",
     headline: "Primauté du socle du vivant",
     description:
       "Les continuités écologiques, paysagères, sociales et actives sont-elles restaurées ou renforcées ?",
@@ -849,7 +847,6 @@ const vttModes = [
     label: "Revitalisation",
     color: "var(--color-accent-soft)",
     accent: "var(--color-accent-strong)",
-    num: "1.3",
     headline: "Primauté du socle du vivant",
     description:
       "Les milieux bâtis, agricoles, forestiers et hydrographiques gagnent-ils en qualité, résilience et habitabilité ?",
@@ -864,7 +861,6 @@ const vttModes = [
     label: "Régénération",
     color: "var(--color-violet-soft)",
     accent: "var(--color-violet-strong)",
-    num: "2.1",
     headline: "Rééquilibrage multipolaire de l’agglomération",
     description:
       "Les tissus et polarités existants accueillent-ils mieux habitants, emplois, logements, services et équipements ?",
@@ -880,7 +876,6 @@ const vttModes = [
     label: "Mise en réseau",
     color: "var(--color-primary-soft)",
     accent: "var(--color-primary-strong)",
-    num: "2.2",
     headline: "Rééquilibrage multipolaire de l’agglomération",
     description:
       "Les polarités et bassins de vie sont-ils reliés par des mobilités décarbonées et adaptées aux contextes territoriaux ?",
@@ -896,7 +891,6 @@ const vttModes = [
     label: "Circularité",
     color: "var(--color-ochre-soft)",
     accent: "var(--color-ochre-strong)",
-    num: "2.3",
     headline: "Rééquilibrage multipolaire de l’agglomération",
     description:
       "Les ressources, flux et filières locales sont-ils mieux bouclés à l’échelle du bassin de vie ?",
@@ -1298,7 +1292,6 @@ export default function App() {
                   fontFamily: "'Public Sans', sans-serif",
                 }}
               >
-                <span style={{ fontSize: 11, fontWeight: 800, opacity: 0.6 }}>{m.num}</span>
                 {m.label}
                 <span className="text-[11px]" style={{ opacity: 0.65 }}>{indicateurs.filter((i) => i.lienVTT === m.key).length}</span>
               </button>
@@ -1311,7 +1304,6 @@ export default function App() {
             style={{ background: current.color, border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
           >
             <div className="flex items-baseline gap-3 mb-2">
-              <span style={{ fontSize: 12, fontWeight: 800, color: current.accent, opacity: 0.5 }}>{current.num}</span>
               <h3 style={{
                 fontFamily: "'Newsreader', serif",
                 fontWeight: 700,
