@@ -1441,6 +1441,16 @@ export default function App() {
                           <span className="text-[11px]" style={{ color: "var(--color-text-muted)" }}>{relation}</span>
                         </div>
                         <p className="mt-2 text-sm font-semibold leading-snug" style={{ color: "var(--color-primary-strong)" }}>{ind.nom}</p>
+                        <div className="mt-2 flex items-center gap-1.5">
+                          <span
+                            aria-hidden="true"
+                            className="shrink-0 rounded-full"
+                            style={{ width: 8, height: 8, background: maturiteColor[ind.maturite] }}
+                          />
+                          <span className="text-[11px]" style={{ color: "var(--color-text-muted)" }}>
+                            Maturité {ind.maturite} · {maturiteLabel[ind.maturite]}
+                          </span>
+                        </div>
                       </li>
                     );
                   })}
