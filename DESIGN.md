@@ -175,7 +175,11 @@ La palette lémanique et minérale combine des neutres lumineux, un bleu fonctio
 - **Ocre circularité** (`colors.ochre`, `colors.ochre-strong`, `colors.ochre-soft`): circularité, ressources et repères secondaires.
 - **Corail et rose brume** (`colors.coral`, `colors.rose-soft`): illustrations et coopération, sans devenir des couleurs d'action génériques.
 - **Échelle de maturité** (`colors.status-1` à `colors.status-4`): progression ordonnée provisoire de « À construire » à « Opérationnel ». La couleur complète le chiffre et le libellé, elle ne les remplace pas. Le statut provisoire doit rester visible tant que l’arbitrage avec les cinq statuts du compte rendu du 31 août n’est pas réalisé.
-- **Palette d'illustration** (`colors.illustration-skin`, `colors.illustration-clay`, `colors.illustration-taupe`, `colors.illustration-neutral`): personnages vectoriels aux tons atténués, associés à l'ardoise et aux accents sémantiques.
+- **Palette d'illustration** (`colors.illustration-skin-light`, `colors.illustration-skin-medium`, `colors.illustration-skin-deep`, `colors.illustration-hair-warm`, `colors.illustration-hair-light`, `colors.illustration-neutral`): carnations et chevelures diversifiées, aux tons atténués, associées à l'ardoise et aux accents sémantiques.
+
+### Avatars de responsabilité
+
+Les cartes d'acteurs utilisent une même grammaire de portrait vectoriel : cadrage en buste, formes simples, fond pâle et médaillon fonctionnel. Le portrait varie sans attribuer un métier à un genre ou à une apparence. Le médaillon porte l'information distinctive avec un pictogramme propre à chaque responsabilité : source, collecte, référentiel, calcul, qualité, méthode, usage métier, publication ou maintenance. Comme le rôle est déjà écrit dans la carte, l'avatar et son pictogramme restent décoratifs pour les technologies d'assistance.
 
 ### Neutral
 

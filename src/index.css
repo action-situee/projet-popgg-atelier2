@@ -52,9 +52,14 @@
 
   /* Illustration */
   --color-illustration-skin: #efb7a8;
+  --color-illustration-skin-light: #efb7a8;
+  --color-illustration-skin-medium: #d59675;
+  --color-illustration-skin-deep: #8a513d;
   --color-illustration-clay: #ba7048;
   --color-illustration-taupe: #776c6c;
   --color-illustration-neutral: #8a969d;
+  --color-illustration-hair-warm: #8e5b45;
+  --color-illustration-hair-light: #c59a54;
 
   /* Rythme, formes et profondeur */
   --radius-sm: 8px;

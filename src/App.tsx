@@ -494,12 +494,180 @@ const Renovatrice = () => (
 
 // ─── Characters roster ───────────────────────────────────────────────────────
 
-const characters = [
+type RoleIconName = "source" | "collecte" | "reference" | "calcul" | "qualite" | "methode" | "metier" | "publication" | "maintenance";
+type HairStyle = "bob" | "short" | "bun" | "curly" | "waves" | "close" | "braids" | "grey";
+
+type RoleAvatarProps = {
+  icon: RoleIconName;
+  skin: string;
+  hair: string;
+  clothing: string;
+  accent: string;
+  hairStyle: HairStyle;
+  glasses?: boolean;
+};
+
+const RoleSymbol = ({ icon, color }: { icon: RoleIconName; color: string }) => {
+  const strokeProps = {
+    fill: "none",
+    stroke: color,
+    strokeWidth: 2,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  switch (icon) {
+    case "source":
+      return (
+        <g {...strokeProps}>
+          <ellipse cx="134" cy="67" rx="10" ry="4" />
+          <path d="M124 67v8c0 2.2 4.5 4 10 4s10-1.8 10-4v-8" />
+          <path d="M124 75v8c0 2.2 4.5 4 10 4s10-1.8 10-4v-8" />
+        </g>
+      );
+    case "collecte":
+      return (
+        <g {...strokeProps}>
+          <rect x="125" y="64" width="18" height="23" rx="2" />
+          <path d="M130 62h8v5h-8zM129 76l3 3 6-7M129 83h9" />
+        </g>
+      );
+    case "reference":
+      return (
+        <g {...strokeProps}>
+          <path d="M126 82l8-14 9 14M126 82h17" />
+          <circle cx="134" cy="68" r="3" fill="var(--color-surface)" />
+          <circle cx="126" cy="82" r="3" fill="var(--color-surface)" />
+          <circle cx="143" cy="82" r="3" fill="var(--color-surface)" />
+        </g>
+      );
+    case "calcul":
+      return (
+        <g {...strokeProps}>
+          <path d="M124 86V65M124 86h22" />
+          <path d="M129 82v-7M135 82V68M141 82V72" strokeWidth="4" />
+        </g>
+      );
+    case "qualite":
+      return (
+        <g {...strokeProps}>
+          <path d="M134 62l10 4v7c0 7-4.2 12-10 15-5.8-3-10-8-10-15v-7z" />
+          <path d="M129 74l4 4 7-8" />
+        </g>
+      );
+    case "methode":
+      return (
+        <g {...strokeProps}>
+          <path d="M124 68h20M124 76h20M124 84h20" />
+          <circle cx="130" cy="68" r="2.5" fill="var(--color-surface)" />
+          <circle cx="139" cy="76" r="2.5" fill="var(--color-surface)" />
+          <circle cx="133" cy="84" r="2.5" fill="var(--color-surface)" />
+        </g>
+      );
+    case "metier":
+      return (
+        <g {...strokeProps}>
+          <path d="M124 65h20v16h-10l-6 6v-6h-4z" />
+          <path d="M129 73l3 3 7-7" />
+        </g>
+      );
+    case "publication":
+      return (
+        <g {...strokeProps}>
+          <circle cx="128" cy="76" r="2.5" fill={color} stroke="none" />
+          <path d="M133 71c3 2.5 3 7.5 0 10M138 67c6 5 6 13 0 18M123 71c-3 2.5-3 7.5 0 10" />
+        </g>
+      );
+    case "maintenance":
+      return (
+        <g {...strokeProps}>
+          <path d="M126 70a10 10 0 0 1 17 3M143 73v-6M143 73h-6" />
+          <path d="M142 82a10 10 0 0 1-17-3M125 79v6M125 79h6" />
+        </g>
+      );
+  }
+};
+
+const RoleAvatar = ({ icon, skin, hair, clothing, accent, hairStyle, glasses = false }: RoleAvatarProps) => {
+  const hairShape = (() => {
+    switch (hairStyle) {
+      case "bob":
+        return <path d="M41 53c0-24 11-37 28-37s29 13 29 37v26H86V49H52v30H41z" fill={hair} />;
+      case "bun":
+        return (
+          <>
+            <circle cx="69" cy="15" r="10" fill={hair} />
+            <path d="M43 48c2-22 12-32 26-32s25 10 28 32c-8-10-17-14-28-14S51 38 43 48z" fill={hair} />
+          </>
+        );
+      case "curly":
+        return (
+          <g fill={hair}>
+            <circle cx="47" cy="34" r="11" /><circle cx="58" cy="24" r="12" /><circle cx="72" cy="22" r="12" />
+            <circle cx="86" cy="27" r="12" /><circle cx="94" cy="40" r="10" /><circle cx="43" cy="47" r="9" />
+          </g>
+        );
+      case "waves":
+        return <path d="M42 49c2-21 13-33 28-33 13 0 24 8 28 25-8-7-13-9-21-8-9 2-14-3-21 1-6 3-8 9-14 15z" fill={hair} />;
+      case "close":
+        return <path d="M44 43c3-18 12-27 26-27 14 0 23 9 27 27-8-8-17-12-27-12S52 35 44 43z" fill={hair} />;
+      case "braids":
+        return (
+          <g fill={hair}>
+            <path d="M43 47c2-21 12-31 27-31 14 0 24 10 27 31-8-9-17-13-27-13S51 38 43 47z" />
+            <circle cx="44" cy="48" r="6" /><circle cx="42" cy="59" r="5" /><circle cx="41" cy="69" r="4" />
+            <circle cx="96" cy="48" r="6" /><circle cx="98" cy="59" r="5" /><circle cx="99" cy="69" r="4" />
+          </g>
+        );
+      case "grey":
+        return <path d="M43 45c2-19 12-29 27-29s25 10 28 29c-7-5-12-8-18-9l-4 8-5-9-5 7-5-6c-7 1-12 4-18 9z" fill={hair} />;
+      case "short":
+      default:
+        return <path d="M43 46c1-20 12-30 27-30 16 0 26 10 28 30-7-8-16-12-28-12-11 0-20 4-27 12z" fill={hair} />;
+    }
+  })();
+
+  return (
+    <svg viewBox="0 0 180 132" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true" focusable="false">
+      <circle cx="70" cy="67" r="58" fill="var(--color-surface-translucent)" />
+      <path d="M19 132c3-29 18-45 51-45s48 16 51 45z" fill={clothing} />
+      <path d="M55 91l15 15 15-15-6-5H61z" fill="var(--color-surface)" opacity="0.82" />
+      <rect x="59" y="71" width="22" height="23" rx="8" fill={skin} />
+      <circle cx="43" cy="53" r="6" fill={skin} />
+      <circle cx="97" cy="53" r="6" fill={skin} />
+      <ellipse cx="70" cy="51" rx="28" ry="32" fill={skin} />
+      {hairShape}
+      <circle cx="59" cy="52" r="2.4" fill="var(--color-text-strong)" />
+      <circle cx="81" cy="52" r="2.4" fill="var(--color-text-strong)" />
+      <path d="M66 62c2.5 2 5.5 2 8 0" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.8" strokeLinecap="round" />
+      {glasses && (
+        <g fill="none" stroke="var(--color-text-strong)" strokeWidth="1.8">
+          <rect x="50" y="45" width="17" height="13" rx="5" />
+          <rect x="73" y="45" width="17" height="13" rx="5" />
+          <path d="M67 50h6" />
+        </g>
+      )}
+      <circle cx="134" cy="76" r="27" fill="var(--color-surface)" stroke="var(--color-border)" strokeWidth="1.5" />
+      <RoleSymbol icon={icon} color={accent} />
+    </svg>
+  );
+};
+
+type Character = {
+  name: string;
+  role: string;
+  desc: string;
+  avatar: RoleAvatarProps;
+  bg: string;
+  badge: string;
+};
+
+const characters: Character[] = [
   {
     name: "Fournisseur de la donnée",
     role: "Fournit",
     desc: "Met à disposition la source, documente son périmètre, ses droits d’usage et sa fréquence de disponibilité.",
-    Component: Observatrice,
+    avatar: { icon: "source", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-primary)", accent: "var(--color-primary)", hairStyle: "bob" },
     bg: "var(--color-primary-soft)",
     badge: "Source",
   },
@@ -507,7 +675,7 @@ const characters = [
     name: "Responsable de collecte",
     role: "Collecte",
     desc: "Organise l’acquisition des données et vérifie leur couverture territoriale et temporelle.",
-    Component: Urbaniste,
+    avatar: { icon: "collecte", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-hair-light)", clothing: "var(--color-primary)", accent: "var(--color-primary)", hairStyle: "short" },
     bg: "var(--color-primary-soft)",
     badge: "Collecte",
   },
@@ -515,7 +683,7 @@ const characters = [
     name: "Référent POPGG",
     role: "Documente",
     desc: "Relie l’indicateur à un objectif politique, à un niveau L1–L4 et aux modes VTT proposés.",
-    Component: Architecte,
+    avatar: { icon: "reference", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-violet)", accent: "var(--color-violet-strong)", hairStyle: "bun", glasses: true },
     bg: "var(--color-violet-soft)",
     badge: "Référence",
   },
@@ -523,7 +691,7 @@ const characters = [
     name: "Producteur du calcul",
     role: "Produit",
     desc: "Applique une méthode explicite et reproductible pour produire la valeur et ses déclinaisons territoriales.",
-    Component: Cycliste,
+    avatar: { icon: "calcul", skin: "var(--color-illustration-skin-light)", hair: "var(--color-text-strong)", clothing: "var(--color-accent)", accent: "var(--color-accent-strong)", hairStyle: "waves", glasses: true },
     bg: "var(--color-accent-soft)",
     badge: "Calcul",
   },
@@ -531,7 +699,7 @@ const characters = [
     name: "Validateur de la donnée",
     role: "Contrôle",
     desc: "Vérifie la complétude, la cohérence, les ruptures de série et la version de chaque donnée mobilisée.",
-    Component: Ecologue,
+    avatar: { icon: "qualite", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-sage)", accent: "var(--color-sage-strong)", hairStyle: "curly" },
     bg: "var(--color-sage-soft)",
     badge: "Qualité",
   },
@@ -539,7 +707,7 @@ const characters = [
     name: "Validateur méthodologique",
     role: "Valide la méthode",
     desc: "Contrôle les définitions, l’agrégation et la comparabilité entre les territoires français, genevois et vaudois.",
-    Component: Elu,
+    avatar: { icon: "methode", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-neutral)", clothing: "var(--color-primary)", accent: "var(--color-primary-strong)", hairStyle: "grey", glasses: true },
     bg: "var(--color-primary-soft)",
     badge: "Méthode",
   },
@@ -547,7 +715,7 @@ const characters = [
     name: "Validateur métier",
     role: "Valide l’usage",
     desc: "Confirme l’utilité pour le pilotage, l’interprétation raisonnable et les limites à rendre visibles.",
-    Component: Batisseur,
+    avatar: { icon: "metier", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-text-strong)", clothing: "var(--color-ochre)", accent: "var(--color-ochre-strong)", hairStyle: "close" },
     bg: "var(--color-ochre-soft)",
     badge: "Métier",
   },
@@ -555,7 +723,7 @@ const characters = [
     name: "Responsable de publication",
     role: "Publie",
     desc: "Prépare des vues adaptées aux usages publics, institutionnels et techniques sans masquer les incertitudes.",
-    Component: Coordinatrice,
+    avatar: { icon: "publication", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-violet)", accent: "var(--color-accent-strong)", hairStyle: "braids" },
     bg: "var(--color-rose-soft)",
     badge: "Publication",
   },
@@ -563,7 +731,7 @@ const characters = [
     name: "Responsable de maintenance",
     role: "Maintient",
     desc: "Planifie les mises à jour, conserve les métadonnées et clarifie qui répond de l’indicateur dans la durée.",
-    Component: Renovatrice,
+    avatar: { icon: "maintenance", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-primary)", accent: "var(--color-primary-strong)", hairStyle: "short" },
     bg: "var(--color-primary-soft)",
     badge: "Maintenance",
   },
@@ -1029,17 +1197,17 @@ export default function App() {
             {characters.map((c) => (
               <div
                 key={c.name}
-                className="rounded-xl overflow-hidden flex flex-col transition-transform hover:-translate-y-1"
+                className="rounded-xl overflow-hidden flex flex-col"
                 style={{ border: "1px solid var(--color-border)", background: c.bg, boxShadow: "var(--shadow-sm)" }}
               >
-                <div className="flex items-end justify-center pt-5 px-3" style={{ height: 172 }}>
-                  <div style={{ height: 158, width: c.badge === "Calcul" ? "90%" : "68%" }}>
-                    <c.Component />
+                <div className="flex items-center justify-center px-5 pt-3" style={{ height: 160 }}>
+                  <div style={{ height: 144, width: "100%", maxWidth: 250 }}>
+                    <RoleAvatar {...c.avatar} />
                   </div>
                 </div>
-                <div className="p-3 pt-2.5" style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>
-                  <div className="flex items-start justify-between gap-1 mb-0.5">
-                    <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 15, color: "var(--color-primary-strong)", lineHeight: 1.2 }}>
+                <div className="p-4 pt-3.5 flex-1" style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>
+                  <div className="flex items-start justify-between gap-2 mb-1">
+                    <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 17, color: "var(--color-primary-strong)", lineHeight: 1.2 }}>
                       {c.name}
                     </span>
                     <span
@@ -1049,8 +1217,8 @@ export default function App() {
                       {c.badge}
                     </span>
                   </div>
-                  <p className="text-xs font-semibold mb-1" style={{ color: "var(--color-accent-strong)" }}>{c.role}</p>
-                  <p className="text-xs leading-snug" style={{ color: "var(--color-text)" }}>{c.desc}</p>
+                  <p className="text-xs font-semibold mb-1.5" style={{ color: "var(--color-accent-strong)" }}>{c.role}</p>
+                  <p className="text-sm leading-relaxed" style={{ color: "var(--color-text)" }}>{c.desc}</p>
                 </div>
               </div>
             ))}
