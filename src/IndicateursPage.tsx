@@ -775,7 +775,7 @@ function DensityToggle({ value, onChange }: { value: Density; onChange: (d: Dens
 
 export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   const [viewMode, setViewMode] = useState<ViewMode>("grille");
-  const [density, setDensity] = useState<Density>("etendue");
+  const [density, setDensity] = useState<Density>("mini");
   const [filterPole, setFilterPole] = useState<Pole | "Tous">("Tous");
   const [filterListe, setFilterListe] = useState<Liste | "Tous">("Tous");
   const [filterMaturite, setFilterMaturite] = useState<number | "Tous">("Tous");
