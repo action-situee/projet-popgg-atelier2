@@ -999,7 +999,7 @@ export default function App() {
           <div className="pb-4 grid grid-cols-1 md:grid-cols-2 gap-5 text-sm leading-relaxed" style={{ color: "var(--color-text)" }}>
             <div>
               <p>
-                Cette représentation ne reproduit pas un schéma unique. Elle synthétise trois éléments du corpus de l’étude.
+                Cette représentation synthétise trois éléments du corpus de l’Étude indicateurs.
               </p>
               <ul className="mt-3 pl-5 list-disc space-y-2">
                 <li>
