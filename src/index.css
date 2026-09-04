@@ -253,7 +253,7 @@ summary {
   padding-right: 0;
 }
 
-.vtt-indicator-strip button:hover {
+.vtt-explore-button:hover {
   border-color: var(--color-primary) !important;
   background: var(--color-primary-soft);
 }

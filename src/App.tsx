@@ -1425,28 +1425,9 @@ export default function App() {
             </div>
 
             <div className="vtt-indicator-strip px-6 py-5 sm:px-8 sm:py-6" style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>
-              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
-                <div>
-                  <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: "var(--color-primary-strong)" }}>
-                    Indicateurs associés
-                  </h4>
-                  <p className="mt-1 text-xs" style={{ color: "var(--color-text-muted)" }}>
-                    {currentPrimaryIndicators.length > 0
-                      ? `${currentPrimaryIndicators.length} rattachement${currentPrimaryIndicators.length > 1 ? "s" : ""} principal${currentPrimaryIndicators.length > 1 ? "aux" : ""} dans le préclassement de travail.`
-                      : "Aucun rattachement principal ; les exemples ci-dessous sont proposés comme liens secondaires."}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setPage("indicateurs")}
-                  className="inline-flex items-center gap-2 self-start sm:self-auto text-sm font-semibold rounded-full px-4 py-2 transition-colors"
-                  style={{ color: "var(--color-primary)", border: "1px solid var(--color-border)" }}
-                >
-                  Explorer les fiches
-                  <svg aria-hidden="true" width="13" height="13" viewBox="0 0 14 14" fill="none">
-                    <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
+              <h4 className="mb-5" style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: "var(--color-primary-strong)" }}>
+                Indicateurs associés
+              </h4>
 
               {currentExamples.length > 0 ? (
                 <ul className="vtt-indicator-examples">
@@ -1469,6 +1450,19 @@ export default function App() {
               )}
             </div>
           </article>
+
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={() => setPage("indicateurs")}
+              className="vtt-explore-button inline-flex min-h-11 w-full sm:w-auto items-center justify-center gap-2 text-sm font-semibold rounded-full px-5 py-2 transition-colors"
+              style={{ color: "var(--color-primary)", border: "1px solid var(--color-border)", background: "var(--color-surface)" }}
+            >
+              Explorer les fiches
+              <svg aria-hidden="true" width="13" height="13" viewBox="0 0 14 14" fill="none">
+                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
 
           <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
             Leviers synthétisés à partir des planches de la Vision territoriale transfrontalière 2050. Les rattachements d’indicateurs restent à confirmer dans le tableur consolidé.
