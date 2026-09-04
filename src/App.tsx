@@ -1224,31 +1224,27 @@ export default function App() {
           <summary className="py-3 text-xs font-semibold" style={{ color: "var(--color-primary)" }}>
             D’où vient cette chaîne ?
           </summary>
-          <div className="pb-4 grid grid-cols-1 md:grid-cols-2 gap-5 text-sm leading-relaxed" style={{ color: "var(--color-text)" }}>
-            <div>
-              <p>
-                Cette représentation synthétise trois éléments du corpus de l’Étude indicateurs.
-              </p>
-              <ul className="mt-3 pl-5 list-disc space-y-2">
-                <li>
-                  Le narratif fournit l’ossature générale : objectifs politiques, modes d’action VTT, portefeuille d’indicateurs, données et métadonnées, calculs et contrôles, tableau de bord, décision et réorientation.
-                </li>
-                <li>
-                  Le rapport final et la note stratégique précisent les fonctions nécessaires, de la source à la maintenance, et proposent une adaptation du RACI : Fournit, Collecte, Produit, Valide, Consulte, Publie, Maintient.
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p>
-                Dans l’interface, les validations sont séparées selon leur objet : qualité de la donnée, robustesse de la méthode et pertinence de l’usage métier.
-              </p>
-              <p className="mt-3">
-                Le « Référent POPGG » est une fonction de synthèse inférée pour porter la documentation transversale : objectif politique, niveau L1–L4 et rattachements VTT. Cette fonction reste à confirmer.
-              </p>
-              <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)" }}>
-                Sources de travail : narratif VTT et système d’indicateurs, rapport final indicateurs POPGG et note stratégique indicateurs POPGG.
-              </p>
-            </div>
+          <div className="pb-5" style={{ color: "var(--color-text)" }}>
+            <p className="text-sm leading-relaxed">
+              Cette représentation croise trois apports du corpus de l’Étude indicateurs.
+            </p>
+            <dl className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div>
+                <dt className="text-xs font-semibold" style={{ color: "var(--color-primary-strong)" }}>Chaîne de valeur</dt>
+                <dd className="mt-1 text-sm leading-relaxed">Le parcours de l’objectif politique à la décision et à la réorientation.</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-semibold" style={{ color: "var(--color-primary-strong)" }}>Responsabilités</dt>
+                <dd className="mt-1 text-sm leading-relaxed">Les fonctions nécessaires, de la fourniture des données à leur maintenance.</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-semibold" style={{ color: "var(--color-primary-strong)" }}>Hypothèses de travail</dt>
+                <dd className="mt-1 text-sm leading-relaxed">La séparation des validations et le rôle transversal du référent POPGG, à confirmer.</dd>
+              </div>
+            </dl>
+            <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
+              Sources : narratif VTT, rapport final et note stratégique de l’Étude indicateurs.
+            </p>
           </div>
         </details>
 
