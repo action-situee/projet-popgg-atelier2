@@ -907,7 +907,7 @@ const ModeIcon = ({ mode, color }: { mode: string; color: string }) => {
   const common = {
     fill: "none",
     stroke: color,
-    strokeWidth: 1.7,
+    strokeWidth: 1.6,
     strokeLinecap: "round" as const,
     strokeLinejoin: "round" as const,
   };
@@ -915,23 +915,23 @@ const ModeIcon = ({ mode, color }: { mode: string; color: string }) => {
   const symbol = (() => {
     switch (mode) {
       case "preservation":
-        return <><path d="M12 20V9" {...common} /><path d="M12 14c-4 0-7-2.6-7-6 4 0 7 2.6 7 6ZM12 11c3.8 0 6.5-2.4 6.5-5.5-3.8 0-6.5 2.4-6.5 5.5Z" {...common} /></>;
+        return <><path d="M12 3.2c2.2 1.6 4.6 2.4 7 2.8v5.3c0 4.4-2.6 7.5-7 9.5-4.4-2-7-5.1-7-9.5V6c2.4-.4 4.8-1.2 7-2.8Z" {...common} /><path d="M12 16.8v-5.4M12 13.8c-2.3 0-4-1.4-4-3.4 2.3 0 4 1.4 4 3.4Zm0-1.2c2.3 0 4-1.4 4-3.4-2.3 0-4 1.4-4 3.4Z" {...common} /></>;
       case "reconnexion":
-        return <><circle cx="5" cy="17" r="2.2" {...common} /><circle cx="12" cy="7" r="2.2" {...common} /><circle cx="19" cy="17" r="2.2" {...common} /><path d="m6.3 15.2 4.4-6.4M13.3 8.8l4.4 6.4M7.2 17h9.6" {...common} /></>;
+        return <><path d="m9.3 8.4-1.4-1.3a4 4 0 0 0-5.7 5.6l2.4 2.4a4 4 0 0 0 5.7 0l1.5-1.5M14.7 15.6l1.4 1.3a4 4 0 0 0 5.7-5.6l-2.4-2.4a4 4 0 0 0-5.7 0l-1.5 1.5M8.5 12h7" {...common} /></>;
       case "revitalisation":
-        return <><path d="M12 20v-8" {...common} /><path d="M12 15c-4 0-7-2.4-7-5.5 4 0 7 2.4 7 5.5ZM12 12c0-4 2.4-7 5.5-7 0 4-2.4 7-5.5 7Z" {...common} /><path d="M4 20h16" {...common} /></>;
+        return <><path d="M12 20v-8M12 15c-3.8 0-6.5-2.2-6.5-5.2 3.8 0 6.5 2.2 6.5 5.2Zm0-2.3c0-3.8 2.2-6.5 5.2-6.5 0 3.8-2.2 6.5-5.2 6.5ZM4 20h16" {...common} /><path d="M5 5.5 3.8 4.3M19 5.5l1.2-1.2M12 4V2.5" {...common} /></>;
       case "regeneration":
-        return <><path d="M5 19v-7h5v7M14 19V8h5v11M3 19h18" {...common} /><path d="M6 8a7 7 0 0 1 11-3M17 5V2M17 5h-3" {...common} /></>;
+        return <><path d="M4 20h16M5 20v-7h6v7M14 20V9h5v11M7.5 16h1M16.5 12h1M16.5 15h1" {...common} /><path d="M6 9c1.3-3.4 5.2-5.1 8.7-3.9M13 2.8l1.7 2.3-2.7 1.6" {...common} /></>;
       case "reseau":
-        return <><circle cx="12" cy="5" r="2" {...common} /><circle cx="5" cy="18" r="2" {...common} /><circle cx="19" cy="18" r="2" {...common} /><circle cx="12" cy="13" r="2" {...common} /><path d="m12 7v4M10.4 14.2l-3.8 2.6M13.6 14.2l3.8 2.6" {...common} /></>;
+        return <><circle cx="12" cy="12" r="2.3" {...common} /><circle cx="12" cy="4" r="1.8" {...common} /><circle cx="4.5" cy="17.5" r="1.8" {...common} /><circle cx="19.5" cy="17.5" r="1.8" {...common} /><circle cx="4.5" cy="7" r="1.8" {...common} /><path d="M12 6v3.7m-5.9-1.6 4 2.7m-4.2 5.4 4.2-3m3.8 0 4.2 3" {...common} /></>;
       case "circularite":
       default:
-        return <><path d="M7 7a7 7 0 0 1 11.5 2M18.5 9V5M18.5 9h-4" {...common} /><path d="M17 17A7 7 0 0 1 5.5 15M5.5 15v4M5.5 15h4" {...common} /></>;
+        return <><path d="M7.1 7.3A7.5 7.5 0 0 1 19.5 10M19.5 10V5.8M19.5 10h-4.2M16.9 16.7A7.5 7.5 0 0 1 4.5 14M4.5 14v4.2M4.5 14h4.2" {...common} /><path d="M8.8 11.8 12 9.9l3.2 1.9v3.7L12 17.4l-3.2-1.9v-3.7Z" {...common} /></>;
     }
   })();
 
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26">
       {symbol}
     </svg>
   );
@@ -984,12 +984,20 @@ export default function App() {
     const linkedIndicators = indicateurs.filter(
       (ind) => ind.lienVTT === mode.key || ind.lienVTTSecondaire === mode.label,
     );
+    const maturityAverage = linkedIndicators.length
+      ? linkedIndicators.reduce((sum, ind) => sum + ind.maturite, 0) / linkedIndicators.length
+      : null;
+    const maturityLevel = maturityAverage
+      ? Math.max(1, Math.min(4, Math.round(maturityAverage))) as 1 | 2 | 3 | 4
+      : null;
 
     return {
       ...mode,
       linkedPoles: new Set(linkedIndicators.map((ind) => ind.pole)),
       hasL1: linkedIndicators.some((ind) => ind.liste === "L1"),
       hasL2: linkedIndicators.some((ind) => ind.liste === "L2"),
+      maturityAverage,
+      maturityLevel,
     };
   });
 
@@ -1521,12 +1529,13 @@ export default function App() {
           >
             <table className="implementation-matrix w-full border-collapse">
               <caption className="sr-only">
-                Liens proposés entre les six modes d’action VTT, les pôles d’observation et les horizons L1 et L2 du portefeuille d’indicateurs.
+                Liens proposés entre les six modes d’action VTT, les pôles d’observation, la maturité moyenne et les horizons L1 et L2 du portefeuille d’indicateurs.
               </caption>
               <thead>
                 <tr>
                   <th scope="col" rowSpan={2} className="matrix-mode-heading text-left">Mode d’action</th>
                   <th scope="colgroup" colSpan={4}>Pôles d’observation</th>
+                  <th scope="col" rowSpan={2} className="matrix-maturity-heading">Maturité moyenne</th>
                   <th scope="colgroup" colSpan={2}>Horizon du portefeuille</th>
                 </tr>
                 <tr>
@@ -1561,6 +1570,22 @@ export default function App() {
                         </td>
                       );
                     })}
+                    <td className="matrix-maturity-cell">
+                      {row.maturityAverage && row.maturityLevel ? (
+                        <div
+                          className="matrix-maturity"
+                          aria-label={`Maturité moyenne ${row.maturityAverage.toFixed(1).replace(".", ",")} sur 4, ${maturiteLabel[row.maturityLevel]}`}
+                        >
+                          <span className="matrix-maturity-value">
+                            <span aria-hidden="true" className="matrix-maturity-dot" style={{ background: maturiteColor[row.maturityLevel] }} />
+                            {row.maturityAverage.toFixed(1).replace(".", ",")} / 4
+                          </span>
+                          <span className="matrix-maturity-label">{maturiteLabel[row.maturityLevel]}</span>
+                        </div>
+                      ) : (
+                        <span className="matrix-maturity-label">Non calculée</span>
+                      )}
+                    </td>
                     <td className="matrix-horizon-cell">
                       <span className={`matrix-status ${row.hasL1 ? "is-l1" : "is-unset"}`}>
                         {row.hasL1 ? "Démarrage L1" : "À cadrer"}
