@@ -903,6 +903,40 @@ const vttModes = [
   },
 ];
 
+const ModeIcon = ({ mode, color }: { mode: string; color: string }) => {
+  const common = {
+    fill: "none",
+    stroke: color,
+    strokeWidth: 1.7,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+
+  const symbol = (() => {
+    switch (mode) {
+      case "preservation":
+        return <><path d="M12 20V9" {...common} /><path d="M12 14c-4 0-7-2.6-7-6 4 0 7 2.6 7 6ZM12 11c3.8 0 6.5-2.4 6.5-5.5-3.8 0-6.5 2.4-6.5 5.5Z" {...common} /></>;
+      case "reconnexion":
+        return <><circle cx="5" cy="17" r="2.2" {...common} /><circle cx="12" cy="7" r="2.2" {...common} /><circle cx="19" cy="17" r="2.2" {...common} /><path d="m6.3 15.2 4.4-6.4M13.3 8.8l4.4 6.4M7.2 17h9.6" {...common} /></>;
+      case "revitalisation":
+        return <><path d="M12 20v-8" {...common} /><path d="M12 15c-4 0-7-2.4-7-5.5 4 0 7 2.4 7 5.5ZM12 12c0-4 2.4-7 5.5-7 0 4-2.4 7-5.5 7Z" {...common} /><path d="M4 20h16" {...common} /></>;
+      case "regeneration":
+        return <><path d="M5 19v-7h5v7M14 19V8h5v11M3 19h18" {...common} /><path d="M6 8a7 7 0 0 1 11-3M17 5V2M17 5h-3" {...common} /></>;
+      case "reseau":
+        return <><circle cx="12" cy="5" r="2" {...common} /><circle cx="5" cy="18" r="2" {...common} /><circle cx="19" cy="18" r="2" {...common} /><circle cx="12" cy="13" r="2" {...common} /><path d="m12 7v4M10.4 14.2l-3.8 2.6M13.6 14.2l3.8 2.6" {...common} /></>;
+      case "circularite":
+      default:
+        return <><path d="M7 7a7 7 0 0 1 11.5 2M18.5 9V5M18.5 9h-4" {...common} /><path d="M17 17A7 7 0 0 1 5.5 15M5.5 15v4M5.5 15h4" {...common} /></>;
+    }
+  })();
+
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24">
+      {symbol}
+    </svg>
+  );
+};
+
 // ─── App ─────────────────────────────────────────────────────────────────────
 
 export default function App() {
@@ -945,6 +979,18 @@ export default function App() {
     if (currentExamples.length < 3 && !currentExamples.some((example) => example.ind.id === item.ind.id)) {
       currentExamples.push(item);
     }
+  });
+  const implementationRows = vttModes.map((mode) => {
+    const linkedIndicators = indicateurs.filter(
+      (ind) => ind.lienVTT === mode.key || ind.lienVTTSecondaire === mode.label,
+    );
+
+    return {
+      ...mode,
+      linkedPoles: new Set(linkedIndicators.map((ind) => ind.pole)),
+      hasL1: linkedIndicators.some((ind) => ind.liste === "L1"),
+      hasL2: linkedIndicators.some((ind) => ind.liste === "L2"),
+    };
   });
 
   return (
@@ -1424,6 +1470,125 @@ export default function App() {
 
           <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
             Leviers synthétisés à partir des planches de la Vision territoriale transfrontalière 2050. Les rattachements d’indicateurs restent à confirmer dans le tableur consolidé.
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="mise-en-oeuvre"
+        className="py-20"
+        style={{ background: "var(--color-canvas)", borderTop: "1px solid var(--color-border)" }}
+      >
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8">
+            <div>
+              <h2
+                style={{
+                  fontFamily: "'Newsreader', serif",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
+                  color: "var(--color-text-strong)",
+                  lineHeight: 1.2,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Mise en œuvre par horizon
+              </h2>
+              <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 700 }}>
+                Cette première matrice relie les modes VTT aux pôles d’observation et aux deux horizons du portefeuille. Elle permet de repérer les sujets déjà inscrits dans la feuille de route et ceux qui restent à cadrer.
+              </p>
+            </div>
+            <span className="self-start lg:self-auto text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: "var(--color-primary-soft)", color: "var(--color-primary-strong)" }}>
+              Lecture provisoire
+            </span>
+          </div>
+
+          <p
+            className="matrix-scroll-hint mb-3 text-xs sm:hidden"
+            style={{ color: "var(--color-text-muted)" }}
+          >
+            Faites défiler la matrice horizontalement pour voir les pôles et les horizons.
+          </p>
+
+          <div
+            className="implementation-matrix-scroll rounded-2xl overflow-x-auto"
+            role="region"
+            aria-label="Matrice de mise en œuvre des modes VTT"
+            tabIndex={0}
+            style={{ border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
+          >
+            <table className="implementation-matrix w-full border-collapse">
+              <caption className="sr-only">
+                Liens proposés entre les six modes VTT, les pôles d’observation et les horizons L1 et L2 du portefeuille d’indicateurs.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" rowSpan={2} className="matrix-mode-heading text-left">Mode d’action</th>
+                  <th scope="colgroup" colSpan={4}>Pôles d’observation</th>
+                  <th scope="colgroup" colSpan={2}>Horizon du portefeuille</th>
+                </tr>
+                <tr>
+                  {poles.map((pole) => (
+                    <th key={pole} scope="col" className="matrix-pole-heading">{pole}</th>
+                  ))}
+                  <th scope="col">2026–27</th>
+                  <th scope="col">2028</th>
+                </tr>
+              </thead>
+              <tbody>
+                {implementationRows.map((row) => (
+                  <tr key={row.id}>
+                    <th scope="row" className="matrix-mode-cell text-left">
+                      <span className="matrix-mode-icon" style={{ background: row.color, color: row.accent }}>
+                        <ModeIcon mode={row.id} color={row.accent} />
+                      </span>
+                      <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 17, color: "var(--color-primary-strong)" }}>
+                        {row.label}
+                      </span>
+                    </th>
+                    {poles.map((pole) => {
+                      const linked = row.linkedPoles.has(pole);
+                      return (
+                        <td key={pole} className="matrix-pole-cell" title={linked ? `${pole} : lien proposé` : `${pole} : aucun lien proposé`}>
+                          <span className="sr-only">{linked ? `Lien proposé avec le pôle ${pole}` : `Aucun lien proposé avec le pôle ${pole}`}</span>
+                          <span
+                            aria-hidden="true"
+                            className={`matrix-dot ${linked ? "is-linked" : ""}`}
+                            style={linked ? { background: poleColors[pole].accent } : undefined}
+                          />
+                        </td>
+                      );
+                    })}
+                    <td className="matrix-horizon-cell">
+                      <span className={`matrix-status ${row.hasL1 ? "is-l1" : "is-unset"}`}>
+                        {row.hasL1 ? "Démarrage L1" : "À cadrer"}
+                      </span>
+                    </td>
+                    <td className="matrix-horizon-cell">
+                      <span className={`matrix-status ${row.hasL2 ? "is-l2" : "is-unset"}`}>
+                        {row.hasL2 ? "Consolidation L2" : "À cadrer"}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="implementation-legend flex flex-wrap gap-x-7 gap-y-3 mt-5 text-xs" style={{ color: "var(--color-text-muted)" }}>
+            <span className="flex items-center gap-2">
+              <span aria-hidden="true" className="matrix-dot is-linked" style={{ background: "var(--color-primary)" }} />
+              Lien principal ou secondaire proposé
+            </span>
+            <span className="flex items-center gap-2">
+              <span aria-hidden="true" className="matrix-dot" />
+              Aucun lien dans le préclassement
+            </span>
+            <span>Les libellés d’horizon indiquent la présence d’au moins un indicateur L1 ou L2.</span>
+          </div>
+
+          <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 760 }}>
+            Cette vue est générée à partir du préclassement actuel des 30 indicateurs. Elle ne constitue pas encore une programmation opérationnelle et pourra être révisée après arbitrage collectif.
           </p>
         </div>
       </section>

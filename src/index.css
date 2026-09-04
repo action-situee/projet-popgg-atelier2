@@ -207,6 +207,10 @@ summary {
   scroll-margin-top: 72px;
 }
 
+#mise-en-oeuvre {
+  scroll-margin-top: 72px;
+}
+
 .vtt-mode-levers {
   border-left: 1px solid var(--color-border);
   background: var(--color-surface-translucent);
@@ -244,6 +248,151 @@ summary {
 .vtt-indicator-strip button:hover {
   border-color: var(--color-primary) !important;
   background: var(--color-primary-soft);
+}
+
+.implementation-matrix-scroll {
+  background: var(--color-surface);
+  contain: paint;
+}
+
+.implementation-matrix {
+  min-width: 1000px;
+  background: var(--color-surface);
+}
+
+.implementation-matrix thead {
+  background: var(--color-surface-soft);
+}
+
+.implementation-matrix thead th {
+  padding: 12px 16px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.implementation-matrix thead tr:first-child th {
+  padding-top: 15px;
+  padding-bottom: 9px;
+}
+
+.implementation-matrix thead tr:last-child th {
+  padding-top: 5px;
+  padding-bottom: 14px;
+  color: var(--color-text);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.implementation-matrix .matrix-mode-heading {
+  left: 0;
+  z-index: 3;
+  width: 230px;
+  min-width: 230px;
+  padding-left: 24px;
+  background: var(--color-surface-soft);
+  text-align: left;
+}
+
+.implementation-matrix tbody tr {
+  --matrix-row-bg: var(--color-surface);
+  background: var(--matrix-row-bg);
+}
+
+.implementation-matrix tbody tr:nth-child(even) {
+  --matrix-row-bg: color-mix(in srgb, var(--color-surface-soft) 62%, var(--color-surface));
+}
+
+.implementation-matrix tbody th,
+.implementation-matrix tbody td {
+  padding: 16px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+.implementation-matrix .matrix-mode-cell {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  padding-left: 24px;
+  background: var(--matrix-row-bg);
+  box-shadow: 1px 0 0 var(--color-border-subtle);
+  white-space: nowrap;
+}
+
+.matrix-mode-icon {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  margin-right: 12px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-radius: var(--radius-sm);
+  vertical-align: middle;
+}
+
+.matrix-pole-heading,
+.matrix-pole-cell {
+  width: 105px;
+  min-width: 105px;
+  text-align: center;
+}
+
+.matrix-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex: 0 0 auto;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: var(--color-surface-soft);
+}
+
+.matrix-dot.is-linked {
+  border-color: transparent;
+}
+
+.matrix-horizon-cell {
+  width: 145px;
+  min-width: 145px;
+  text-align: center;
+}
+
+.matrix-status {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.matrix-status.is-l1 {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+}
+
+.matrix-status.is-l2 {
+  background: var(--color-violet-soft);
+  color: var(--color-violet-strong);
+}
+
+.matrix-status.is-unset {
+  background: var(--color-surface-soft);
+  color: var(--color-text-muted);
+}
+
+.implementation-matrix-scroll:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
 }
 
 @media (max-width: 899px) {

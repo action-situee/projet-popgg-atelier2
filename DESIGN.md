@@ -289,6 +289,10 @@ Les variantes mini et étendue partagent le même en-tête sémantique, l'identi
 
 La section des modes VTT suit une hiérarchie stable : le nom du mode porte le titre principal, son axe est un repère secondaire, puis trois leviers territoriaux synthétisés à partir des planches VTT explicitent son contenu. Une ligne introductive relie Environnement, Mobilité et Urbanisation pour rendre visible la lecture transversale. Les indicateurs associés viennent ensuite dans une liste compacte qui affiche leur pôle et la nature principale ou secondaire du rattachement. Les onglets ne portent ni numéro de nomenclature ni décompte.
 
+### Matrice de mise en œuvre
+
+`components.implementation-matrix` croise les six modes, les quatre pôles d’observation et les horizons L1 et L2. Un point coloré signale qu’au moins un rattachement principal ou secondaire existe dans le préclassement ; un point vide signale son absence. Les horizons sont toujours écrits avec leur phase, « Démarrage L1 », « Consolidation L2 » ou « À cadrer », afin que la couleur ne porte jamais seule l’information. La première colonne reste visible pendant le défilement horizontal sur petit écran. La matrice est qualifiée de lecture provisoire et ne doit pas être présentée comme une programmation opérationnelle validée.
+
 ### Maturity Dots
 
 Les quatre points matérialisent une échelle ordonnée. Les points atteints prennent la couleur du niveau courant, les autres utilisent le bleu-gris de bordure. Le chiffre et le libellé de maturité accompagnent cette forme dans les vues où une interprétation autonome est nécessaire.
