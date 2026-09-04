@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { Building2, Leaf, Link2, Recycle, Sprout, Waypoints } from "lucide-react";
 import homeIllustration from "@/imports/home.481ab0667bd5.svg";
 import IndicateursPage from "@/IndicateursPage";
 import { indicateurs, poleColors, maturiteColor, maturiteLabel } from "@/data/indicators";
@@ -903,38 +904,19 @@ const vttModes = [
   },
 ];
 
+const modeIcons = {
+  preservation: Leaf,
+  reconnexion: Link2,
+  revitalisation: Sprout,
+  regeneration: Building2,
+  reseau: Waypoints,
+  circularite: Recycle,
+} as const;
+
 const ModeIcon = ({ mode, color }: { mode: string; color: string }) => {
-  const common = {
-    fill: "none",
-    stroke: color,
-    strokeWidth: 1.6,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
+  const Icon = modeIcons[mode as keyof typeof modeIcons] ?? Recycle;
 
-  const symbol = (() => {
-    switch (mode) {
-      case "preservation":
-        return <><path d="M12 3.2c2.2 1.6 4.6 2.4 7 2.8v5.3c0 4.4-2.6 7.5-7 9.5-4.4-2-7-5.1-7-9.5V6c2.4-.4 4.8-1.2 7-2.8Z" {...common} /><path d="M12 16.8v-5.4M12 13.8c-2.3 0-4-1.4-4-3.4 2.3 0 4 1.4 4 3.4Zm0-1.2c2.3 0 4-1.4 4-3.4-2.3 0-4 1.4-4 3.4Z" {...common} /></>;
-      case "reconnexion":
-        return <><path d="m9.3 8.4-1.4-1.3a4 4 0 0 0-5.7 5.6l2.4 2.4a4 4 0 0 0 5.7 0l1.5-1.5M14.7 15.6l1.4 1.3a4 4 0 0 0 5.7-5.6l-2.4-2.4a4 4 0 0 0-5.7 0l-1.5 1.5M8.5 12h7" {...common} /></>;
-      case "revitalisation":
-        return <><path d="M12 20v-8M12 15c-3.8 0-6.5-2.2-6.5-5.2 3.8 0 6.5 2.2 6.5 5.2Zm0-2.3c0-3.8 2.2-6.5 5.2-6.5 0 3.8-2.2 6.5-5.2 6.5ZM4 20h16" {...common} /><path d="M5 5.5 3.8 4.3M19 5.5l1.2-1.2M12 4V2.5" {...common} /></>;
-      case "regeneration":
-        return <><path d="M4 20h16M5 20v-7h6v7M14 20V9h5v11M7.5 16h1M16.5 12h1M16.5 15h1" {...common} /><path d="M6 9c1.3-3.4 5.2-5.1 8.7-3.9M13 2.8l1.7 2.3-2.7 1.6" {...common} /></>;
-      case "reseau":
-        return <><circle cx="12" cy="12" r="2.3" {...common} /><circle cx="12" cy="4" r="1.8" {...common} /><circle cx="4.5" cy="17.5" r="1.8" {...common} /><circle cx="19.5" cy="17.5" r="1.8" {...common} /><circle cx="4.5" cy="7" r="1.8" {...common} /><path d="M12 6v3.7m-5.9-1.6 4 2.7m-4.2 5.4 4.2-3m3.8 0 4.2 3" {...common} /></>;
-      case "circularite":
-      default:
-        return <><path d="M7.1 7.3A7.5 7.5 0 0 1 19.5 10M19.5 10V5.8M19.5 10h-4.2M16.9 16.7A7.5 7.5 0 0 1 4.5 14M4.5 14v4.2M4.5 14h4.2" {...common} /><path d="M8.8 11.8 12 9.9l3.2 1.9v3.7L12 17.4l-3.2-1.9v-3.7Z" {...common} /></>;
-    }
-  })();
-
-  return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" width="26" height="26">
-      {symbol}
-    </svg>
-  );
+  return <Icon aria-hidden="true" focusable="false" color={color} size={24} strokeWidth={1.8} />;
 };
 
 // ─── App ─────────────────────────────────────────────────────────────────────

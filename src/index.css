@@ -332,13 +332,13 @@ summary {
 
 .matrix-mode-icon {
   display: inline-flex;
-  width: 46px;
-  height: 46px;
+  width: 42px;
+  height: 42px;
   margin-right: 12px;
   align-items: center;
   justify-content: center;
-  border: 1px solid color-mix(in srgb, currentColor 26%, transparent);
-  border-radius: var(--radius-md);
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-radius: var(--radius-sm);
   vertical-align: middle;
 }
 
