@@ -216,6 +216,8 @@ La provenance de la chaîne reste accessible dans un volet discret. Son contenu 
 
 **The Legible Metadata Rule.** Le texte courant reste à 14 px ou plus. Les métadonnées peuvent descendre à 11 ou 12 px uniquement avec une couleur pleinement contrastée et sans atténuation qui compromette la lecture.
 
+**The Construction Metadata Rule.** Les niveaux L1 et L2 sont des repères internes de priorisation. Ils ne sont pas traités comme des chiffres clés ou des niveaux de décision sur la page d’accueil ; ils restent accessibles comme métadonnée secondaire et dans le catalogue des indicateurs.
+
 ## Layout
 
 La mise en page repose sur des conteneurs centrés de 1024 px pour le récit principal et de 1152 px pour les ensembles analytiques, avec une gouttière latérale récurrente de 24 px. Les sections éditoriales disposent de respirations verticales généreuses, tandis que les cartes et barres d'outils utilisent un rythme compact issu de `spacing.1` à `spacing.6`.

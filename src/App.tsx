@@ -1033,8 +1033,8 @@ export default function App() {
               }}>
                 {indicateurs.length} indicateurs territorialisés
               </h2>
-              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)", maxWidth: 420 }}>
-                13 indicateurs L1 pour le démarrage 2026–27 et 17 indicateurs L2 pour la consolidation 2028. Le classement reste versionné et révisable.
+              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)", maxWidth: 520 }}>
+                Un portefeuille commun pour observer les transformations du Grand Genève à travers quatre pôles complémentaires.
               </p>
             </div>
             <button
@@ -1050,25 +1050,7 @@ export default function App() {
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-            {/* L1 / L2 */}
-            {[
-              { label: "L1 · Horizon 2026-27", value: statsL1, bg: "var(--color-primary-soft)", accent: "var(--color-primary)" },
-              { label: "L2 · Horizon 2028", value: statsL2, bg: "var(--color-primary-soft)", accent: "var(--color-primary)" },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className="rounded-xl p-4 flex flex-col gap-1"
-                style={{ background: s.bg, border: "1.5px solid var(--color-border-subtle)" }}
-              >
-                <span style={{ fontFamily: "'Newsreader', serif", fontSize: 32, fontWeight: 700, color: s.accent, lineHeight: 1 }}>
-                  {s.value}
-                </span>
-                <span className="text-xs font-semibold" style={{ color: s.accent, opacity: 0.8 }}>{s.label}</span>
-              </div>
-            ))}
-
-            {/* By pole */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
             {poles.map((p) => {
               const count = indicateurs.filter((i) => i.pole === p).length;
               const c = poleColors[p];
@@ -1110,6 +1092,10 @@ export default function App() {
               </span>
             ))}
           </div>
+
+          <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
+            Repère de construction interne : {statsL1} indicateurs L1 et {statsL2} indicateurs L2. Cette distinction sert à prioriser le travail ; elle ne constitue pas un niveau de décision POPGG.
+          </p>
         </div>
       </section>
 
