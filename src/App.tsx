@@ -1067,15 +1067,19 @@ export default function App() {
                     {count}
                   </span>
                   <span className="text-xs font-semibold" style={{ color: c.accent, opacity: 0.85 }}>{p}</span>
-                  <div className="flex gap-0.5 mt-1">
-                    {[1,2,3,4].map((n) => (
-                      <span key={n} style={{
-                        width: 8, height: 8, borderRadius: "50%",
-                        background: n <= maturiteAvg ? maturiteColor[maturiteAvg] : "var(--color-border)",
-                        display: "inline-block",
-                      }}/>
-                    ))}
-                    <span className="text-[11px] ml-1" style={{ color: c.accent }}>{maturiteLabel[maturiteAvg]}</span>
+                  <div className="flex items-center gap-1.5 mt-1 min-w-0">
+                    <span className="flex items-center gap-0.5 shrink-0" aria-hidden="true">
+                      {[1,2,3,4].map((n) => (
+                        <span key={n} style={{
+                          width: 8, height: 8, borderRadius: "50%",
+                          background: n <= maturiteAvg ? maturiteColor[maturiteAvg] : "var(--color-border)",
+                          display: "inline-block",
+                        }}/>
+                      ))}
+                    </span>
+                    <span className="text-[11px] leading-none whitespace-nowrap" style={{ color: c.accent }}>
+                      {maturiteLabel[maturiteAvg]}
+                    </span>
                   </div>
                 </div>
               );
