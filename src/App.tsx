@@ -1098,7 +1098,7 @@ export default function App() {
           </div>
 
           <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
-            Repère de construction interne : {statsL1} indicateurs L1 et {statsL2} indicateurs L2. Cette distinction sert à prioriser le travail ; elle ne constitue pas un niveau de décision POPGG.
+            Repère de gestion et de mise en œuvre : {statsL1} indicateurs L1 et {statsL2} indicateurs L2. Cette distinction sert à prioriser le travail ; elle ne constitue pas un niveau de décision POPGG.
           </p>
         </div>
       </section>

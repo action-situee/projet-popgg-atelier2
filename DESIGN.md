@@ -216,7 +216,7 @@ La provenance de la chaîne reste accessible dans un volet discret. Son contenu 
 
 **The Legible Metadata Rule.** Le texte courant reste à 14 px ou plus. Les métadonnées peuvent descendre à 11 ou 12 px uniquement avec une couleur pleinement contrastée et sans atténuation qui compromette la lecture.
 
-**The Construction Metadata Rule.** Les niveaux L1 et L2 sont des repères internes de priorisation. Ils ne sont pas traités comme des chiffres clés ou des niveaux de décision sur la page d’accueil ; ils restent accessibles comme métadonnée secondaire et dans le catalogue des indicateurs.
+**The Construction Metadata Rule.** Les niveaux L1 et L2 sont des repères de gestion et de mise en œuvre qui servent à prioriser le travail. Ils ne sont pas traités comme des chiffres clés ou des niveaux de décision sur la page d’accueil ; ils restent accessibles comme métadonnée secondaire et dans le catalogue des indicateurs.
 
 ## Layout
 
