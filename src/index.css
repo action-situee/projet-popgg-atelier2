@@ -447,6 +447,223 @@ summary {
   box-shadow: var(--focus-ring);
 }
 
+.graph-legend,
+.graph-legend-group,
+.graph-legend-item {
+  display: flex;
+  align-items: center;
+}
+
+.graph-legend {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 20px;
+  padding: 11px 14px;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.graph-legend-group {
+  flex-wrap: wrap;
+  gap: 8px 14px;
+}
+
+.graph-legend-item {
+  gap: 6px;
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.graph-legend-dot,
+.graph-relation-dot {
+  flex: 0 0 auto;
+  border: 1.5px solid;
+  border-radius: 50%;
+}
+
+.graph-legend-dot {
+  width: 10px;
+  height: 10px;
+}
+
+.graph-legend-line {
+  width: 22px;
+  border-top: 2px solid var(--color-primary);
+}
+
+.graph-legend-line.is-secondary {
+  border-top-style: dashed;
+  opacity: 0.6;
+}
+
+.graph-selection-status {
+  min-height: 36px;
+  margin: 0;
+  padding: 10px 2px 8px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.indicator-graph-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-canvas-cool);
+  overscroll-behavior-inline: contain;
+}
+
+.indicator-graph-scroll:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
+}
+
+.indicator-graph-canvas {
+  display: block;
+  width: 100%;
+  min-width: 980px;
+  height: auto;
+}
+
+.graph-edge,
+.graph-cluster-circle,
+.graph-mode-node,
+.graph-indicator-node {
+  transition: opacity 160ms ease, stroke-opacity 160ms ease;
+}
+
+.graph-mode-node,
+.graph-indicator-node {
+  cursor: pointer;
+  outline: none;
+}
+
+.graph-indicator-node:hover .graph-indicator-shape {
+  stroke-width: 3;
+}
+
+.graph-mode-node:hover .graph-mode-ring {
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  opacity: 1;
+}
+
+.graph-mode-node:focus-visible .graph-mode-ring,
+.graph-indicator-node:focus-visible .graph-indicator-shape {
+  stroke: var(--color-accent);
+  stroke-width: 4;
+  opacity: 1;
+}
+
+.graph-mobile-hint {
+  display: none;
+  margin: 8px 2px 0;
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.graph-relations-list {
+  margin-top: 20px;
+  border-top: 1px solid var(--color-border-subtle);
+  padding-top: 16px;
+}
+
+.graph-relations-list > summary {
+  width: fit-content;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.graph-relations-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 28px;
+  margin-top: 18px;
+}
+
+.graph-relation-group {
+  min-width: 0;
+}
+
+.graph-relation-group h3 {
+  margin: 0 0 8px;
+  color: var(--color-primary-strong);
+  font-family: "Newsreader", serif;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.graph-relation-group p,
+.graph-unmatched-note {
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.graph-relation-group ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.graph-relation-group button {
+  display: flex;
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  gap: 9px;
+  border-radius: var(--radius-sm);
+  padding: 7px 8px;
+  text-align: left;
+}
+
+.graph-relation-group button:hover {
+  background: var(--color-surface-soft);
+}
+
+.graph-relation-group button > span:last-child {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+
+.graph-relation-group strong,
+.graph-relation-group small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.graph-relation-group strong {
+  color: var(--color-text-strong);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.graph-relation-group small {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.graph-relation-dot {
+  width: 12px;
+  height: 12px;
+}
+
+.graph-unmatched-note {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
 @media (max-width: 899px) {
   .value-chain {
     grid-template-columns: 1fr;
@@ -483,6 +700,18 @@ summary {
 }
 
 @media (max-width: 640px) {
+  .indicator-graph-canvas {
+    min-width: 960px;
+  }
+
+  .graph-mobile-hint {
+    display: block;
+  }
+
+  .graph-relations-grid {
+    grid-template-columns: 1fr;
+  }
+
   .vtt-mode-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;

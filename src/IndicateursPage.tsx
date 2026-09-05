@@ -1,4 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
+import { Grid2X2, List, Network } from "lucide-react";
+import IndicatorGraphView from "@/IndicatorGraphView";
 import {
   indicateurs,
   poleColors,
@@ -24,7 +26,8 @@ const typologieShort: Record<string, string> = {
 };
 
 type ViewMode = "grille" | "vtt" | "matrice";
-type Density = "mini" | "etendue";
+type CardDensity = "mini" | "etendue";
+type Presentation = CardDensity | "graphe";
 
 // ─── Atoms ───────────────────────────────────────────────────────────────────
 
@@ -517,7 +520,7 @@ function VTTView({
   onSelect,
 }: {
   items: Indicateur[];
-  density: Density;
+  density: CardDensity;
   filterMaturite: number | "Tous";
   onMaturiteClick: (m: number | "Tous") => void;
   onSelect: (ind: Indicateur) => void;
@@ -726,47 +729,35 @@ function MatriceView({
 
 // ─── Density toggle ───────────────────────────────────────────────────────────
 
-function DensityToggle({ value, onChange }: { value: Density; onChange: (d: Density) => void }) {
+function PresentationToggle({ value, onChange }: { value: Presentation; onChange: (presentation: Presentation) => void }) {
+  const options = [
+    { id: "mini", label: "Mini", icon: List },
+    { id: "etendue", label: "Étendue", icon: Grid2X2 },
+    { id: "graphe", label: "Graphe", icon: Network },
+  ] as const;
+
   return (
     <div
       className="flex rounded-full p-0.5"
       style={{ background: "var(--color-border-subtle)", border: "1px solid var(--color-border-subtle)" }}
     >
-      <button
-        onClick={() => onChange("mini")}
-        aria-pressed={value === "mini"}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all"
-        style={{
-          background: value === "mini" ? "var(--color-primary)" : "transparent",
-          color: value === "mini" ? "var(--color-surface)" : "var(--color-text)",
-        }}
-        title="Vue mini"
-      >
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <rect x="0.5" y="2" width="12" height="2" rx="1" fill="currentColor"/>
-          <rect x="0.5" y="6" width="12" height="2" rx="1" fill="currentColor"/>
-          <rect x="0.5" y="10" width="12" height="2" rx="1" fill="currentColor"/>
-        </svg>
-        Mini
-      </button>
-      <button
-        onClick={() => onChange("etendue")}
-        aria-pressed={value === "etendue"}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all"
-        style={{
-          background: value === "etendue" ? "var(--color-primary)" : "transparent",
-          color: value === "etendue" ? "var(--color-surface)" : "var(--color-text)",
-        }}
-        title="Vue étendue"
-      >
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <rect x="0.5" y="0.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-          <rect x="7.5" y="0.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-          <rect x="0.5" y="7.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-          <rect x="7.5" y="7.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/>
-        </svg>
-        Étendue
-      </button>
+      {options.map(({ id, label, icon: Icon }) => (
+        <button
+          key={id}
+          type="button"
+          onClick={() => onChange(id)}
+          aria-pressed={value === id}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all"
+          style={{
+            background: value === id ? "var(--color-primary)" : "transparent",
+            color: value === id ? "var(--color-surface)" : "var(--color-text)",
+          }}
+          title={`Vue ${label.toLowerCase()}`}
+        >
+          <Icon aria-hidden="true" size={13} strokeWidth={1.8} />
+          {label}
+        </button>
+      ))}
     </div>
   );
 }
@@ -775,7 +766,7 @@ function DensityToggle({ value, onChange }: { value: Density; onChange: (d: Dens
 
 export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   const [viewMode, setViewMode] = useState<ViewMode>("grille");
-  const [density, setDensity] = useState<Density>("mini");
+  const [presentation, setPresentation] = useState<Presentation>("mini");
   const [filterPole, setFilterPole] = useState<Pole | "Tous">("Tous");
   const [filterListe, setFilterListe] = useState<Liste | "Tous">("Tous");
   const [filterMaturite, setFilterMaturite] = useState<number | "Tous">("Tous");
@@ -805,6 +796,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
 
   const statsL1 = indicateurs.filter((i) => i.liste === "L1").length;
   const statsL2 = indicateurs.filter((i) => i.liste === "L2").length;
+  const cardDensity: CardDensity = presentation === "graphe" ? "mini" : presentation;
 
   const viewButtons: { id: ViewMode; label: string; icon: React.ReactNode }[] = [
     {
@@ -857,7 +849,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
             Fiches indicateurs
           </h1>
           <p className="mt-2 text-sm" style={{ color: "var(--color-text)", maxWidth: 520 }}>
-            Portefeuille de travail L1 + L2 : {indicateurs.length} indicateurs explorables par grille, mode d’action VTT principal proposé ou matrice VTT × maturité.
+            Portefeuille de travail L1 + L2 : {indicateurs.length} indicateurs explorables par grille, regroupement par mode d’action, graphe de relations ou matrice VTT × maturité.
           </p>
           <p className="mt-3 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
             Les rattachements VTT sont un préclassement à synchroniser avec le tableur consolidé. Les 21 indicateurs L3 et les 47 indicateurs L4 restent dans la feuille de route et la traçabilité de l’étude.
@@ -890,7 +882,11 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
             {viewButtons.map((v) => (
               <button
                 key={v.id}
-                onClick={() => { setViewMode(v.id); setActiveMatrixCell(null); }}
+                onClick={() => {
+                  setViewMode(v.id);
+                  setActiveMatrixCell(null);
+                  if (v.id === "grille" && presentation === "graphe") setPresentation("mini");
+                }}
                 aria-pressed={viewMode === v.id}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
                 style={{
@@ -904,9 +900,18 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
             ))}
           </div>
 
-          {/* Density toggle — only in grille and vtt modes */}
+          {/* Card density and graph presentation — only in grille and vtt modes */}
           {viewMode !== "matrice" && (
-            <DensityToggle value={density} onChange={setDensity} />
+            <PresentationToggle
+              value={presentation}
+              onChange={(next) => {
+                setPresentation(next);
+                if (next === "graphe") {
+                  setViewMode("vtt");
+                  setActiveMatrixCell(null);
+                }
+              }}
+            />
           )}
 
           {/* Search */}
@@ -994,7 +999,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
               <p style={{ fontFamily: "'Newsreader', serif", fontSize: 22, fontWeight: 700 }}>Aucun résultat</p>
               <p className="text-sm mt-1">Essayez d'élargir les filtres.</p>
             </div>
-          ) : density === "mini" ? (
+          ) : cardDensity === "mini" ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {baseFiltered.map((ind) => (
                 <MiniCard key={ind.id} ind={ind} onClick={() => setSelected(ind)} />
@@ -1011,13 +1016,17 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
 
         {/* VTT */}
         {viewMode === "vtt" && (
-          <VTTView
-            items={baseFiltered}
-            density={density}
-            filterMaturite={filterMaturite}
-            onMaturiteClick={(m) => setFilterMaturite(m)}
-            onSelect={setSelected}
-          />
+          presentation === "graphe" ? (
+            <IndicatorGraphView items={baseFiltered} onSelect={setSelected} />
+          ) : (
+            <VTTView
+              items={baseFiltered}
+              density={cardDensity}
+              filterMaturite={filterMaturite}
+              onMaturiteClick={(m) => setFilterMaturite(m)}
+              onSelect={setSelected}
+            />
+          )
         )}
 
         {/* Matrice */}
