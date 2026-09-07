@@ -1,7 +1,7 @@
 import {
   indicateurs,
   vttSections,
-  type Indicateur,
+  type FicheIndicateur,
   type Pole,
 } from "@/data/indicators"
 
@@ -21,7 +21,7 @@ export type IndicatorGraphIndicatorNode = {
   indicatorId: string
   label: string
   pole: Pole
-  maturite: 1 | 2 | 3 | 4
+  maturite: 1 | 2 | 3 | 4 | null
 }
 
 export type IndicatorGraphEdge = {
@@ -54,7 +54,7 @@ export function toGraphNodeId(prefix: "vtt" | "indicateur", value: string) {
 }
 
 export function buildIndicatorGraph(
-  items: Indicateur[] = indicateurs,
+  items: FicheIndicateur[] = indicateurs,
 ): IndicatorGraphData {
   const modes = vttSections.map((section) => ({
     id: toGraphNodeId("vtt", section.label),

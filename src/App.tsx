@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, type CSSProperties } from "react";
 import {
   Building2,
   Calculator,
@@ -21,7 +21,7 @@ import { indicateurs, poleColors, maturiteColor, maturiteLabel } from "@/data/in
 
 // ─── Shared style tokens ─────────────────────────────────────────────────────
 // Palette sourced from Grand Genève: lake, alpine greens, institutional blues,
-// terracotta accents — kept editable and vectorial throughout.
+// terracotta accents · kept editable and vectorial throughout.
 
 // ─── Character SVGs ──────────────────────────────────────────────────────────
 // Style: flat vector, dark-ink outlines via fill, skin var(--color-illustration-skin), limited palette.
@@ -31,7 +31,7 @@ const Observatrice = () => (
   <svg viewBox="0 0 90 160" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
     {/* Head */}
     <ellipse cx="45" cy="27" rx="16" ry="17" fill="var(--color-illustration-skin)"/>
-    {/* Hair — straight bob */}
+    {/* Hair · straight bob */}
     <path d="M29 22 Q31 7 45 6 Q59 7 61 22 L61 36 Q53 42 45 42 Q37 42 29 36Z" fill="var(--color-text)"/>
     <path d="M29 22 Q29 10 45 9 Q61 10 61 22 Q55 13 45 14 Q35 13 29 22Z" fill="var(--color-text-strong)"/>
     {/* Ears */}
@@ -55,7 +55,7 @@ const Observatrice = () => (
     <path d="M60 50 L52 60 L45 50" fill="var(--color-primary-soft)" opacity="0.25"/>
     {/* White shirt under */}
     <rect x="38" y="50" width="14" height="22" fill="var(--color-canvas)"/>
-    {/* Left arm — holding tablet */}
+    {/* Left arm · holding tablet */}
     <path d="M20 54 L6 70 L10 80 L24 64" fill="var(--color-illustration-skin)"/>
     {/* Tablet */}
     <rect x="0" y="65" width="18" height="24" rx="2" fill="var(--color-primary-soft)" stroke="var(--color-text)" strokeWidth="1.2"/>
@@ -103,7 +103,7 @@ const Urbaniste = () => (
     <rect x="38" y="42" width="14" height="9" fill="var(--color-illustration-skin)"/>
     {/* Jacket */}
     <path d="M20 54 L30 50 L60 50 L70 54 L72 108 L18 108Z" fill="var(--color-violet-soft)"/>
-    {/* Left arm — blueprint */}
+    {/* Left arm · blueprint */}
     <path d="M20 54 L5 70 L9 80 L24 64" fill="var(--color-violet-soft)"/>
     <ellipse cx="7" cy="81" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
     {/* Blueprint sheet */}
@@ -151,7 +151,7 @@ const Architecte = () => (
     {/* Left arm */}
     <path d="M20 56 L5 72 L9 82 L24 66" fill="var(--color-violet)"/>
     <ellipse cx="7" cy="83" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
-    {/* Right arm — rolled plans */}
+    {/* Right arm · rolled plans */}
     <path d="M70 56 L85 70 L81 80 L66 66" fill="var(--color-violet)"/>
     <ellipse cx="83" cy="81" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
     {/* Rolled plan tube */}
@@ -167,7 +167,7 @@ const Architecte = () => (
   </svg>
 );
 
-// Mathieu — cyclist, rider properly seated on bicycle, leaning forward
+// Mathieu · cyclist, rider properly seated on bicycle, leaning forward
 const Cycliste = () => (
   <svg viewBox="0 0 130 160" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
     {/* === BICYCLE === */}
@@ -220,7 +220,7 @@ const Cycliste = () => (
     <rect x="48" y="113" width="9" height="3.5" rx="1.5" fill="var(--color-text)"/>
     <rect x="63" y="99" width="9" height="3.5" rx="1.5" fill="var(--color-text)"/>
     {/* === RIDER === */}
-    {/* Head — centered above handlebar area, leaning forward */}
+    {/* Head · centered above handlebar area, leaning forward */}
     <ellipse cx="80" cy="42" rx="15" ry="15" fill="var(--color-illustration-skin)"/>
     {/* Helmet */}
     <path d="M65 38 Q67 24 80 23 Q93 24 95 38 Q89 28 80 29 Q71 28 65 38Z" fill="var(--color-accent)"/>
@@ -240,21 +240,21 @@ const Cycliste = () => (
     <ellipse cx="65" cy="42" rx="3.5" ry="4.5" fill="var(--color-illustration-skin)"/>
     {/* Neck */}
     <path d="M76 56 L84 56 L82 66 L78 66Z" fill="var(--color-illustration-skin)"/>
-    {/* Torso — cycling jersey, leaning forward (~45°) */}
+    {/* Torso · cycling jersey, leaning forward (~45°) */}
     {/* Hips at saddle (50,70), shoulders at (72,58), head at (80,42) */}
     <path d="M48 70 L52 74 L76 66 L80 58 L68 56 L44 64Z" fill="var(--color-violet-soft)"/>
     {/* Jersey pockets on back */}
     <rect x="44" y="64" width="10" height="7" rx="2" fill="var(--color-violet)"/>
-    {/* Left arm — reaching down to handlebar drops */}
+    {/* Left arm · reaching down to handlebar drops */}
     <path d="M68 58 Q76 62 88 72" fill="none" stroke="var(--color-illustration-skin)" strokeWidth="8" strokeLinecap="round"/>
     <ellipse cx="89" cy="73" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
     {/* Right arm */}
     <path d="M76 58 Q82 62 93 70" fill="none" stroke="var(--color-illustration-skin)" strokeWidth="7" strokeLinecap="round"/>
     <ellipse cx="94" cy="71" rx="4.5" ry="4.5" fill="var(--color-illustration-skin)"/>
-    {/* Left leg — pedal down */}
+    {/* Left leg · pedal down */}
     <path d="M50 72 Q46 90 52 112" fill="none" stroke="var(--color-text)" strokeWidth="8" strokeLinecap="round"/>
     <ellipse cx="52" cy="114" rx="9" ry="5" fill="var(--color-text)"/>
-    {/* Right leg — pedal up */}
+    {/* Right leg · pedal up */}
     <path d="M54 72 Q62 84 68 100" fill="none" stroke="var(--color-text)" strokeWidth="8" strokeLinecap="round"/>
     <ellipse cx="69" cy="101" rx="9" ry="5" fill="var(--color-text)"/>
     {/* Cycling shoes */}
@@ -293,7 +293,7 @@ const Ecologue = () => (
     <rect x="38" y="42" width="14" height="9" fill="var(--color-illustration-skin)"/>
     {/* Field shirt */}
     <path d="M20 54 L30 50 L60 50 L70 54 L72 108 L18 108Z" fill="var(--color-sage)"/>
-    {/* Left arm — binoculars */}
+    {/* Left arm · binoculars */}
     <path d="M20 54 L5 70 L9 80 L24 64" fill="var(--color-illustration-skin)"/>
     {/* Binoculars */}
     <rect x="-4" y="70" width="14" height="9" rx="3" fill="var(--color-text)"/>
@@ -301,7 +301,7 @@ const Ecologue = () => (
     <circle cx="9" cy="74.5" r="4" fill="var(--color-primary-strong)"/>
     <circle cx="1" cy="74.5" r="2" fill="var(--color-primary)" opacity="0.6"/>
     <circle cx="9" cy="74.5" r="2" fill="var(--color-primary)" opacity="0.6"/>
-    {/* Right arm — notebook */}
+    {/* Right arm · notebook */}
     <path d="M70 54 L84 66 L80 76 L66 64" fill="var(--color-illustration-skin)"/>
     <ellipse cx="82" cy="77" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
     <rect x="76" y="62" width="14" height="18" rx="2" fill="var(--color-surface)" stroke="var(--color-text)" strokeWidth="1"/>
@@ -332,7 +332,7 @@ const Elu = () => (
     <ellipse cx="52" cy="25" rx="2.5" ry="2.8" fill="var(--color-text)"/>
     <circle cx="39" cy="24" r="0.9" fill="var(--color-surface)"/>
     <circle cx="53" cy="24" r="0.9" fill="var(--color-surface)"/>
-    {/* Eyebrows — expressive */}
+    {/* Eyebrows · expressive */}
     <path d="M33 19 Q38 16 43 19" fill="none" stroke="var(--color-illustration-neutral)" strokeWidth="2" strokeLinecap="round"/>
     <path d="M47 19 Q52 16 57 19" fill="none" stroke="var(--color-illustration-neutral)" strokeWidth="2" strokeLinecap="round"/>
     {/* Smile */}
@@ -341,7 +341,7 @@ const Elu = () => (
     <rect x="38" y="42" width="14" height="9" fill="var(--color-illustration-skin)"/>
     {/* White shirt */}
     <rect x="36" y="48" width="18" height="18" fill="var(--color-canvas)"/>
-    {/* Tie — swiss cross red */}
+    {/* Tie · swiss cross red */}
     <path d="M43 52 L45 72 L47 52Z" fill="var(--color-accent)"/>
     <rect x="43" y="58" width="4" height="3" fill="var(--color-accent)"/>
     {/* Suit jacket */}
@@ -351,7 +351,7 @@ const Elu = () => (
     {/* Pin / badge */}
     <circle cx="34" cy="70" r="5.5" fill="var(--color-ochre-soft)"/>
     <circle cx="34" cy="70" r="3" fill="var(--color-accent)"/>
-    {/* Left arm — papers */}
+    {/* Left arm · papers */}
     <path d="M18 58 L4 74 L8 84 L22 68" fill="var(--color-primary)"/>
     <rect x="-2" y="68" width="16" height="20" rx="1.5" fill="var(--color-canvas)" stroke="var(--color-text)" strokeWidth="0.8"/>
     <line x1="1" y1="73" x2="11" y2="73" stroke="var(--color-text)" strokeWidth="0.6"/>
@@ -399,7 +399,7 @@ const Batisseur = () => (
     {/* Left arm */}
     <path d="M18 55 L3 71 L7 81 L22 65" fill="var(--color-illustration-clay)"/>
     <ellipse cx="5" cy="82" rx="5" ry="5" fill="var(--color-illustration-clay)"/>
-    {/* Right arm — wrench */}
+    {/* Right arm · wrench */}
     <path d="M72 55 L86 69 L82 79 L68 65" fill="var(--color-illustration-clay)"/>
     {/* Wrench */}
     <path d="M82 62 L92 80" stroke="var(--color-illustration-neutral)" strokeWidth="5" strokeLinecap="round"/>
@@ -436,7 +436,7 @@ const Coordinatrice = () => (
     <rect x="38" y="42" width="14" height="9" fill="var(--color-illustration-clay)"/>
     {/* Shirt */}
     <path d="M20 54 L30 50 L60 50 L70 54 L72 110 L18 110Z" fill="var(--color-accent-soft)"/>
-    {/* Left arm — raised, holding sign pole */}
+    {/* Left arm · raised, holding sign pole */}
     <path d="M20 54 Q10 40 12 28" fill="none" stroke="var(--color-illustration-clay)" strokeWidth="9" strokeLinecap="round"/>
     <ellipse cx="12" cy="26" rx="5.5" ry="5.5" fill="var(--color-illustration-clay)"/>
     {/* Sign pole */}
@@ -492,7 +492,7 @@ const Renovatrice = () => (
     {/* Left arm */}
     <path d="M18 55 L3 70 L7 80 L22 65" fill="var(--color-illustration-skin)"/>
     <ellipse cx="5" cy="81" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
-    {/* Right arm — paintbrush */}
+    {/* Right arm · paintbrush */}
     <path d="M72 55 L86 64 L82 74 L68 65" fill="var(--color-illustration-skin)"/>
     <ellipse cx="84" cy="75" rx="5" ry="5" fill="var(--color-illustration-skin)"/>
     {/* Paintbrush handle */}
@@ -773,6 +773,11 @@ const vttModes = [
     axis: "Primauté du socle du vivant",
     vision:
       "Préserver le socle du vivant en garantissant la qualité des milieux naturels, agricoles, forestiers et urbains.",
+    contributions: {
+      environnement: "Infrastructure écologique, sols, eau, biodiversité.",
+      urbanisation: "Emprise bâtie, pression foncière, espaces ouverts.",
+      mobilite: "Emprises, infrastructures fragmentantes, pression des flux.",
+    },
     levers: [
       { title: "Réseau hydrographique", body: "Préserver les cours d’eau, leurs espaces de fonctionnement, les zones humides et les nappes stratégiques." },
       { title: "Infrastructure écologique", body: "Protéger les espaces structurants et restaurer les sols naturels dans les territoires bâtis, agricoles et forestiers." },
@@ -788,6 +793,12 @@ const vttModes = [
     axis: "Primauté du socle du vivant",
     vision:
       "Réduire les ruptures produites par les infrastructures et les tissus bâtis afin de rétablir les continuités écologiques et les parcours humains.",
+    contributions: {
+      environnement: "Corridors biologiques, trames vertes et bleues.",
+      urbanisation:
+        "Accès aux espaces ouverts, lisières, continuités entre polarités.",
+      mobilite: "Continuités cyclables, marchabilité, rabattement TP.",
+    },
     levers: [
       { title: "Franchissement des infrastructures", body: "Créer ou réaménager des corridors et des écoponts pour rendre les grandes coupures plus perméables." },
       { title: "Franges et tissus urbains", body: "Restaurer les pénétrantes de verdure et retisser les interfaces entre espaces bâtis, agricoles et naturels." },
@@ -803,6 +814,13 @@ const vttModes = [
     axis: "Primauté du socle du vivant",
     vision:
       "Adapter le territoire au dérèglement climatique et renforcer la biodiversité par une gestion renouvelée des sols, de la nature et de l’eau.",
+    contributions: {
+      environnement:
+        "Canopée, îlots de chaleur, qualité de l’air, désimperméabilisation.",
+      urbanisation: "Qualité des tissus bâtis, espaces publics, proximité.",
+      mobilite:
+        "Réduction des nuisances, sécurité, confort climatique des espaces de mobilité.",
+    },
     levers: [
       { title: "Espaces bâtis", body: "Désimperméabiliser, infiltrer les eaux pluviales, renforcer la canopée et remettre certains cours d’eau à ciel ouvert." },
       { title: "Espaces agricoles et forestiers", body: "Améliorer la rétention des sols, développer les pratiques agroécologiques et diversifier les lisières et essences." },
@@ -818,6 +836,12 @@ const vttModes = [
     axis: "Rééquilibrage multipolaire de l’agglomération",
     vision:
       "Améliorer le cadre de vie et accueillir le développement attendu en renouvelant les polarités et les tissus déjà urbanisés.",
+    contributions: {
+      environnement: "Intégration du vivant dans les tissus existants.",
+      urbanisation: "Densification, mixité fonctionnelle, logement, services.",
+      mobilite:
+        "Réduction des distances contraintes, accessibilité aux centralités.",
+    },
     levers: [
       { title: "Polarités diversifiées", body: "Moduler l’équilibre entre habitants, emplois, services et équipements selon la nature de chaque polarité." },
       { title: "Tissus bâtis transformés", body: "Intensifier et renouveler l’existant selon les caractéristiques locales, en limitant fortement l’extension urbaine." },
@@ -833,6 +857,12 @@ const vttModes = [
     axis: "Rééquilibrage multipolaire de l’agglomération",
     vision:
       "Organiser un maillage multimodal qui privilégie les mobilités actives et les transports publics tout en requalifiant les espaces publics.",
+    contributions: {
+      environnement: "Accès aux espaces de nature et continuités paysagères.",
+      urbanisation: "Polarités, équipements structurants, centralités.",
+      mobilite:
+        "Desserte TP, accessibilité multimodale, flux transfrontaliers, réseaux cyclables.",
+    },
     levers: [
       { title: "Maillage multimodal décarboné", body: "Articuler marche, réseaux cyclables, transports publics et liaisons tangentielles selon les situations territoriales." },
       { title: "Interfaces et rabattement", body: "Coordonner les gares, plateformes multimodales, transports à la demande et services de mobilité partagée." },
@@ -848,6 +878,12 @@ const vttModes = [
     axis: "Rééquilibrage multipolaire de l’agglomération",
     vision:
       "Réduire l’usage des ressources et rapprocher production, transformation, distribution et consommation à l’échelle des bassins de vie.",
+    contributions: {
+      environnement: "Eau, énergie, sols, ressources, filières.",
+      urbanisation:
+        "Réemploi, foncier, densification de l’existant, surfaces productives.",
+      mobilite: "Logistique, flux de marchandises, sobriété des déplacements.",
+    },
     levers: [
       { title: "Ressources et filières locales", body: "Développer les filières agricoles, industrielles et de réemploi des matériaux en privilégiant la sobriété." },
       { title: "Distribution décarbonée", body: "Hiérarchiser plateformes régionales, centres urbains et micro-hubs pour organiser une logistique de proximité." },
@@ -865,11 +901,256 @@ const modeIcons = {
   circularite: Recycle,
 } as const;
 
-const ModeIcon = ({ mode, color }: { mode: string; color: string }) => {
+const ModeIcon = ({ mode, color, size = 24 }: { mode: string; color: string; size?: number }) => {
   const Icon = modeIcons[mode as keyof typeof modeIcons] ?? Recycle;
 
-  return <Icon aria-hidden="true" focusable="false" color={color} size={24} strokeWidth={1.8} />;
+  return <Icon aria-hidden="true" focusable="false" color={color} size={size} strokeWidth={1.8} />;
 };
+
+const conceptLinkPaths = {
+  preservation: "M470 130 C470 111 470 95 470 78",
+  reconnexion: "M548 174 C616 144 678 121 735 112",
+  revitalisation: "M548 296 C616 326 678 349 735 358",
+  regeneration: "M470 340 C470 359 470 375 470 392",
+  reseau: "M392 296 C324 326 262 349 205 358",
+  circularite: "M392 174 C324 144 262 121 205 112",
+} as const
+
+function VTTConceptDiagram({
+  modes,
+  activeMode,
+  onSelect,
+}: {
+  modes: typeof vttModes
+  activeMode: string
+  onSelect: (modeId: string) => void
+}) {
+  const currentMode = modes.find((mode) => mode.id === activeMode) ?? modes[0]
+  const contributions = [
+    {
+      id: "environnement",
+      label: "Contribution environnement",
+      body: currentMode.contributions.environnement,
+      color: poleColors.Environnement.accent,
+    },
+    {
+      id: "urbanisation",
+      label: "Contribution urbanisation / logement",
+      body: currentMode.contributions.urbanisation,
+      color: poleColors.Urbanisation.accent,
+    },
+    {
+      id: "mobilite",
+      label: "Contribution mobilité",
+      body: currentMode.contributions.mobilite,
+      color: poleColors.Mobilité.accent,
+    },
+  ] as const
+
+  return (
+    <section className="vtt-concept" aria-labelledby="vtt-section-title">
+      <p className="vtt-concept-summary">
+        Choisissez un mode d’action pour afficher ses contributions
+        environnementales, urbaines et liées à la mobilité.
+      </p>
+
+      <div className="vtt-concept-map">
+        <svg
+          className="vtt-concept-links"
+          viewBox="0 0 1120 470"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <marker
+              id="vtt-concept-arrow"
+              markerWidth="8"
+              markerHeight="8"
+              refX="6"
+              refY="4"
+              orient="auto"
+            >
+              <path d="M0 0 L8 4 L0 8 Z" fill="var(--color-primary)" />
+            </marker>
+          </defs>
+          {modes.map((mode) => (
+            <path
+              key={mode.id}
+              d={conceptLinkPaths[(mode.id as keyof typeof conceptLinkPaths)]}
+              className={activeMode === mode.id ? "is-active" : undefined}
+            />
+          ))}
+          <path
+            className="vtt-concept-output-link"
+            d="M575 235 C704 235 819 235 932 235"
+            markerEnd="url(#vtt-concept-arrow)"
+          />
+        </svg>
+
+        <div
+          className="vtt-territory-core"
+          aria-label="Le territoire commun du Grand Genève"
+        >
+          <svg
+            viewBox="0 0 220 220"
+            role="img"
+            aria-labelledby="territory-visual-title"
+          >
+            <title id="territory-visual-title">
+              Le territoire commun au centre des six modes d’action
+            </title>
+            <circle
+              cx="110"
+              cy="110"
+              r="103"
+              fill="var(--color-surface)"
+              stroke="var(--color-primary-strong)"
+              strokeWidth="2"
+            />
+            <circle
+              cx="110"
+              cy="110"
+              r="78"
+              fill="none"
+              stroke="var(--color-border)"
+              strokeDasharray="2 7"
+              strokeWidth="1"
+            />
+            <text
+              x="110"
+              y="106"
+              textAnchor="middle"
+              fill="var(--color-primary-strong)"
+              fontFamily="'Newsreader', serif"
+              fontSize="22"
+              fontWeight="700"
+            >
+              Territoire
+            </text>
+            <text
+              x="110"
+              y="130"
+              textAnchor="middle"
+              fill="var(--color-text-muted)"
+              fontFamily="'Public Sans', sans-serif"
+              fontSize="12"
+              fontWeight="600"
+            >
+              commun
+            </text>
+          </svg>
+        </div>
+
+        {modes.map((mode) => {
+          const isActive = activeMode === mode.id
+          return (
+            <button
+              key={mode.id}
+              type="button"
+              className={`vtt-concept-mode is-${mode.id}`}
+              style={
+                {
+                  "--concept-mode-bg": mode.color,
+                  "--concept-mode-accent": mode.accent,
+                } as CSSProperties
+              }
+              aria-pressed={isActive}
+              onClick={() => onSelect(mode.id)}
+            >
+              <span className="vtt-concept-mode-icon">
+                <ModeIcon mode={mode.id} color={mode.accent} size={25} />
+              </span>
+              <span>{mode.label}</span>
+            </button>
+          )
+        })}
+
+        <div className="vtt-concept-mobile-flow">
+          <span>Les modes d’action alimentent l’observation</span>
+          <svg viewBox="0 0 28 34" aria-hidden="true">
+            <path d="M14 2 V28" />
+            <path d="M7 21 L14 29 L21 21" />
+          </svg>
+        </div>
+
+        <div className="vtt-concept-output">
+          <svg viewBox="0 0 96 68" aria-hidden="true">
+            <rect
+              x="5"
+              y="5"
+              width="86"
+              height="58"
+              rx="14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            />
+            <path
+              d="M20 47 L37 33 L54 42 L73 20"
+              fill="none"
+              stroke="var(--color-accent)"
+              strokeWidth="4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <g
+              fill="var(--color-surface)"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <circle cx="20" cy="47" r="5" />
+              <circle cx="37" cy="33" r="5" />
+              <circle cx="54" cy="42" r="5" />
+              <circle cx="73" cy="20" r="5" />
+            </g>
+          </svg>
+          <strong>POPGG</strong>
+          <span>Données · discussion · décision</span>
+        </div>
+      </div>
+
+      <div
+        className="vtt-concept-context"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <div className="vtt-concept-context-heading">
+          <span
+            className="vtt-concept-context-icon"
+            style={{ background: currentMode.color, color: currentMode.accent }}
+          >
+            <ModeIcon
+              mode={currentMode.id}
+              color={currentMode.accent}
+              size={23}
+            />
+          </span>
+          <div>
+            <h4>{currentMode.label}</h4>
+            <p>Contributions par pôle</p>
+          </div>
+        </div>
+        <div className="vtt-concept-contributions">
+          {contributions.map((contribution) => (
+            <section
+              key={`${currentMode.id}-${contribution.id}`}
+              className="vtt-concept-contribution"
+            >
+              <h5>
+                <span
+                  style={{ background: contribution.color }}
+                  aria-hidden="true"
+                />
+                {contribution.label}
+              </h5>
+              <p>{contribution.body}</p>
+            </section>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
 
 // ─── App ─────────────────────────────────────────────────────────────────────
 
@@ -894,7 +1175,6 @@ export default function App() {
   const statsL1 = indicateurs.filter((i) => i.liste === "L1").length;
   const statsL2 = indicateurs.filter((i) => i.liste === "L2").length;
   const poles = ["Environnement", "Mobilité", "Urbanisation", "Gouvernance"] as const;
-  const transversalPoles = ["Environnement", "Mobilité", "Urbanisation"] as const;
   const currentPrimaryIndicators = indicateurs.filter((i) => i.lienVTT === current.key);
   const currentSecondaryIndicators = indicateurs.filter((i) => i.lienVTTSecondaire === current.label);
   const relatedIndicators = [
@@ -1092,7 +1372,7 @@ export default function App() {
             {([1,2,3,4] as const).map((m) => (
               <span key={m} className="flex items-center gap-1.5 text-xs" style={{ color: "var(--color-text)", opacity: 0.7 }}>
                 <span style={{ width: 10, height: 10, borderRadius: "50%", background: maturiteColor[m], display: "inline-block" }}/>
-                {m} — {maturiteLabel[m]}
+                {m} · {maturiteLabel[m]}
               </span>
             ))}
           </div>
@@ -1256,7 +1536,7 @@ export default function App() {
       <section id="vtt" style={{ background: "var(--color-canvas-cool)", borderTop: "1px solid var(--color-border)" }} className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-8">
-            <h2 style={{
+            <h2 id="vtt-section-title" style={{
               fontFamily: "'Newsreader', serif",
               fontWeight: 700,
               fontSize: "clamp(1.8rem, 4vw, 2.6rem)",
@@ -1264,49 +1544,14 @@ export default function App() {
               lineHeight: 1.2,
               letterSpacing: "-0.02em",
             }}>
-              Six modes d’action
+              Un territoire commun, six modes d’action
             </h2>
             <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 690 }}>
               Les modes d’action de la VTT décrivent des transformations territoriales attendues à l’horizon 2050. Chacun associe une orientation, des leviers concrets et des indicateurs susceptibles de documenter leur mise en œuvre.
             </p>
           </div>
 
-          <div className="vtt-transversal-row flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 mb-7" style={{ borderTop: "1px solid var(--color-border)", borderBottom: "1px solid var(--color-border)" }}>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 620 }}>
-              La VTT propose une lecture transversale : un même mode d’action permet de relier les transformations observées dans plusieurs pôles.
-            </p>
-            <div className="flex flex-wrap gap-2" aria-label="Pôles d’observation reliés par la VTT">
-              {transversalPoles.map((pole) => (
-                <span
-                  key={pole}
-                  className="text-xs font-semibold px-3 py-1.5 rounded-full"
-                  style={{ background: poleColors[pole].bg, color: poleColors[pole].accent }}
-                >
-                  {pole}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Mode tabs */}
-          <nav className="vtt-mode-tabs flex gap-2 flex-wrap mb-7" aria-label="Choisir un mode d’action VTT">
-            {vttModes.map((m) => (
-              <button
-                key={m.id}
-                onClick={() => setActiveMode(m.id)}
-                aria-pressed={activeMode === m.id}
-                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all"
-                style={{
-                  background: activeMode === m.id ? m.color : "var(--color-surface)",
-                  color: activeMode === m.id ? m.accent : "var(--color-text)",
-                  border: `1px solid ${activeMode === m.id ? m.accent : "var(--color-border)"}`,
-                  fontFamily: "'Public Sans', sans-serif",
-                }}
-              >
-                {m.label}
-              </button>
-            ))}
-          </nav>
+          <VTTConceptDiagram modes={vttModes} activeMode={activeMode} onSelect={setActiveMode} />
 
           <header className="vtt-mode-intro mb-6" aria-live="polite" aria-atomic="true">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
@@ -1384,7 +1629,7 @@ export default function App() {
                   })}
                 </ul>
               ) : (
-                <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>Aucun indicateur associé dans le préclassement actuel.</p>
+                <p className="text-sm" style={{ color: "var(--color-text-muted)" }}>Aucun indicateur associé dans la liste de travail actuelle.</p>
               )}
             </div>
           </article>
@@ -1403,7 +1648,7 @@ export default function App() {
           </div>
 
           <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
-            Leviers synthétisés à partir des planches de la Vision territoriale transfrontalière 2050. Les rattachements d’indicateurs restent à confirmer dans le tableur consolidé.
+            Leviers synthétisés à partir des planches de la Vision territoriale transfrontalière 2050. Les rattachements d’indicateurs correspondent à la liste de travail mise à jour le 7 septembre 2026.
           </p>
         </div>
       </section>
@@ -1533,7 +1778,7 @@ export default function App() {
             </span>
             <span className="flex items-center gap-2">
               <span aria-hidden="true" className="matrix-dot" />
-              Aucun lien dans le préclassement
+              Aucun lien dans la liste de travail actuelle
             </span>
             <span>Les libellés d’horizon indiquent la présence d’au moins un indicateur L1 ou L2.</span>
           </div>
@@ -1552,7 +1797,7 @@ export default function App() {
           <span className="text-xs ml-2" style={{ color: "var(--color-primary)" }}>Grand Genève</span>
         </div>
         <p className="text-xs text-center" style={{ color: "var(--color-primary-strong)", opacity: 0.65 }}>
-          Plateforme d'Observation et de Prospective — Vision Territoriale Transfrontalière 2050
+          Plateforme d'Observation et de Prospective · Vision Territoriale Transfrontalière 2050
         </p>
         <div className="flex gap-3 text-xs font-medium" style={{ color: "var(--color-primary-strong)" }}>
           <span>Franco-Suisse</span>
