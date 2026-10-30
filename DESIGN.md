@@ -2,8 +2,8 @@
 name: POPGG atelier2
 description: Observatoire territorial clair pour consulter les indicateurs du Grand Genève.
 colors:
-  canvas: "#f6f3ed"
-  canvas-cool: "#edf3f6"
+  canvas: "#f7f3eb"
+  canvas-cool: "#eaf3f7"
   surface: "#ffffff"
   surface-soft: "#f1f4f5"
   surface-translucent: "rgba(255, 255, 255, 0.76)"
@@ -17,11 +17,11 @@ colors:
   overlay: "rgba(33, 53, 68, 0.32)"
   primary: "#315f7b"
   primary-strong: "#24495f"
-  primary-soft: "#dceaf1"
-  primary-soft-strong: "#c7dde9"
-  accent: "#c86849"
-  accent-strong: "#a34730"
-  accent-soft: "#f4dfd6"
+  primary-soft: "#dcecf3"
+  primary-soft-strong: "#c9dfeb"
+  accent: "#ee5b43"
+  accent-strong: "#b33f2d"
+  accent-soft: "#f8ddd6"
   sage: "#557569"
   sage-strong: "#3f5d53"
   sage-medium: "#89a69b"
@@ -32,8 +32,23 @@ colors:
   ochre: "#a8792a"
   ochre-strong: "#775117"
   ochre-soft: "#f3e6c6"
-  coral: "#d07a66"
+  coral: "#ef6a52"
   rose-soft: "#f1e2e7"
+  pole-environment: "#4dbe7a"
+  pole-environment-strong: "#276641"
+  pole-environment-soft: "#eaf7f0"
+  pole-urbanisation: "#ef4979"
+  pole-urbanisation-strong: "#99183f"
+  pole-urbanisation-soft: "#fdeff2"
+  pole-mobility: "#3c95fa"
+  pole-mobility-strong: "#155d9d"
+  pole-mobility-soft: "#eaf4ff"
+  pole-social: "#ec7d2d"
+  pole-social-strong: "#934211"
+  pole-social-soft: "#fdf0e6"
+  pole-governance: "#fad93a"
+  pole-governance-strong: "#665000"
+  pole-governance-soft: "#fff9dd"
   status-1: "#b8563f"
   status-2: "#8b5d1c"
   status-3: "#3e7393"
@@ -142,7 +157,7 @@ components:
 
 POPGG adopte une présence éditoriale, analytique et calme. La matière territoriale est structurée pour être parcourue et comparée sans donner à l'interface l'apparence d'un tableau de bord technique fermé. Le contraste entre les titres en Newsreader et l'interface en Public Sans installe une hiérarchie lisible, tandis que les fonds ivoire et bleu brume maintiennent une atmosphère légère.
 
-La couleur reste située. Le bleu lac porte les actions et la navigation, la terre cuite et l'ocre donnent des accents mesurés, le violet signale la transformation et le vert sauge reste attaché à l'environnement et à la préservation. Les surfaces sont claires, les composants précis et les effets de profondeur discrets.
+La couleur reste située. Le bleu lac porte les actions et la navigation, le corail, l'ocre, le violet et le vert sauge distinguent les modes d'action. Une palette plus franche identifie les cinq pôles thématiques. Les surfaces sont claires, les composants précis et les effets de profondeur discrets. L’univers présenté dans les diapositives finales est repris par des anneaux corail, des filets fins et l’alternance entre bleu brume, ivoire et blanc, sans transformer l’interface en composition de présentation.
 
 **Key Characteristics:**
 
@@ -170,11 +185,12 @@ La palette lémanique et minérale combine des neutres lumineux, un bleu fonctio
 
 ### Tertiary
 
-- **Sauge** (`colors.sage`, `colors.sage-strong`, `colors.sage-medium`, `colors.sage-soft`): environnement, vivant et préservation uniquement.
+- **Sauge** (`colors.sage`, `colors.sage-strong`, `colors.sage-medium`, `colors.sage-soft`): vivant et mode d'action Préservation uniquement.
 - **Violet transformation** (`colors.violet`, `colors.violet-strong`, `colors.violet-soft`): régénération, urbanisation et transformation.
 - **Ocre circularité** (`colors.ochre`, `colors.ochre-strong`, `colors.ochre-soft`): circularité, ressources et repères secondaires.
 - **Corail et rose brume** (`colors.coral`, `colors.rose-soft`): illustrations et coopération, sans devenir des couleurs d'action génériques.
-- **Échelle de maturité** (`colors.status-1` à `colors.status-4`): progression ordonnée provisoire de « À construire » à « Opérationnel ». La couleur complète le chiffre et le libellé, elle ne les remplace pas. Le statut provisoire doit rester visible tant que l’arbitrage avec les cinq statuts du compte rendu du 31 août n’est pas réalisé.
+- **Pôles thématiques** : vert franc pour l'environnement, rose pour l'urbanisation, bleu vif pour la mobilité, orange pour le social et jaune pour la gouvernance. Chaque couleur de référence possède une variante foncée accessible pour le texte et une surface pâle pour les cartes.
+- **Échelle de maturité** (`colors.status-1` à `colors.status-4`): quatre niveaux de l’étude, « Émergent », « En construction », « Avancé », « Consolidé ». La couleur complète le chiffre et le libellé, elle ne les remplace pas. La qualification des fiches reste provisoire ; les statuts opérationnels du compte rendu du 31 août ne sont pas assimilés automatiquement à cette échelle.
 - **Palette d'illustration** (`colors.illustration-skin-light`, `colors.illustration-skin-medium`, `colors.illustration-skin-deep`, `colors.illustration-hair-warm`, `colors.illustration-hair-light`, `colors.illustration-neutral`): carnations et chevelures diversifiées, aux tons atténués, associées à l'ardoise et aux accents sémantiques.
 
 ### Avatars de responsabilité
@@ -192,7 +208,7 @@ La provenance de la chaîne reste accessible dans un volet discret. Son contenu 
 - **Bleu-gris structurel** (`colors.border`, `colors.border-strong`, `colors.border-subtle`, `colors.border-faint`): séparations, contours et états désactivés.
 - **Voile de panneau** (`colors.overlay`) et **blanc translucide** (`colors.surface-translucent`): modalité latérale et pastilles superposées à des fonds colorés.
 
-**The Situated Color Rule.** Le vert sauge n'est jamais une couleur générique de succès, d'action ou de navigation. Il reste strictement réservé aux contenus environnementaux et à la préservation.
+**The Situated Color Rule.** Le vert sauge n'est jamais une couleur générique de succès, d'action ou de navigation. Il reste strictement réservé au mode d'action Préservation et aux contenus liés au vivant. Le vert franc identifie le pôle Environnement.
 
 **The Double Encoding Rule.** Une couleur catégorielle ou de maturité est toujours doublée par un texte, un nombre ou une forme identifiable.
 
@@ -283,27 +299,35 @@ Les composants sont précis et sobres. Leur état courant reste lumineux; la cou
 
 ### Indicator Cards
 
+La synthèse d’accueil sépare les nombres par thème et la préparation des 30 indicateurs. Les cartes de thème affichent uniquement le nom et un effectif avec son unité. La maturité est une liste globale : libellé complet, explication concrète, puis nombre d’indicateurs. Éviter les notations « niveau · effectif » qui demandent de décoder une légende. Les listes L1/L2 et la source sont expliquées dans un détail repliable. La grille des thèmes passe à deux colonnes sous 640 px ; les définitions de maturité passent sous leur libellé sous 900 px.
+
 Les variantes mini et étendue partagent le même en-tête sémantique, l'identifiant, les badges de liste et de typologie, puis un pied regroupant maturité et mode d’action VTT principal proposé. La variante étendue ajoute les métadonnées de mesure dans un corps blanc. La carte entière est le contrôle d'ouverture du panneau latéral.
+
+Le bandeau de synthèse du catalogue aligne les six statistiques dans une grille régulière. Chaque cellule conserve le nombre et son libellé sur une même ligne de base. La grille passe à trois colonnes sous 900 px puis à deux colonnes sous 640 px.
 
 ### Side Panel
 
-`components.side-panel` se superpose à un voile ardoise translucide et conserve un fond clair. Sa largeur est bornée par le viewport; son en-tête reprend la couleur du pôle, son corps défile et ses blocs de métadonnées restent sur fond blanc. Le rattachement VTT y distingue le mode d’action principal, sa question évaluative et le mode d’action secondaire proposé ; toute valeur hors des six modes d’action est signalée comme à confirmer.
+`components.side-panel` se superpose à un voile ardoise translucide et conserve un fond clair. Sa largeur est bornée par le viewport; son en-tête reprend la couleur du pôle, son corps défile et ses blocs de métadonnées restent sur fond blanc. Le rattachement VTT y distingue le mode d’action principal, sa question évaluative et tous les modes d’action secondaires proposés ; toute valeur hors des six modes d’action est signalée comme à confirmer.
 
-### Graphe indicateurs × modes d’action
+### Matrice indicateurs × maturité
 
-La vue graphe complète les présentations mini et étendue. Elle propose deux dispositions complémentaires : « Structuré » organise les six modes d’action VTT au centre d’orbites circulaires stables; « Réseau » utilise une simulation de forces déterministe pour rapprocher les indicateurs qui partagent plusieurs modes d’action. Les modes d’action restent des cercles bleu lac, plus grands que les indicateurs, sans cartouches ni ellipses. Les indicateurs portent la couleur de leur pôle; leur identifiant apparaît au survol ou au focus dans la disposition libre. Un trait continu représente le rattachement principal; un trait interrompu plus discret représente un rattachement secondaire proposé. Dans les deux dispositions, la sélection d’un mode isole ses relations et la sélection d’un indicateur ouvre sa fiche. La disposition libre ajoute le déplacement des nœuds, le déplacement du fond, le zoom et le recentrage. Une liste repliable reprend toutes les relations pour la navigation au clavier, les lecteurs d’écran et les petits écrans.
+La matrice du catalogue conserve les modes d’action en lignes et les quatre niveaux de maturité en colonnes. Chaque indicateur est représenté par une ligne compacte avec son identifiant, son intitulé tronqué visuellement et un filet portant la couleur de son pôle. Le nom complet reste disponible au survol et dans les fiches affichées après sélection d’une cellule. Les cellules vides restent discrètes, les totaux sont alignés dans le pied du tableau et le conteneur défile horizontalement sur les petits écrans. Les indicateurs sans niveau de maturité ou sans mode d’action VTT principal ne sont pas forcés dans une cellule : ils apparaissent dans une section repliable sous la matrice. La vue Par VTT inclut les rattachements principaux et secondaires ; un indicateur peut apparaître dans plusieurs modes mais le total reste un effectif d’identifiants uniques. Sa section « Autres indicateurs » conserve les fiches sans maturité ou sans rattachement à l’un des six modes.
+
+### Vue en colonnes
+
+La vue en colonnes organise les indicateurs selon les quatre niveaux de maturité et ajoute une colonne « Non renseignée » lorsque la sélection contient des fiches à qualifier. Les colonnes défilent horizontalement et leurs listes verticalement afin de conserver une hauteur maîtrisée, y compris lorsque les listes L3 et L4 sont actives. Les cartes compactes affichent l’identifiant, le pôle, la liste, le mode d’action VTT principal et la typologie. Elles ouvrent la même fiche détaillée que les autres vues.
 
 ### Lecture des modes d’action VTT
 
-La section est intitulée « Un territoire commun, six modes d’action ». Le schéma n’en répète pas le titre et commence par une courte consigne d’interaction. Sur grand écran, le territoire est représenté par un double cercle abstrait, sans paysage figuratif, pictogramme décoratif ni subdivision interne. Les six modes d’action sont disposés autour de ce noyau. Chaque contrôle associe un pictogramme Lucide inscrit dans un cercle, un libellé et la couleur sémantique du mode. Des liaisons fines et interrompues relient les modes au territoire; la liaison du mode actif devient continue et plus marquée. Le schéma se prolonge par une flèche vers POPGG, explicitement qualifié comme sortie « Données · discussion · décision ».
+La section est intitulée « Un territoire commun, six modes d’action ». Le module adopte une composition éditoriale plutôt qu’un diagramme technique. La question commune « Quels impacts sur le territoire ? » forme le centre symbolique de la lecture dans un grand cercle terre cuite à double anneau, inscrit dans un bandeau bleu brume. Les six modes sont ensuite répartis en deux ensembles structurés. Préservation, Reconnexion et Revitalisation appartiennent à « Primauté du socle du vivant » ; Régénération, Mise en réseau et Circularité à « Rééquilibrage multipolaire de l’agglomération ». Chaque contrôle associe un pictogramme Lucide, un libellé et la couleur sémantique du mode dans une même ligne de sélection. La zone « Du territoire aux indicateurs » prolonge cette lecture par l’illustration du moniteur et du smartphone POPGG, reliée au territoire par un filet directionnel court.
 
-Le choix d’un mode dans le schéma, signalé par `aria-pressed`, un contour renforcé et le soulignement du libellé, affiche immédiatement un second niveau de lecture sous le graphe. Ce panneau donne le contexte du mode sélectionné selon trois contributions écrites en toutes lettres : environnement, urbanisation / logement et mobilité. Les contenus proviennent de la grille transversale fournie pour les six modes d’action. Le même choix met à jour l’introduction, l’axe VTT, les trois leviers territoriaux et les indicateurs associés plus bas. La rangée d’onglets distincte n’existe plus : le schéma porte lui-même la sélection. Les indicateurs conservent une liste compacte indiquant leur pôle, la nature principale ou secondaire du rattachement et leur maturité provisoire avec chiffre et libellé. L’accès au catalogue reste une action séparée sous la carte de détail.
+Le choix d’un mode, signalé par `aria-pressed`, un fond teinté et un filet inférieur renforcé, affiche immédiatement un second niveau de lecture sous la sélection. Ce panneau donne le contexte du mode selon trois contributions compactes : ENV, URB et MOB, chacune accompagnée de son libellé accessible et de son texte explicatif. Le même choix met à jour l’introduction, l’axe VTT, les deux ou trois leviers territoriaux issus des planches de référence et jusqu’à six exemples d’indicateurs associés plus bas. Cette liste forme une grille compacte de quatre colonnes, visuellement distincte de la grille des leviers. Les indicateurs indiquent leur pôle, la nature principale ou secondaire du rattachement et leur maturité provisoire avec chiffre et libellé. L’accès au catalogue reste une action séparée sous la carte de détail.
 
-Sous 900 px, le noyau territorial analytique est placé en tête et les six modes deviennent une grille de deux colonnes sur trois rangées. Les liaisons orbitales sont masquées; un libellé et une flèche verticale indiquent que les modes d’action alimentent l’observation avant la sortie POPGG. Sous 640 px, les trois contributions du mode actif deviennent une liste verticale séparée par des filets. Cette composition conserve la séquence territoire, modes, flux, sortie et contexte sans imposer de défilement horizontal.
+Sous 900 px, le noyau de lecture commune est placé en tête et les deux classes deviennent deux grilles successives de trois modes. Les liaisons orbitales sont masquées; un libellé et une flèche verticale indiquent que les modes d’action alimentent l’observation avant la sortie POPGG. Sous 640 px, les pictogrammes sont réduits et les trois contributions du mode actif deviennent une liste verticale séparée par des filets. Cette composition conserve la séquence question commune, classes, modes, flux, sortie et contexte sans imposer de défilement horizontal.
 
 ### Matrice de mise en œuvre
 
-`components.implementation-matrix` croise les six modes, les quatre pôles d’observation et les horizons L1 et L2. Un point coloré signale qu’au moins un rattachement principal ou secondaire existe dans le préclassement ; un point vide signale son absence. Une colonne affiche la maturité moyenne des indicateurs rattachés avec une valeur sur 4 et le libellé correspondant ; la couleur reste un repère secondaire. Les horizons sont toujours écrits avec leur phase, « Démarrage L1 », « Consolidation L2 » ou « À cadrer », afin que la couleur ne porte jamais seule l’information. La première colonne reste visible pendant le défilement horizontal sur petit écran. La matrice est qualifiée de lecture provisoire et ne doit pas être présentée comme une programmation opérationnelle validée. Les pictogrammes proviennent tous de la famille Lucide, dans un même style à trait fin : feuille, maillon, pousse, bâtiment, réseau et recyclage.
+`components.implementation-matrix` croise les six modes, les quatre pôles d’observation et les horizons L1 et L2. Un point coloré signale qu’au moins un rattachement principal ou secondaire existe dans le préclassement ; un point vide signale son absence. La couleur reste un repère secondaire. Les horizons sont toujours écrits avec leur phase, « Démarrage L1 », « Consolidation L2 » ou « À cadrer », afin que la couleur ne porte jamais seule l’information. La première colonne reste visible pendant le défilement horizontal sur petit écran. La matrice est qualifiée de lecture provisoire et ne doit pas être présentée comme une programmation opérationnelle validée. Les pictogrammes proviennent tous de la famille Lucide, dans un même style à trait fin : feuille, maillon, pousse, bâtiment, réseau et recyclage.
 
 ### Maturity Dots
 
@@ -328,3 +352,9 @@ Les quatre points matérialisent une échelle ordonnée. Les points atteints pre
 - **Don't** ajouter d'ombres lourdes, de bordures épaisses, de déplacement de mise en page au survol ou d'animation décorative.
 - **Don't** employer des icônes Unicode lorsqu'un pictogramme SVG est disponible.
 - **Don't** afficher les numéros 1.1 à 2.3 devant les modes d'action ; ces codes restent réservés aux clés internes et à la traçabilité du corpus.
+
+## Ajustements du catalogue · 28 septembre 2026
+
+Le bandeau du catalogue est compact ; la synthèse du portefeuille de référence est repliable et distincte du compteur de résultats filtrés. Les commandes séparent vue et densité. La réinitialisation restaure les filtres L1/L2 par défaut. Les trois onglets passent sur deux lignes sur petit écran ; les commandes cessent d’être collantes pour préserver la place de lecture.
+
+Les relations entre registres sont des boutons textuels identifiés par code et intitulé. Un retour contextuel restaure la sélection et les filtres précédents. Les liens reflètent les identifiants explicites du classeur, sans inférence sémantique.

@@ -1,10 +1,13 @@
-import { useLayoutEffect, useState, type CSSProperties } from "react";
+import { vttKeys, maturityCounts } from "@/data/catalogueRelations";
+import { useEffect, useLayoutEffect, useState, type CSSProperties } from "react";
 import {
   Building2,
+  BusFront,
   Calculator,
   ClipboardCheck,
   Database,
   Leaf,
+  Landmark,
   Link2,
   MessageSquareCheck,
   Radio,
@@ -16,8 +19,11 @@ import {
   Waypoints,
 } from "lucide-react";
 import homeIllustration from "@/imports/home.481ab0667bd5.svg";
+import vttLevers from "@/imports/vtt-levers.webp";
 import IndicateursPage from "@/IndicateursPage";
 import { indicateurs, poleColors, maturiteColor, maturiteLabel } from "@/data/indicators";
+import { catalogueMetadata } from "@/data/workbookCatalogue";
+import "@/indicatorOverview.css";
 
 // ─── Shared style tokens ─────────────────────────────────────────────────────
 // Palette sourced from Grand Genève: lake, alpine greens, institutional blues,
@@ -75,6 +81,13 @@ const Observatrice = () => (
     <ellipse cx="58" cy="154" rx="11" ry="6" fill="var(--color-text-strong)"/>
   </svg>
 );
+
+const poleOverviewIcons = {
+  Environnement: Leaf,
+  Mobilité: BusFront,
+  Urbanisation: Building2,
+  Gouvernance: Landmark,
+} as const;
 
 const Urbaniste = () => (
   <svg viewBox="0 0 90 160" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
@@ -524,6 +537,9 @@ const roleIcons = {
 
 type RoleIconName = keyof typeof roleIcons;
 type HairStyle = "bob" | "short" | "bun" | "curly" | "waves" | "close" | "braids" | "grey";
+type FaceShape = "oval" | "round" | "long";
+type Expression = "smile" | "calm" | "focused";
+type CollarStyle = "v" | "crew" | "shirt";
 
 type RoleAvatarProps = {
   icon: RoleIconName;
@@ -532,11 +548,31 @@ type RoleAvatarProps = {
   clothing: string;
   accent: string;
   hairStyle: HairStyle;
+  faceShape?: FaceShape;
+  expression?: Expression;
+  collar?: CollarStyle;
   glasses?: boolean;
 };
 
-const RoleAvatar = ({ icon, skin, hair, clothing, accent, hairStyle, glasses = false }: RoleAvatarProps) => {
+const RoleAvatar = ({
+  icon,
+  skin,
+  hair,
+  clothing,
+  accent,
+  hairStyle,
+  faceShape = "oval",
+  expression = "calm",
+  collar = "v",
+  glasses = false,
+}: RoleAvatarProps) => {
   const RoleIcon = roleIcons[icon];
+  const faceSizes: Record<FaceShape, { rx: number; ry: number }> = {
+    oval: { rx: 28, ry: 32 },
+    round: { rx: 30, ry: 29 },
+    long: { rx: 26, ry: 34 },
+  };
+  const face = faceSizes[faceShape];
   const hairShape = (() => {
     switch (hairStyle) {
       case "bob":
@@ -575,33 +611,54 @@ const RoleAvatar = ({ icon, skin, hair, clothing, accent, hairStyle, glasses = f
     }
   })();
 
+  const mouth = {
+    smile: "M64 63.5c3.5 4 8.5 4 12 0",
+    calm: "M65 64.5c3 1.5 7 1.5 10 0",
+    focused: "M65 65h10",
+  }[expression];
+
+  const collarShape = {
+    v: <path d="m54 91 16 16 16-16" fill="none" stroke="var(--color-surface)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" opacity="0.94" />,
+    crew: <path d="M55 92c2 10 8 15 15 15s13-5 15-15" fill="none" stroke="var(--color-surface)" strokeWidth="5" strokeLinecap="round" opacity="0.94" />,
+    shirt: (
+      <>
+        <path d="m54 91 16 16-7 8-15-20M86 91l-16 16 7 8 15-20" fill="var(--color-surface)" opacity="0.94" />
+        <path d="M70 107v25" stroke={accent} strokeWidth="1.5" opacity="0.35" />
+      </>
+    ),
+  }[collar];
+
   return (
     <svg viewBox="0 0 180 132" xmlns="http://www.w3.org/2000/svg" className="role-avatar w-full h-full" aria-hidden="true" focusable="false">
-      <circle cx="70" cy="66" r="58" fill="var(--color-surface-translucent)" />
-      <circle cx="70" cy="66" r="58" fill="none" stroke={accent} strokeWidth="1" opacity="0.16" />
-      <path d="M17 132c3-30 20-46 53-46s50 16 53 46z" fill={clothing} />
-      <rect x="59" y="71" width="22" height="23" rx="8" fill={skin} />
-      <circle cx="43" cy="53" r="6" fill={skin} />
-      <circle cx="97" cy="53" r="6" fill={skin} />
-      <ellipse cx="70" cy="51" rx="28" ry="32" fill={skin} />
+      <path d="M14 132V66C14 31 37 8 70 8s56 23 56 58v66Z" fill="var(--color-surface-translucent)" />
+      <path d="M14 132V66C14 31 37 8 70 8s56 23 56 58" fill="none" stroke={accent} strokeWidth="1.2" opacity="0.18" />
+      <path d="M12 132c4-33 23-50 58-50s54 17 58 50z" fill={clothing} />
+      <rect x="58" y="71" width="24" height="24" rx="9" fill={skin} />
+      <ellipse cx="43" cy="53" rx="6" ry="7" fill={skin} />
+      <ellipse cx="97" cy="53" rx="6" ry="7" fill={skin} />
+      <ellipse cx="70" cy="51" rx={face.rx} ry={face.ry} fill={skin} />
       {hairShape}
-      <path d="M54.5 47.5c2-1.2 4.5-1.3 7-.2M78.5 47.3c2.5-1.1 5-.9 7 .3" fill="none" stroke={hair} strokeWidth="1.5" strokeLinecap="round" opacity="0.72" />
-      <circle cx="59" cy="52.5" r="2.2" fill="var(--color-text-strong)" />
-      <circle cx="81" cy="52.5" r="2.2" fill="var(--color-text-strong)" />
-      <path d="M70 54.5v4l2 1" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.42" />
-      <path d="M65 63c3 2.8 7 2.8 10 0" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M54 47c2.3-1.8 5.4-2 8.2-.4M77.8 46.6c2.8-1.6 5.9-1.4 8.2.4" fill="none" stroke={hair} strokeWidth="1.7" strokeLinecap="round" opacity="0.78" />
+      <ellipse cx="59" cy="52.5" rx="2" ry="2.5" fill="var(--color-text-strong)" />
+      <ellipse cx="81" cy="52.5" rx="2" ry="2.5" fill="var(--color-text-strong)" />
+      <circle cx="58.4" cy="51.8" r="0.65" fill="var(--color-surface)" opacity="0.9" />
+      <circle cx="80.4" cy="51.8" r="0.65" fill="var(--color-surface)" opacity="0.9" />
+      <path d="M69.5 54.5v4.2l2.3 1" fill="none" stroke="var(--color-text-strong)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.48" />
+      <circle cx="54" cy="60" r="3.2" fill={accent} opacity="0.11" />
+      <circle cx="86" cy="60" r="3.2" fill={accent} opacity="0.11" />
+      <path d={mouth} fill="none" stroke="var(--color-text-strong)" strokeWidth="1.7" strokeLinecap="round" />
       {glasses && (
         <g fill="var(--color-surface)" fillOpacity="0.08" stroke="var(--color-text-strong)" strokeWidth="1.7">
-          <rect x="50" y="45" width="17" height="13" rx="5" />
-          <rect x="73" y="45" width="17" height="13" rx="5" />
+          <rect x="49" y="45" width="18" height="14" rx="5" />
+          <rect x="73" y="45" width="18" height="14" rx="5" />
           <path d="M67 50h6" />
         </g>
       )}
-      <path d="m55 91 15 15 15-15" fill="none" stroke="var(--color-surface)" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" opacity="0.9" />
-      <path d="M70 106v26" fill="none" stroke={accent} strokeWidth="1.2" opacity="0.28" />
-      <circle cx="136" cy="75" r="25" fill="var(--color-surface)" stroke="var(--color-border)" strokeWidth="1.2" />
-      <circle cx="136" cy="75" r="21" fill="none" stroke={accent} strokeWidth="1" opacity="0.14" />
-      <RoleIcon x={124} y={63} width={24} height={24} color={accent} strokeWidth={1.8} />
+      {collarShape}
+      {collar !== "shirt" && <path d="M70 107v25" fill="none" stroke={accent} strokeWidth="1.2" opacity="0.28" />}
+      <path d="M116 75h5" stroke={accent} strokeWidth="1.4" opacity="0.3" />
+      <circle cx="141" cy="75" r="21" fill="var(--color-surface)" stroke={accent} strokeWidth="1.4" />
+      <RoleIcon x={131} y={65} width={20} height={20} color={accent} strokeWidth={1.8} />
     </svg>
   );
 };
@@ -620,7 +677,7 @@ const characters: Character[] = [
     name: "Fournisseur de la donnée",
     role: "Fournit",
     desc: "Met à disposition la source, documente son périmètre, ses droits d’usage et sa fréquence de disponibilité.",
-    avatar: { icon: "source", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-primary)", accent: "var(--color-primary)", hairStyle: "bob" },
+    avatar: { icon: "source", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-primary)", accent: "var(--color-primary)", hairStyle: "bob", faceShape: "oval", expression: "calm", collar: "v" },
     bg: "var(--color-primary-soft)",
     badge: "Source",
   },
@@ -628,7 +685,7 @@ const characters: Character[] = [
     name: "Responsable de collecte",
     role: "Collecte",
     desc: "Organise l’acquisition des données et vérifie leur couverture territoriale et temporelle.",
-    avatar: { icon: "collecte", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-hair-light)", clothing: "var(--color-primary)", accent: "var(--color-primary)", hairStyle: "short" },
+    avatar: { icon: "collecte", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-hair-light)", clothing: "var(--color-primary)", accent: "var(--color-primary)", hairStyle: "short", faceShape: "round", expression: "smile", collar: "crew" },
     bg: "var(--color-primary-soft)",
     badge: "Collecte",
   },
@@ -636,7 +693,7 @@ const characters: Character[] = [
     name: "Référent POPGG",
     role: "Documente",
     desc: "Relie l’indicateur à un objectif politique, à un niveau L1–L4 et aux modes d’action VTT proposés.",
-    avatar: { icon: "reference", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-violet)", accent: "var(--color-violet-strong)", hairStyle: "bun", glasses: true },
+    avatar: { icon: "reference", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-violet)", accent: "var(--color-violet-strong)", hairStyle: "bun", faceShape: "long", expression: "calm", collar: "shirt", glasses: true },
     bg: "var(--color-violet-soft)",
     badge: "Référence",
   },
@@ -644,7 +701,7 @@ const characters: Character[] = [
     name: "Producteur du calcul",
     role: "Produit",
     desc: "Applique une méthode explicite et reproductible pour produire la valeur et ses déclinaisons territoriales.",
-    avatar: { icon: "calcul", skin: "var(--color-illustration-skin-light)", hair: "var(--color-text-strong)", clothing: "var(--color-accent)", accent: "var(--color-accent-strong)", hairStyle: "waves", glasses: true },
+    avatar: { icon: "calcul", skin: "var(--color-illustration-skin-light)", hair: "var(--color-text-strong)", clothing: "var(--color-accent)", accent: "var(--color-accent-strong)", hairStyle: "waves", faceShape: "round", expression: "smile", collar: "shirt", glasses: true },
     bg: "var(--color-accent-soft)",
     badge: "Calcul",
   },
@@ -652,7 +709,7 @@ const characters: Character[] = [
     name: "Validateur de la donnée",
     role: "Contrôle",
     desc: "Vérifie la complétude, la cohérence, les ruptures de série et la version de chaque donnée mobilisée.",
-    avatar: { icon: "qualite", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-sage)", accent: "var(--color-sage-strong)", hairStyle: "curly" },
+    avatar: { icon: "qualite", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-sage)", accent: "var(--color-sage-strong)", hairStyle: "curly", faceShape: "oval", expression: "focused", collar: "crew" },
     bg: "var(--color-sage-soft)",
     badge: "Qualité",
   },
@@ -660,7 +717,7 @@ const characters: Character[] = [
     name: "Validateur méthodologique",
     role: "Valide la méthode",
     desc: "Contrôle les définitions, l’agrégation et la comparabilité entre les territoires français, genevois et vaudois.",
-    avatar: { icon: "methode", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-neutral)", clothing: "var(--color-primary)", accent: "var(--color-primary-strong)", hairStyle: "grey", glasses: true },
+    avatar: { icon: "methode", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-neutral)", clothing: "var(--color-primary)", accent: "var(--color-primary-strong)", hairStyle: "grey", faceShape: "long", expression: "calm", collar: "shirt", glasses: true },
     bg: "var(--color-primary-soft)",
     badge: "Méthode",
   },
@@ -668,7 +725,7 @@ const characters: Character[] = [
     name: "Validateur métier",
     role: "Valide l’usage",
     desc: "Confirme l’utilité pour le pilotage, l’interprétation raisonnable et les limites à rendre visibles.",
-    avatar: { icon: "metier", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-text-strong)", clothing: "var(--color-ochre)", accent: "var(--color-ochre-strong)", hairStyle: "close" },
+    avatar: { icon: "metier", skin: "var(--color-illustration-skin-medium)", hair: "var(--color-text-strong)", clothing: "var(--color-ochre)", accent: "var(--color-ochre-strong)", hairStyle: "close", faceShape: "round", expression: "smile", collar: "v" },
     bg: "var(--color-ochre-soft)",
     badge: "Métier",
   },
@@ -676,7 +733,7 @@ const characters: Character[] = [
     name: "Responsable de publication",
     role: "Publie",
     desc: "Prépare des vues adaptées aux usages publics, institutionnels et techniques sans masquer les incertitudes.",
-    avatar: { icon: "publication", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-violet)", accent: "var(--color-accent-strong)", hairStyle: "braids" },
+    avatar: { icon: "publication", skin: "var(--color-illustration-skin-deep)", hair: "var(--color-text-strong)", clothing: "var(--color-violet)", accent: "var(--color-accent-strong)", hairStyle: "braids", faceShape: "oval", expression: "focused", collar: "crew" },
     bg: "var(--color-rose-soft)",
     badge: "Publication",
   },
@@ -684,7 +741,7 @@ const characters: Character[] = [
     name: "Responsable de maintenance",
     role: "Maintient",
     desc: "Planifie les mises à jour, conserve les métadonnées et clarifie qui répond de l’indicateur dans la durée.",
-    avatar: { icon: "maintenance", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-primary)", accent: "var(--color-primary-strong)", hairStyle: "short" },
+    avatar: { icon: "maintenance", skin: "var(--color-illustration-skin-light)", hair: "var(--color-illustration-hair-warm)", clothing: "var(--color-primary)", accent: "var(--color-primary-strong)", hairStyle: "short", faceShape: "round", expression: "calm", collar: "v" },
     bg: "var(--color-primary-soft)",
     badge: "Maintenance",
   },
@@ -768,6 +825,7 @@ const vttModes = [
     id: "preservation",
     key: "1.1 Préservation",
     label: "Préservation",
+    territoryTitle: "Un territoire préservé",
     color: "var(--color-sage-soft)",
     accent: "var(--color-sage-strong)",
     axis: "Primauté du socle du vivant",
@@ -779,15 +837,16 @@ const vttModes = [
       mobilite: "Emprises, infrastructures fragmentantes, pression des flux.",
     },
     levers: [
-      { title: "Réseau hydrographique", body: "Préserver les cours d’eau, leurs espaces de fonctionnement, les zones humides et les nappes stratégiques." },
-      { title: "Infrastructure écologique", body: "Protéger les espaces structurants et restaurer les sols naturels dans les territoires bâtis, agricoles et forestiers." },
-      { title: "Corridors biologiques", body: "Maintenir les continuités entre les sites de valeur et les passages nécessaires aux déplacements de la faune." },
+      { title: "Réseau hydrographique", body: "Préserver les cours d’eau et leurs espaces de fonctionnement, y compris dans les tissus bâtis, pour protéger l’eau, limiter les risques et maintenir des espaces ouverts.", illustration: { col: 0, row: 5 } },
+      { title: "Infrastructure écologique", body: "Relier les milieux naturels, agricoles et urbains par un réseau d’espaces structurants, intégré aux projets d’urbanisation et de mobilité.", illustration: { col: 1, row: 5 } },
+      { title: "Connexions et corridors biologiques", body: "Maintenir les corridors biologiques et rétablir les passages au droit des routes, voies ferrées et autres coupures du territoire.", illustration: { col: 2, row: 5 } },
     ],
   },
   {
     id: "reconnexion",
     key: "1.2 Reconnexion",
     label: "Reconnexion",
+    territoryTitle: "Un territoire reconnecté",
     color: "var(--color-primary-soft)",
     accent: "var(--color-primary)",
     axis: "Primauté du socle du vivant",
@@ -800,15 +859,16 @@ const vttModes = [
       mobilite: "Continuités cyclables, marchabilité, rabattement TP.",
     },
     levers: [
-      { title: "Franchissement des infrastructures", body: "Créer ou réaménager des corridors et des écoponts pour rendre les grandes coupures plus perméables." },
-      { title: "Franges et tissus urbains", body: "Restaurer les pénétrantes de verdure et retisser les interfaces entre espaces bâtis, agricoles et naturels." },
-      { title: "Réseau socio-écologique", body: "Relier les lieux naturels, paysagers, culturels et de loisirs par des cheminements renaturés de proximité." },
+      { title: "À travers les infrastructures", body: "Créer ou réaménager des écoponts, passages et continuités cyclables ou piétonnes là où les infrastructures fragmentent les milieux et les parcours.", illustration: { col: 0, row: 3 } },
+      { title: "En limite et à travers les tissus urbains", body: "Retisser les interfaces entre quartiers, espaces agricoles et milieux naturels par des pénétrantes de verdure et des cheminements continus.", illustration: { col: 1, row: 3 } },
+      { title: "Par un réseau socioécologique", body: "Relier les polarités et les lieux naturels, paysagers ou culturels par un réseau de proximité végétalisé, accessible à pied et à vélo.", illustration: { col: 2, row: 3 } },
     ],
   },
   {
     id: "revitalisation",
     key: "1.3 Revitalisation",
     label: "Revitalisation",
+    territoryTitle: "Un territoire revitalisé",
     color: "var(--color-accent-soft)",
     accent: "var(--color-accent-strong)",
     axis: "Primauté du socle du vivant",
@@ -822,15 +882,16 @@ const vttModes = [
         "Réduction des nuisances, sécurité, confort climatique des espaces de mobilité.",
     },
     levers: [
-      { title: "Espaces bâtis", body: "Désimperméabiliser, infiltrer les eaux pluviales, renforcer la canopée et remettre certains cours d’eau à ciel ouvert." },
-      { title: "Espaces agricoles et forestiers", body: "Améliorer la rétention des sols, développer les pratiques agroécologiques et diversifier les lisières et essences." },
-      { title: "Réseau hydrographique", body: "Restaurer les dynamiques naturelles et les continuités hydrologiques, piscicoles et sédimentaires." },
+      { title: "Dans les espaces bâtis", body: "Désimperméabiliser, renforcer la canopée et gérer les eaux pluviales pour améliorer le confort des quartiers, des rues et des espaces de mobilité.", illustration: { col: 0, row: 2 } },
+      { title: "Dans les terres agricoles et forestières", body: "Améliorer la rétention des sols, développer les pratiques agroécologiques et diversifier les lisières pour soutenir la biodiversité et la production locale.", illustration: { col: 1, row: 2 } },
+      { title: "Dans le réseau hydrographique", body: "Remettre certains cours d’eau à ciel ouvert et restaurer les continuités hydrologiques, piscicoles et sédimentaires au contact des espaces habités.", illustration: { col: 2, row: 2 } },
     ],
   },
   {
     id: "regeneration",
     key: "2.1 Régénération",
     label: "Régénération",
+    territoryTitle: "Un territoire régénéré",
     color: "var(--color-violet-soft)",
     accent: "var(--color-violet-strong)",
     axis: "Rééquilibrage multipolaire de l’agglomération",
@@ -843,15 +904,15 @@ const vttModes = [
         "Réduction des distances contraintes, accessibilité aux centralités.",
     },
     levers: [
-      { title: "Polarités diversifiées", body: "Moduler l’équilibre entre habitants, emplois, services et équipements selon la nature de chaque polarité." },
-      { title: "Tissus bâtis transformés", body: "Intensifier et renouveler l’existant selon les caractéristiques locales, en limitant fortement l’extension urbaine." },
-      { title: "Quartiers de proximité", body: "Renforcer la diversité des services, des opportunités économiques et des formes d’habiter à l’échelle des bassins de vie." },
+      { title: "Polarités urbaines régénérées", body: "Renforcer un réseau de polarités accessibles offrant logements, emplois, services, équipements et espaces publics à l’échelle des bassins de vie.", illustration: { col: 0, row: 1 } },
+      { title: "Tissus bâtis régénérés", body: "Renouveler et densifier l’existant en intégrant logement, activités, nature en ville, patrimoine et qualité des espaces publics.", illustration: { col: 1, row: 1 } },
     ],
   },
   {
     id: "reseau",
     key: "2.2 Mise en réseau",
     label: "Mise en réseau",
+    territoryTitle: "Un territoire mis en réseau",
     color: "var(--color-primary-soft)",
     accent: "var(--color-primary-strong)",
     axis: "Rééquilibrage multipolaire de l’agglomération",
@@ -864,15 +925,15 @@ const vttModes = [
         "Desserte TP, accessibilité multimodale, flux transfrontaliers, réseaux cyclables.",
     },
     levers: [
-      { title: "Maillage multimodal décarboné", body: "Articuler marche, réseaux cyclables, transports publics et liaisons tangentielles selon les situations territoriales." },
-      { title: "Interfaces et rabattement", body: "Coordonner les gares, plateformes multimodales, transports à la demande et services de mobilité partagée." },
-      { title: "Espaces publics requalifiés", body: "Adapter rues, places, routes et voies vertes aux usages, au paysage, au climat et à la végétalisation." },
+      { title: "À travers un maillage multimodal décarboné", body: "Relier les polarités par la marche, le vélo et les transports publics, en coordonnant gares, correspondances et services partagés selon les situations territoriales.", illustration: { col: 0, row: 0 } },
+      { title: "À travers la requalification des espaces publics", body: "Adapter rues, places, routes et voies vertes aux usages, au paysage, au climat et à la végétalisation.", illustration: { col: 2, row: 0 } },
     ],
   },
   {
     id: "circularite",
     key: "2.3 Circularité",
     label: "Circularité",
+    territoryTitle: "Un territoire circularisé",
     color: "var(--color-ochre-soft)",
     accent: "var(--color-ochre-strong)",
     axis: "Rééquilibrage multipolaire de l’agglomération",
@@ -885,9 +946,9 @@ const vttModes = [
       mobilite: "Logistique, flux de marchandises, sobriété des déplacements.",
     },
     levers: [
-      { title: "Ressources et filières locales", body: "Développer les filières agricoles, industrielles et de réemploi des matériaux en privilégiant la sobriété." },
-      { title: "Distribution décarbonée", body: "Hiérarchiser plateformes régionales, centres urbains et micro-hubs pour organiser une logistique de proximité." },
-      { title: "Énergies renouvelables", body: "Mobiliser les potentiels solaire, géothermique, lacustre, éolien et les réseaux de chaleur." },
+      { title: "Ressources", body: "Relier production, transformation, réemploi et consommation à l’échelle locale pour réduire l’usage de ressources et les transports évitables.", illustration: { col: 0, row: 4 } },
+      { title: "Réseaux de distribution", body: "Articuler plateformes régionales, centres urbains et micro-hubs pour organiser des flux de marchandises sobres et adaptés aux tissus urbains.", illustration: { col: 1, row: 4 } },
+      { title: "Ressources en énergie", body: "Mobiliser les potentiels solaire, géothermique, lacustre et éolien, et les intégrer aux bâtiments et réseaux de chaleur.", illustration: { col: 2, row: 4 } },
     ],
   },
 ];
@@ -907,14 +968,7 @@ const ModeIcon = ({ mode, color, size = 24 }: { mode: string; color: string; siz
   return <Icon aria-hidden="true" focusable="false" color={color} size={size} strokeWidth={1.8} />;
 };
 
-const conceptLinkPaths = {
-  preservation: "M470 130 C470 111 470 95 470 78",
-  reconnexion: "M548 174 C616 144 678 121 735 112",
-  revitalisation: "M548 296 C616 326 678 349 735 358",
-  regeneration: "M470 340 C470 359 470 375 470 392",
-  reseau: "M392 296 C324 326 262 349 205 358",
-  circularite: "M392 174 C324 144 262 121 205 112",
-} as const
+const VTT_EXAMPLE_LIMIT = 4
 
 function VTTConceptDiagram({
   modes,
@@ -925,230 +979,116 @@ function VTTConceptDiagram({
   activeMode: string
   onSelect: (modeId: string) => void
 }) {
-  const currentMode = modes.find((mode) => mode.id === activeMode) ?? modes[0]
-  const contributions = [
-    {
-      id: "environnement",
-      label: "Contribution environnement",
-      body: currentMode.contributions.environnement,
-      color: poleColors.Environnement.accent,
-    },
-    {
-      id: "urbanisation",
-      label: "Contribution urbanisation / logement",
-      body: currentMode.contributions.urbanisation,
-      color: poleColors.Urbanisation.accent,
-    },
-    {
-      id: "mobilite",
-      label: "Contribution mobilité",
-      body: currentMode.contributions.mobilite,
-      color: poleColors.Mobilité.accent,
-    },
+  const nodes = [
+    { id: "preservation", x: 360, y: 75 },
+    { id: "revitalisation", x: 120, y: 210 },
+    { id: "reconnexion", x: 600, y: 210 },
+    { id: "circularite", x: 130, y: 500 },
+    { id: "reseau", x: 590, y: 500 },
+    { id: "regeneration", x: 360, y: 615 },
   ] as const
 
   return (
-    <section className="vtt-concept" aria-labelledby="vtt-section-title">
-      <p className="vtt-concept-summary">
-        Choisissez un mode d’action pour afficher ses contributions
-        environnementales, urbaines et liées à la mobilité.
-      </p>
-
-      <div className="vtt-concept-map">
-        <svg
-          className="vtt-concept-links"
-          viewBox="0 0 1120 470"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <defs>
-            <marker
-              id="vtt-concept-arrow"
-              markerWidth="8"
-              markerHeight="8"
-              refX="6"
-              refY="4"
-              orient="auto"
-            >
-              <path d="M0 0 L8 4 L0 8 Z" fill="var(--color-primary)" />
-            </marker>
-          </defs>
-          {modes.map((mode) => (
-            <path
-              key={mode.id}
-              d={conceptLinkPaths[(mode.id as keyof typeof conceptLinkPaths)]}
-              className={activeMode === mode.id ? "is-active" : undefined}
-            />
+    <figure className="vtt-concept" aria-labelledby="vtt-section-title">
+      <svg
+        className="vtt-concept-svg"
+        viewBox="0 0 720 720"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <g fill="none" stroke="var(--color-primary)" strokeDasharray="2 5" strokeLinecap="round" strokeWidth="2">
+          {nodes.map((node) => (
+            <line key={node.id} x1="360" y1="340" x2={node.x} y2={node.y} />
           ))}
-          <path
-            className="vtt-concept-output-link"
-            d="M575 235 C704 235 819 235 932 235"
-            markerEnd="url(#vtt-concept-arrow)"
-          />
-        </svg>
+        </g>
 
-        <div
-          className="vtt-territory-core"
-          aria-label="Le territoire commun du Grand Genève"
-        >
-          <svg
-            viewBox="0 0 220 220"
-            role="img"
-            aria-labelledby="territory-visual-title"
-          >
-            <title id="territory-visual-title">
-              Le territoire commun au centre des six modes d’action
-            </title>
-            <circle
-              cx="110"
-              cy="110"
-              r="103"
-              fill="var(--color-surface)"
-              stroke="var(--color-primary-strong)"
-              strokeWidth="2"
-            />
-            <circle
-              cx="110"
-              cy="110"
-              r="78"
-              fill="none"
-              stroke="var(--color-border)"
-              strokeDasharray="2 7"
-              strokeWidth="1"
-            />
-            <text
-              x="110"
-              y="106"
-              textAnchor="middle"
-              fill="var(--color-primary-strong)"
-              fontFamily="'Newsreader', serif"
-              fontSize="22"
-              fontWeight="700"
-            >
-              Territoire
-            </text>
-            <text
-              x="110"
-              y="130"
-              textAnchor="middle"
-              fill="var(--color-text-muted)"
-              fontFamily="'Public Sans', sans-serif"
-              fontSize="12"
-              fontWeight="600"
-            >
-              commun
-            </text>
-          </svg>
-        </div>
+        {nodes.map((node) => {
+          const mode = modes.find((item) => item.id === node.id)
+          const Icon = modeIcons[node.id]
+          if (!mode) return null
 
-        {modes.map((mode) => {
-          const isActive = activeMode === mode.id
           return (
-            <button
-              key={mode.id}
-              type="button"
-              className={`vtt-concept-mode is-${mode.id}`}
-              style={
-                {
-                  "--concept-mode-bg": mode.color,
-                  "--concept-mode-accent": mode.accent,
-                } as CSSProperties
-              }
-              aria-pressed={isActive}
-              onClick={() => onSelect(mode.id)}
-            >
-              <span className="vtt-concept-mode-icon">
-                <ModeIcon mode={mode.id} color={mode.accent} size={25} />
-              </span>
-              <span>{mode.label}</span>
-            </button>
+            <g key={node.id}>
+              <circle
+                cx={node.x}
+                cy={node.y}
+                r="50"
+                fill={activeMode === node.id ? mode.color : "var(--color-canvas)"}
+                stroke="var(--color-accent)"
+                strokeWidth="3"
+              />
+              <Icon
+                x={node.x - 22}
+                y={node.y - 22}
+                width="44"
+                height="44"
+                color={mode.accent}
+                strokeWidth="1.8"
+              />
+              <text
+                x={node.x}
+                y={node.y + 75}
+                fill="var(--color-primary)"
+                fontFamily="Public Sans, sans-serif"
+                fontSize="18"
+                fontWeight={activeMode === node.id ? 700 : 500}
+                textAnchor="middle"
+              >
+                {mode.label.toUpperCase()}
+              </text>
+            </g>
           )
         })}
 
-        <div className="vtt-concept-mobile-flow">
-          <span>Les modes d’action alimentent l’observation</span>
-          <svg viewBox="0 0 28 34" aria-hidden="true">
-            <path d="M14 2 V28" />
-            <path d="M7 21 L14 29 L21 21" />
-          </svg>
-        </div>
+        <circle cx="360" cy="340" r="145" fill="var(--color-accent)" />
+        <text
+          x="360"
+          y="300"
+          fill="var(--color-surface)"
+          fontFamily="Public Sans, sans-serif"
+          fontSize="20"
+          fontWeight="700"
+          textAnchor="middle"
+        >
+          <tspan x="360" dy="0">LES TRANSFORMATIONS</tspan>
+          <tspan x="360" dy="30">TERRITORIALES DU</tspan>
+          <tspan x="360" dy="30">GRAND GENÈVE</tspan>
+        </text>
+        <text
+          x="360"
+          y="410"
+          fill="var(--color-surface)"
+          fontFamily="Public Sans, sans-serif"
+          fontSize="21"
+          fontWeight="400"
+          textAnchor="middle"
+        >
+          À HORIZON 2050
+        </text>
+      </svg>
 
-        <div className="vtt-concept-output">
-          <svg viewBox="0 0 96 68" aria-hidden="true">
-            <rect
-              x="5"
-              y="5"
-              width="86"
-              height="58"
-              rx="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            />
-            <path
-              d="M20 47 L37 33 L54 42 L73 20"
-              fill="none"
-              stroke="var(--color-accent)"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <g
-              fill="var(--color-surface)"
-              stroke="currentColor"
-              strokeWidth="2.5"
-            >
-              <circle cx="20" cy="47" r="5" />
-              <circle cx="37" cy="33" r="5" />
-              <circle cx="54" cy="42" r="5" />
-              <circle cx="73" cy="20" r="5" />
-            </g>
-          </svg>
-          <strong>POPGG</strong>
-          <span>Données · discussion · décision</span>
-        </div>
-      </div>
-
-      <div
-        className="vtt-concept-context"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        <div className="vtt-concept-context-heading">
-          <span
-            className="vtt-concept-context-icon"
-            style={{ background: currentMode.color, color: currentMode.accent }}
-          >
-            <ModeIcon
-              mode={currentMode.id}
-              color={currentMode.accent}
-              size={23}
-            />
-          </span>
-          <div>
-            <h4>{currentMode.label}</h4>
-            <p>Contributions par pôle</p>
-          </div>
-        </div>
-        <div className="vtt-concept-contributions">
-          {contributions.map((contribution) => (
-            <section
-              key={`${currentMode.id}-${contribution.id}`}
-              className="vtt-concept-contribution"
-            >
-              <h5>
-                <span
-                  style={{ background: contribution.color }}
-                  aria-hidden="true"
-                />
-                {contribution.label}
-              </h5>
-              <p>{contribution.body}</p>
-            </section>
-          ))}
-        </div>
-      </div>
-    </section>
+      {nodes.map((point) => {
+        const mode = modes.find((item) => item.id === point.id)
+        if (!mode) return null
+        return (
+          <button
+            key={mode.id}
+            type="button"
+            className="vtt-concept-hotspot"
+            style={
+              {
+                left: `${(point.x / 720) * 100}%`,
+                top: `${(point.y / 720) * 100}%`,
+                "--concept-mode-accent": mode.accent,
+              } as CSSProperties
+            }
+            aria-label={`${mode.label} · ${activeMode === mode.id ? "mode sélectionné" : "afficher ce mode"}`}
+            aria-pressed={activeMode === mode.id}
+            onClick={() => onSelect(mode.id)}
+          />
+        )
+      })}
+    </figure>
   )
 }
 
@@ -1156,9 +1096,28 @@ function VTTConceptDiagram({
 
 export default function App() {
   const [activeMode, setActiveMode] = useState("preservation");
-  const [page, setPage] = useState<"home" | "indicateurs">("home");
-  const [actorView, setActorView] = useState<"responsabilites" | "chaine">("responsabilites");
+  const [page, setPage] = useState<"home" | "indicateurs">(() =>
+    window.location.hash === "#indicateurs" ? "indicateurs" : "home",
+  );
+  const [actorView, setActorView] = useState<"responsabilites" | "chaine">("chaine");
   const current = vttModes.find((m) => m.id === activeMode)!;
+
+  useEffect(() => {
+    const syncPageWithHash = () => {
+      setPage(window.location.hash === "#indicateurs" ? "indicateurs" : "home");
+    };
+
+    window.addEventListener("hashchange", syncPageWithHash);
+    return () => window.removeEventListener("hashchange", syncPageWithHash);
+  }, []);
+
+  const openIndicators = () => {
+    window.location.hash = "indicateurs";
+  };
+
+  const returnHome = () => {
+    window.location.hash = "vtt";
+  };
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -1169,14 +1128,21 @@ export default function App() {
   }, [page]);
 
   if (page === "indicateurs") {
-    return <IndicateursPage onBack={() => setPage("home")} />;
+    return <IndicateursPage onBack={returnHome} />;
   }
 
   const statsL1 = indicateurs.filter((i) => i.liste === "L1").length;
   const statsL2 = indicateurs.filter((i) => i.liste === "L2").length;
+  // Definitions follow the study's four maturity levels; source ratings stay unchanged.
+  const preparationDescriptions: Record<number, string> = {
+    1: "Méthode ou données encore à construire.",
+    2: "Données à retraiter ou à harmoniser.",
+    3: "Données disponibles, calcul à formaliser.",
+    4: "Valeur déjà calculée et réutilisable.",
+  };
   const poles = ["Environnement", "Mobilité", "Urbanisation", "Gouvernance"] as const;
   const currentPrimaryIndicators = indicateurs.filter((i) => i.lienVTT === current.key);
-  const currentSecondaryIndicators = indicateurs.filter((i) => i.lienVTTSecondaire === current.label);
+  const currentSecondaryIndicators = indicateurs.filter((i) => vttKeys(i).includes(current.key) && i.lienVTT !== current.key);
   const relatedIndicators = [
     ...currentPrimaryIndicators.map((ind) => ({ ind, relation: "Principal" as const })),
     ...currentSecondaryIndicators
@@ -1184,34 +1150,26 @@ export default function App() {
       .map((ind) => ({ ind, relation: "Secondaire" as const })),
   ];
   const currentExamples = relatedIndicators.reduce<typeof relatedIndicators>((examples, item) => {
-    if (examples.length < 3 && !examples.some((example) => example.ind.pole === item.ind.pole)) {
+    if (examples.length < VTT_EXAMPLE_LIMIT && !examples.some((example) => example.ind.pole === item.ind.pole)) {
       examples.push(item);
     }
     return examples;
   }, []);
   relatedIndicators.forEach((item) => {
-    if (currentExamples.length < 3 && !currentExamples.some((example) => example.ind.id === item.ind.id)) {
+    if (currentExamples.length < VTT_EXAMPLE_LIMIT && !currentExamples.some((example) => example.ind.id === item.ind.id)) {
       currentExamples.push(item);
     }
   });
   const implementationRows = vttModes.map((mode) => {
     const linkedIndicators = indicateurs.filter(
-      (ind) => ind.lienVTT === mode.key || ind.lienVTTSecondaire === mode.label,
+      (ind) => vttKeys(ind).includes(mode.key),
     );
-    const maturityAverage = linkedIndicators.length
-      ? linkedIndicators.reduce((sum, ind) => sum + ind.maturite, 0) / linkedIndicators.length
-      : null;
-    const maturityLevel = maturityAverage
-      ? Math.max(1, Math.min(4, Math.round(maturityAverage))) as 1 | 2 | 3 | 4
-      : null;
 
     return {
       ...mode,
       linkedPoles: new Set(linkedIndicators.map((ind) => ind.pole)),
       hasL1: linkedIndicators.some((ind) => ind.liste === "L1"),
       hasL2: linkedIndicators.some((ind) => ind.liste === "L2"),
-      maturityAverage,
-      maturityLevel,
     };
   });
 
@@ -1220,7 +1178,7 @@ export default function App() {
 
       {/* Nav */}
       <nav
-        className="main-nav sticky top-0 z-50 flex items-center justify-between px-6 py-3"
+        className="main-nav sticky top-0 z-50 flex items-center justify-between"
         style={{ background: "var(--color-canvas)", borderBottom: "1.5px solid var(--color-border)" }}
       >
         <div className="flex items-baseline gap-3">
@@ -1228,29 +1186,32 @@ export default function App() {
             POPGG
           </span>
           <span className="text-xs hidden sm:inline" style={{ color: "var(--color-text)", opacity: 0.55 }}>
-            Plateforme d'Observation et de Prospective du Grand Genève
+            Observatoire territorial du Grand Genève
           </span>
         </div>
         <div className="flex gap-5 text-sm font-medium" style={{ color: "var(--color-text)" }}>
           <a href="#acteurs" className="hover:text-[var(--color-primary)] transition-colors">Acteurs</a>
-          <a href="#vtt" className="hover:text-[var(--color-primary)] transition-colors">Modes d’action</a>
-          <button
-            onClick={() => setPage("indicateurs")}
-            className="flex items-center gap-1 hover:text-[var(--color-primary)] transition-colors font-semibold"
-            style={{ color: "var(--color-primary)" }}
+          <a href="#vtt" className="hover:text-[var(--color-primary)] transition-colors">
+            <span className="nav-label-full">Modes d’action</span>
+            <span className="nav-label-short" aria-hidden="true">Modes</span>
+          </a>
+          <a
+            href="#indicateurs"
+            className="nav-indicators-cta flex items-center gap-2 font-semibold"
+            aria-label="Consulter les fiches indicateurs"
           >
             Indicateurs
             <svg aria-hidden="true" width="13" height="13" viewBox="0 0 14 14" fill="none">
               <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </button>
+          </a>
         </div>
       </nav>
 
       {/* Hero */}
-      <section style={{ background: "var(--color-primary-soft-strong)", borderBottom: "1px solid var(--color-border)" }} className="relative overflow-hidden">
-        <div className="max-w-5xl mx-auto px-6 pt-12 pb-0">
-          <div className="max-w-3xl mb-8">
+      <section style={{ background: "var(--color-primary-soft-strong)", borderBottom: "1px solid var(--color-border)" }} className="home-hero relative overflow-hidden">
+        <div className="home-hero-content site-frame pt-12 pb-0">
+          <div className="relative z-10 max-w-3xl mb-8">
             <h1 style={{
               fontFamily: "'Newsreader', serif",
               fontWeight: 700,
@@ -1275,21 +1236,16 @@ export default function App() {
               Ménager, hybrider et renouveler le territoire
             </p>
             <p className="mt-4 text-sm leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 600 }}>
-              Organiser un système d’indicateurs pour observer les transformations territoriales et éclairer la décision publique.
+              Suivre les transformations du Grand Genève pour éclairer la décision publique.
             </p>
             <p className="mt-3 text-xs" style={{ color: "var(--color-text-muted)", maxWidth: 440 }}>
-              Prototype de travail préparatoire à l’atelier du 8 septembre 2026.
+              Catalogue mis à jour le {catalogueMetadata.sourceDate}.
             </p>
-            <div className="flex gap-3 mt-6 flex-wrap">
-              {["Préservation", "Reconnexion", "Revitalisation", "Régénération", "Mise en réseau", "Circularité"].map((m) => (
-                <span key={m} className="text-xs px-2.5 py-1 rounded-full font-medium" style={{ background: "var(--color-surface-translucent)", color: "var(--color-primary-strong)", border: "1px solid var(--color-border)" }}>{m}</span>
-              ))}
-            </div>
           </div>
           <img
             src={homeIllustration}
             alt="Scène territoriale illustrée du Grand Genève : bâti, espaces verts, mobilités et acteurs"
-            className="w-full max-w-3xl block"
+            className="home-hero-illustration relative z-10 w-full max-w-3xl block"
             style={{ marginLeft: "auto", marginRight: "auto" }}
           />
         </div>
@@ -1298,93 +1254,78 @@ export default function App() {
       {/* Accent bar */}
       <div style={{ height: 5, background: "var(--color-accent-soft)" }}/>
 
-      {/* Indicators summary strip */}
-      <section style={{ background: "var(--color-canvas)", borderBottom: "1.5px solid var(--color-border-subtle)" }} className="py-10">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6 mb-8">
+      {/* Indicator counts and readiness answer two separate questions. */}
+      <section className="indicator-overview" aria-labelledby="indicator-overview-title">
+        <div className="site-frame">
+          <div className="indicator-overview-heading">
             <div>
-              <h2 style={{
-                fontFamily: "'Newsreader', serif",
-                fontWeight: 700,
-                fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-                color: "var(--color-primary-strong)",
-                lineHeight: 1.15,
-                letterSpacing: "-0.02em",
-              }}>
-                {indicateurs.length} indicateurs territorialisés
+              <h2 id="indicator-overview-title">
+                {indicateurs.length} indicateurs pour suivre le territoire
               </h2>
-              <p className="mt-1 text-sm" style={{ color: "var(--color-text-muted)", maxWidth: 520 }}>
-                Un portefeuille commun pour observer les transformations du Grand Genève à travers quatre pôles complémentaires.
+              <p>
+                Les fiches documentent la définition, les données et la méthode de chaque indicateur.
               </p>
             </div>
             <button
-              onClick={() => setPage("indicateurs")}
-              className="primary-cta flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:opacity-85 shrink-0"
-              style={{ background: "var(--color-primary)", color: "var(--color-surface)", border: "1px solid var(--color-primary)" }}
+              onClick={openIndicators}
+              className="primary-cta indicator-overview-cta"
             >
-              Explorer les fiches
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              Consulter les fiches
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </button>
           </div>
 
-          {/* Stats row */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {poles.map((p) => {
-              const count = indicateurs.filter((i) => i.pole === p).length;
-              const c = poleColors[p];
-              const maturiteAvg = Math.round(
-                indicateurs.filter((i) => i.pole === p).reduce((s, i) => s + i.maturite, 0) / count
-              ) as 1 | 2 | 3 | 4;
+          <h3>Quatre pôles thématiques</h3>
+          <dl className="indicator-overview-themes">
+            {poles.map((pole) => {
+              const count = indicateurs.filter((i) => i.pole === pole).length;
+              const colors = poleColors[pole];
+              const PoleIcon = poleOverviewIcons[pole as keyof typeof poleOverviewIcons] ?? Building2;
               return (
-                <div
-                  key={p}
-                  className="rounded-xl p-4 flex flex-col gap-1"
-                  style={{ background: c.bg, border: "1.5px solid var(--color-border-subtle)" }}
-                >
-                  <span style={{ fontFamily: "'Newsreader', serif", fontSize: 32, fontWeight: 700, color: c.accent, lineHeight: 1 }}>
-                    {count}
-                  </span>
-                  <span className="text-xs font-semibold" style={{ color: c.accent, opacity: 0.85 }}>{p}</span>
-                  <div className="flex items-center gap-1.5 mt-1 min-w-0">
-                    <span className="flex items-center gap-0.5 shrink-0" aria-hidden="true">
-                      {[1,2,3,4].map((n) => (
-                        <span key={n} style={{
-                          width: 8, height: 8, borderRadius: "50%",
-                          background: n <= maturiteAvg ? maturiteColor[maturiteAvg] : "var(--color-border)",
-                          display: "inline-block",
-                        }}/>
-                      ))}
-                    </span>
-                    <span className="text-[11px] leading-none whitespace-nowrap" style={{ color: c.accent }}>
-                      {maturiteLabel[maturiteAvg]}
-                    </span>
-                  </div>
+                <div key={pole} style={{ background: colors.bg, color: colors.accent }}>
+                  <dt><PoleIcon aria-hidden="true" size={18} strokeWidth={1.8} />{pole}</dt>
+                  <dd><span>{count}</span> {count === 1 ? "indicateur" : "indicateurs"}</dd>
                 </div>
               );
             })}
+          </dl>
+
+          <div className="indicator-overview-readiness">
+            <h3>Quatre niveaux de maturité</h3>
+            <p>
+              La maturité porte sur les données et la méthode, pas sur les résultats des politiques.
+            </p>
+            <dl className="indicator-readiness-list" aria-label={`État de préparation des ${indicateurs.length} indicateurs`}>
+              {maturityCounts(indicateurs).map(({ level, count }) => (
+                <div key={level}>
+                  <dt>
+                    <span className="indicator-readiness-label">
+                      <span className="indicator-readiness-dot" style={{ background: maturiteColor[level] }} aria-hidden="true" />
+                      {maturiteLabel[level]}
+                    </span>
+                    <span className="indicator-readiness-description">{preparationDescriptions[level]}</span>
+                  </dt>
+                  <dd><span>{count}</span> {count === 1 ? "indicateur" : "indicateurs"}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="indicator-overview-note">Classement à confirmer avec les producteurs.</p>
           </div>
 
-          {/* Maturite legend */}
-          <div className="flex gap-4 mt-5 flex-wrap items-center">
-            <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Maturité moyenne · échelle provisoire :</span>
-            {([1,2,3,4] as const).map((m) => (
-              <span key={m} className="flex items-center gap-1.5 text-xs" style={{ color: "var(--color-text)", opacity: 0.7 }}>
-                <span style={{ width: 10, height: 10, borderRadius: "50%", background: maturiteColor[m], display: "inline-block" }}/>
-                {m} · {maturiteLabel[m]}
-              </span>
-            ))}
-          </div>
-
-          <p className="mt-4 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
-            Repère de gestion et de mise en œuvre : {statsL1} indicateurs L1 et {statsL2} indicateurs L2. Cette distinction sert à prioriser le travail ; elle ne constitue pas un niveau de décision POPGG.
-          </p>
+          <details className="indicator-overview-source">
+            <summary>Périmètre et source</summary>
+            <p>
+              Classeur du {catalogueMetadata.sourceDate} · {statsL1} indicateurs L1 · {statsL2} indicateurs L2.
+              Les listes complémentaires L3 et L4 restent accessibles dans le catalogue.
+            </p>
+          </details>
         </div>
       </section>
 
       {/* Characters */}
-      <section id="acteurs" className="max-w-6xl mx-auto px-6 py-20">
+      <section id="acteurs" className="site-frame page-section page-section-actors">
         <div className="mb-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <h2 style={{
@@ -1398,7 +1339,7 @@ export default function App() {
               Qui fait vivre un indicateur POPGG ?
             </h2>
             <p className="mt-2 text-sm" style={{ color: "var(--color-text)", maxWidth: 600, opacity: 0.8 }}>
-              Deux lectures complémentaires : les responsabilités à attribuer et la chaîne qui transforme une source en information utile à la décision.
+              Deux vues présentent les responsabilités et la chaîne de production d’un indicateur.
             </p>
           </div>
 
@@ -1461,14 +1402,14 @@ export default function App() {
         </details>
 
         {actorView === "responsabilites" ? (
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="actor-card-grid grid grid-cols-1 sm:grid-cols-3">
             {characters.map((c) => (
               <div
                 key={c.name}
-                className="rounded-xl overflow-hidden flex flex-col"
+                className="actor-card rounded-xl overflow-hidden flex flex-col"
                 style={{ border: "1px solid var(--color-border)", background: c.bg, boxShadow: "var(--shadow-sm)" }}
               >
-                <div className="flex items-center justify-center px-5 pt-3" style={{ height: 160 }}>
+                <div className="actor-card-visual flex items-center justify-center px-5 pt-3" style={{ height: 160 }}>
                   <div style={{ height: 144, width: "100%", maxWidth: 250 }}>
                     <RoleAvatar {...c.avatar} />
                   </div>
@@ -1500,7 +1441,7 @@ export default function App() {
                   className="value-chain-step rounded-xl p-4"
                   style={{ background: step.color, border: "1px solid var(--color-border)" }}
                 >
-                  <div className="flex items-center justify-between gap-2 mb-4">
+                  <div className="flex items-center justify-start gap-2 mb-3">
                     <span
                       className="flex items-center justify-center rounded-full text-xs font-bold"
                       style={{ width: 28, height: 28, background: "var(--color-surface-translucent)", color: step.accent }}
@@ -1508,7 +1449,7 @@ export default function App() {
                     >
                       {index + 1}
                     </span>
-                    <span className="text-[11px] font-bold uppercase tracking-[0.08em]" style={{ color: step.accent }}>
+                    <span className="value-chain-action text-xs font-semibold" style={{ color: step.accent }}>
                       {step.action}
                     </span>
                   </div>
@@ -1525,16 +1466,13 @@ export default function App() {
               ))}
             </ol>
 
-            <p className="mt-6 mx-auto text-sm leading-relaxed text-center" style={{ color: "var(--color-text-muted)", maxWidth: 620 }}>
-              Des indicateurs comparables, actualisables et interprétables pour le pilotage territorial.
-            </p>
           </div>
         )}
       </section>
 
       {/* VTT Modes */}
-      <section id="vtt" style={{ background: "var(--color-canvas-cool)", borderTop: "1px solid var(--color-border)" }} className="py-20">
-        <div className="max-w-6xl mx-auto px-6">
+      <section id="vtt" style={{ background: "var(--color-canvas-cool)" }} className="page-section page-section-vtt">
+        <div className="site-frame">
           <div className="mb-8">
             <h2 id="vtt-section-title" style={{
               fontFamily: "'Newsreader', serif",
@@ -1547,7 +1485,7 @@ export default function App() {
               Un territoire commun, six modes d’action
             </h2>
             <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 690 }}>
-              Les modes d’action de la VTT décrivent des transformations territoriales attendues à l’horizon 2050. Chacun associe une orientation, des leviers concrets et des indicateurs susceptibles de documenter leur mise en œuvre.
+              La VTT relie transformations territoriales, leviers et indicateurs.
             </p>
           </div>
 
@@ -1564,7 +1502,7 @@ export default function App() {
                   lineHeight: 1.1,
                   letterSpacing: "-0.02em",
                 }}>
-                  {current.label}
+                  {current.territoryTitle}
                 </h3>
                 <p className="mt-2 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 720 }}>
                   {current.vision}
@@ -1579,7 +1517,7 @@ export default function App() {
           {/* Active mode panel */}
           <article
             id={`vtt-mode-${current.id}`}
-            className="rounded-2xl overflow-hidden"
+            className="vtt-mode-panel rounded-2xl overflow-hidden"
             style={{ border: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}
             aria-live="polite"
           >
@@ -1587,9 +1525,21 @@ export default function App() {
               <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: current.accent }}>
                 Leviers territoriaux
               </h4>
-              <ul className="vtt-lever-list">
+              <ul
+                className="vtt-lever-list"
+                style={{ "--vtt-lever-count": current.levers.length } as CSSProperties}
+              >
                 {current.levers.map((lever) => (
                   <li key={lever.title} className="vtt-lever">
+                    <div
+                      className="vtt-lever-illustration"
+                      role="img"
+                      aria-label={`Illustration du levier ${lever.title}`}
+                      style={{
+                        backgroundImage: `url(${vttLevers})`,
+                        backgroundPosition: `calc(${lever.illustration.col * 50}% + ${lever.illustration.col === 0 ? 28 : 0}px) ${lever.illustration.row * 20}%`,
+                      }}
+                    />
                     <h5 className="text-sm font-semibold" style={{ color: current.accent }}>{lever.title}</h5>
                     <p className="mt-1 text-sm leading-relaxed" style={{ color: current.accent, opacity: 0.82 }}>{lever.body}</p>
                   </li>
@@ -1598,9 +1548,11 @@ export default function App() {
             </div>
 
             <div className="vtt-indicator-strip px-6 py-5 sm:px-8 sm:py-6" style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)" }}>
-              <h4 className="mb-5" style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: "var(--color-primary-strong)" }}>
-                Indicateurs associés
-              </h4>
+              <div className="vtt-indicator-strip-heading">
+                <h4 style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 19, color: "var(--color-primary-strong)" }}>
+                  Exemples d’indicateurs associés
+                </h4>
+              </div>
 
               {currentExamples.length > 0 ? (
                 <ul className="vtt-indicator-examples">
@@ -1608,13 +1560,13 @@ export default function App() {
                     const pole = poleColors[ind.pole];
                     return (
                       <li key={`${ind.id}-${relation}`} className="vtt-indicator-example">
-                        <div className="flex items-center gap-2 flex-wrap">
+                        <div className="vtt-indicator-example-meta">
                           <span className="text-[11px] font-bold tracking-wide" style={{ color: pole.accent }}>{ind.id}</span>
                           <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full" style={{ background: pole.bg, color: pole.accent }}>{ind.pole}</span>
                           <span className="text-[11px]" style={{ color: "var(--color-text-muted)" }}>{relation}</span>
                         </div>
-                        <p className="mt-2 text-sm font-semibold leading-snug" style={{ color: "var(--color-primary-strong)" }}>{ind.nom}</p>
-                        <div className="mt-2 flex items-center gap-1.5">
+                        <p className="vtt-indicator-example-name" style={{ color: "var(--color-primary-strong)" }}>{ind.nom}</p>
+                        <div className="vtt-indicator-example-maturity">
                           <span
                             aria-hidden="true"
                             className="shrink-0 rounded-full"
@@ -1636,7 +1588,7 @@ export default function App() {
 
           <div className="flex justify-end mt-4">
             <button
-              onClick={() => setPage("indicateurs")}
+              onClick={openIndicators}
               className="vtt-explore-button inline-flex min-h-11 w-full sm:w-auto items-center justify-center gap-2 text-sm font-semibold rounded-full px-5 py-2 transition-colors"
               style={{ color: "var(--color-primary)", border: "1px solid var(--color-border)", background: "var(--color-surface)" }}
             >
@@ -1648,17 +1600,17 @@ export default function App() {
           </div>
 
           <p className="mt-5 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
-            Leviers synthétisés à partir des planches de la Vision territoriale transfrontalière 2050. Les rattachements d’indicateurs correspondent à la liste de travail mise à jour le 7 septembre 2026.
+            Source : Vision territoriale transfrontalière 2050 · catalogue du {catalogueMetadata.sourceDate}.
           </p>
         </div>
       </section>
 
       <section
         id="mise-en-oeuvre"
-        className="py-20"
-        style={{ background: "var(--color-canvas)", borderTop: "1px solid var(--color-border)" }}
+        className="page-section page-section-implementation"
+        style={{ background: "var(--color-canvas)" }}
       >
-        <div className="max-w-6xl mx-auto px-6">
+        <div className="site-frame">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 mb-8">
             <div>
               <h2
@@ -1674,7 +1626,7 @@ export default function App() {
                 Mise en œuvre par horizon
               </h2>
               <p className="mt-3 text-base leading-relaxed" style={{ color: "var(--color-text)", maxWidth: 700 }}>
-                Cette première matrice relie les modes d’action VTT aux pôles d’observation et aux deux horizons du portefeuille. Elle permet de repérer les sujets déjà inscrits dans la feuille de route et ceux qui restent à cadrer.
+                La matrice relie les modes d’action aux pôles d’observation et aux horizons L1/L2.
               </p>
             </div>
             <span className="self-start lg:self-auto text-xs font-semibold px-3 py-1.5 rounded-full" style={{ background: "var(--color-primary-soft)", color: "var(--color-primary-strong)" }}>
@@ -1698,13 +1650,12 @@ export default function App() {
           >
             <table className="implementation-matrix w-full border-collapse">
               <caption className="sr-only">
-                Liens proposés entre les six modes d’action VTT, les pôles d’observation, la maturité moyenne et les horizons L1 et L2 du portefeuille d’indicateurs.
+                Liens proposés entre les six modes d’action VTT, les pôles d’observation et les horizons L1 et L2 du portefeuille d’indicateurs.
               </caption>
               <thead>
                 <tr>
                   <th scope="col" rowSpan={2} className="matrix-mode-heading text-left">Mode d’action</th>
                   <th scope="colgroup" colSpan={4}>Pôles d’observation</th>
-                  <th scope="col" rowSpan={2} className="matrix-maturity-heading">Maturité moyenne</th>
                   <th scope="colgroup" colSpan={2}>Horizon du portefeuille</th>
                 </tr>
                 <tr>
@@ -1734,27 +1685,11 @@ export default function App() {
                           <span
                             aria-hidden="true"
                             className={`matrix-dot ${linked ? "is-linked" : ""}`}
-                            style={linked ? { background: poleColors[pole].accent } : undefined}
+                            style={linked ? { background: poleColors[pole].light } : undefined}
                           />
                         </td>
                       );
                     })}
-                    <td className="matrix-maturity-cell">
-                      {row.maturityAverage && row.maturityLevel ? (
-                        <div
-                          className="matrix-maturity"
-                          aria-label={`Maturité moyenne ${row.maturityAverage.toFixed(1).replace(".", ",")} sur 4, ${maturiteLabel[row.maturityLevel]}`}
-                        >
-                          <span className="matrix-maturity-value">
-                            <span aria-hidden="true" className="matrix-maturity-dot" style={{ background: maturiteColor[row.maturityLevel] }} />
-                            {row.maturityAverage.toFixed(1).replace(".", ",")} / 4
-                          </span>
-                          <span className="matrix-maturity-label">{maturiteLabel[row.maturityLevel]}</span>
-                        </div>
-                      ) : (
-                        <span className="matrix-maturity-label">Non calculée</span>
-                      )}
-                    </td>
                     <td className="matrix-horizon-cell">
                       <span className={`matrix-status ${row.hasL1 ? "is-l1" : "is-unset"}`}>
                         {row.hasL1 ? "Démarrage L1" : "À cadrer"}
@@ -1780,14 +1715,14 @@ export default function App() {
               <span aria-hidden="true" className="matrix-dot" />
               Aucun lien dans la liste de travail actuelle
             </span>
-            <span>Les libellés d’horizon indiquent la présence d’au moins un indicateur L1 ou L2.</span>
+            <span>Un horizon est indiqué lorsqu’au moins un indicateur L1 ou L2 est présent.</span>
           </div>
         </div>
       </section>
 
       {/* Footer */}
       <footer
-        className="flex flex-col sm:flex-row items-center justify-between gap-4 px-8 py-5"
+        className="main-footer flex flex-col sm:flex-row items-center justify-between gap-4 px-8 py-5"
         style={{ background: "var(--color-primary-soft)", borderTop: "1px solid var(--color-border)" }}
       >
         <div>
@@ -1797,15 +1732,8 @@ export default function App() {
           <span className="text-xs ml-2" style={{ color: "var(--color-primary)" }}>Grand Genève</span>
         </div>
         <p className="text-xs text-center" style={{ color: "var(--color-primary-strong)", opacity: 0.65 }}>
-          Plateforme d'Observation et de Prospective · Vision Territoriale Transfrontalière 2050
+          Observatoire territorial du Grand Genève
         </p>
-        <div className="flex gap-3 text-xs font-medium" style={{ color: "var(--color-primary-strong)" }}>
-          <span>Franco-Suisse</span>
-          <span>·</span>
-          <span>Données documentées</span>
-          <span>·</span>
-          <span>Aide à la décision</span>
-        </div>
       </footer>
     </div>
   );

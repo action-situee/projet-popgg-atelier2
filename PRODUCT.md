@@ -2,11 +2,13 @@
 
 ## Produit
 
-POPGG est une interface d’observation et de prospective territoriale du Grand Genève. Cette version présente le portefeuille de travail L1 + L2, soit 30 indicateurs, leurs niveaux de maturité provisoires et leurs rattachements principal et secondaire proposés aux six modes de la Vision Territoriale Transfrontalière 2050.
+POPGG est une interface d’observation et de prospective territoriale du Grand Genève. Cette version présente le portefeuille de travail L1 + L2, soit 30 indicateurs, leurs niveaux de maturité provisoires et tous leurs rattachements proposés aux six modes de la Vision Territoriale Transfrontalière 2050, en distinguant principal et secondaires.
 
 La VTT constitue l’ossature narrative : « primauté du socle du vivant » et « rééquilibrage multipolaire de l’agglomération », déclinés en Préservation, Reconnexion, Revitalisation, Régénération, Mise en réseau et Circularité. L’interface rend aussi visible la chaîne de responsabilité allant de la source à la maintenance. L’attribution nominative de ces responsabilités et les conditions de publication restent [À COMPLÉTER].
 
-Le contenu est un prototype préparatoire à l’atelier du 8 septembre 2026. Les rattachements VTT proviennent d’un préclassement à synchroniser avec le tableur consolidé ; « Gouvernance territoriale », utilisée deux fois comme rattachement secondaire, reste signalée comme hors nomenclature des six modes et doit être confirmée.
+Le contenu est synchronisé avec le classeur consolidé du 9 septembre 2026. Le catalogue regroupe 30 indicateurs prioritaires L1 et L2, 68 indicateurs complémentaires L3 et L4, 44 entrées de données et 152 politiques publiques. Les rattachements VTT, niveaux de maturité et champs de responsabilité reprennent le classeur source ; les valeurs non renseignées restent explicitement signalées.
+
+Les trois registres sont reliés par les identifiants explicites de la source. Les effectifs par niveau remplacent les moyennes de maturité ; le nombre d’indicateurs uniques reste distinct du nombre de rattachements. Les commandes séparent organisation de la vue et densité d’affichage, avec une réinitialisation des filtres.
 
 ## Contrat de direction
 

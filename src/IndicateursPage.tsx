@@ -1,6 +1,7 @@
+import "@/catalogue.css";
+import { linkedData, linkedPolicies, vttKeys, type CatalogueTarget } from "@/data/catalogueRelations";
 import { useState, useMemo, useEffect } from "react";
-import { Database, FileText, Grid2X2, Landmark, List, Network, Search } from "lucide-react";
-import IndicatorGraphView from "@/IndicatorGraphView";
+import { ChevronDown, Columns3, Database, FileText, Grid2X2, Landmark, List, Search, SlidersHorizontal, X } from "lucide-react";
 import {
   indicateurs,
   poleColors,
@@ -12,6 +13,7 @@ import {
   type FicheIndicateur,
 } from "@/data/indicators";
 import {
+  catalogueMetadata,
   donneesCatalogue,
   indicateursComplementaires,
   politiquesPubliques,
@@ -30,6 +32,9 @@ const LISTE_COLORS: Record<Liste, string> = {
   L4: "var(--color-text)",
 };
 const MATURITES = [1, 2, 3, 4] as const;
+const VTT_SECTION_KEYS = new Set(vttSections.map((section) => section.key));
+
+const hasDefinedVtt = (ind: FicheIndicateur) => VTT_SECTION_KEYS.has(ind.lienVTT);
 
 const typologieShort: Record<string, string> = {
   "Résultat": "Résultat",
@@ -42,9 +47,9 @@ const typologieShort: Record<string, string> = {
   "Stratégique": "Stratégique",
 };
 
-type ViewMode = "grille" | "vtt" | "matrice";
+type ViewMode = "grille" | "colonnes" | "vtt" | "matrice";
 type CardDensity = "mini" | "etendue";
-type Presentation = CardDensity | "graphe";
+type Presentation = CardDensity;
 type CatalogueSection = "indicateurs" | "donnees" | "politiques";
 type MaturityFilter = number | "Tous" | "Non renseignée";
 
@@ -87,15 +92,13 @@ function FilterChip({
 }) {
   return (
     <button
+      type="button"
       onClick={onClick}
       aria-pressed={active}
-      className="text-xs font-semibold px-3 py-1.5 rounded-full transition-all"
-      style={{
-        background: active ? (color ?? "var(--color-primary)") : "var(--color-surface)",
-        color: active ? "var(--color-surface)" : "var(--color-text)",
-        border: `1px solid ${active ? (color ?? "var(--color-primary)") : "var(--color-border)"}`,
-      }}
+      className="catalog-filter-chip"
+      data-active={active || undefined}
     >
+      {color && <span className="catalog-filter-chip-dot" style={{ background: color }} aria-hidden="true" />}
       {children}
     </button>
   );
@@ -109,7 +112,7 @@ function MiniCard({ ind, onClick }: { ind: FicheIndicateur; onClick: () => void 
   return (
     <button
       onClick={onClick}
-      className="data-card w-full text-left rounded-2xl overflow-hidden flex flex-col transition-all group"
+      className="data-card w-full text-left rounded-2xl overflow-hidden flex flex-col group"
       style={{ border: "1px solid var(--color-border)", background: "var(--color-surface)" }}
     >
       {/* Header · same as EtendueCard */}
@@ -182,7 +185,7 @@ function EtendueCard({ ind, onClick }: { ind: FicheIndicateur; onClick: () => vo
   return (
     <button
       onClick={onClick}
-      className="data-card w-full text-left rounded-2xl overflow-hidden flex flex-col transition-all group"
+      className="data-card w-full text-left rounded-2xl overflow-hidden flex flex-col group"
       style={{ border: "1px solid var(--color-border)", background: "var(--color-surface)" }}
     >
       {/* Top stripe */}
@@ -266,6 +269,94 @@ function EtendueCard({ ind, onClick }: { ind: FicheIndicateur; onClick: () => vo
   );
 }
 
+// ─── Columns view ────────────────────────────────────────────────────────────
+
+function ColumnsView({ items, onSelect }: { items: FicheIndicateur[]; onSelect: (ind: FicheIndicateur) => void }) {
+  const stages: Array<{ key: string; value: 1 | 2 | 3 | 4 | null; title: string; label: string; color: string }> = MATURITES.map((m) => ({
+    key: String(m),
+    value: m,
+    title: `Maturité ${m}`,
+    label: maturiteLabel[m],
+    color: maturiteColor[m],
+  }));
+
+  if (items.some((ind) => ind.maturite === null)) {
+    stages.push({
+      key: "unrated",
+      value: null,
+      title: "Non renseignée",
+      label: "Maturité à qualifier",
+      color: "var(--color-text-muted)",
+    });
+  }
+
+  return (
+    <section aria-labelledby="columns-view-title">
+      <h2 id="columns-view-title" className="sr-only">Indicateurs par niveau de maturité</h2>
+      <div
+        className="indicator-board-scroll"
+        role="region"
+        aria-label="Tableau en colonnes des indicateurs par niveau de maturité"
+        tabIndex={0}
+      >
+        <div className="indicator-board">
+          {stages.map((stage) => {
+            const stageItems = items.filter((ind) => ind.maturite === stage.value);
+
+            return (
+              <section key={stage.key} className="indicator-board-column" aria-labelledby={`board-stage-${stage.key}`}>
+                <header className="indicator-board-column-header">
+                  <span className="indicator-board-stage-dot" style={{ background: stage.color }} aria-hidden="true" />
+                  <span className="indicator-board-stage-label">
+                    <strong id={`board-stage-${stage.key}`}>{stage.title}</strong>
+                    <span>{stage.label}</span>
+                  </span>
+                  <span className="indicator-board-count">{stageItems.length}</span>
+                </header>
+
+                <div className="indicator-board-stack">
+                  {stageItems.length === 0 ? (
+                    <p className="indicator-board-empty">Aucun indicateur avec les filtres actifs.</p>
+                  ) : (
+                    stageItems.map((ind) => {
+                      const pole = poleColors[ind.pole];
+                      const vtt = vttSections.find((section) => section.key === ind.lienVTT);
+
+                      return (
+                        <button
+                          key={ind.id}
+                          type="button"
+                          className="indicator-board-card"
+                          onClick={() => onSelect(ind)}
+                          aria-label={`Ouvrir la fiche ${ind.id} · ${ind.nom}`}
+                        >
+                          <span className="indicator-board-card-meta">
+                            <span className="indicator-board-card-id" style={{ color: pole.accent }}>{ind.id}</span>
+                            <span className="indicator-board-pole" style={{ background: pole.bg, color: pole.accent }}>
+                              <span style={{ background: pole.light }} aria-hidden="true" />
+                              {ind.pole}
+                            </span>
+                            <span className="indicator-board-list">{ind.liste}</span>
+                          </span>
+                          <strong>{ind.nom}</strong>
+                          <span className="indicator-board-card-footer">
+                            <span>{vtt?.label ?? "Mode d’action non renseigné"}</span>
+                            <span>{typologieShort[ind.typologie] ?? ind.typologie}</span>
+                          </span>
+                        </button>
+                      );
+                    })
+                  )}
+                </div>
+              </section>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ─── Sidebar helpers ─────────────────────────────────────────────────────────
 
 function SidebarSection({ label, children }: { label: string; children: React.ReactNode }) {
@@ -295,10 +386,10 @@ function MetaCell({ label, value, full }: { label: string; value: string; full?:
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 
-function Sidebar({ ind, onClose }: { ind: FicheIndicateur; onClose: () => void }) {
+function Sidebar({ ind, onClose, onNavigate }: { ind: FicheIndicateur; onClose: () => void; onNavigate: (target: CatalogueTarget) => void }) {
   const c = poleColors[ind.pole];
   const vtt = vttSections.find((s) => s.key === ind.lienVTT);
-  const vttSecondaire = vttSections.find((s) => s.label === ind.lienVTTSecondaire);
+  const secondaryKeys = vttKeys(ind).filter((key) => key !== ind.lienVTT);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -395,6 +486,12 @@ function Sidebar({ ind, onClose }: { ind: FicheIndicateur; onClose: () => void }
             </SidebarSection>
           )}
 
+          <SidebarSection label="Liens du référentiel">
+            <p className="text-xs mb-3">Liens du classeur, à confirmer avec les pôles.</p>
+            <RelationLinks label="Données sources" targets={linkedData(ind, donneesCatalogue).map((d) => ({kind: "donnees", id: d.id, label: d.titre}))} onNavigate={onNavigate} />
+            <RelationLinks label="Politiques publiques" targets={linkedPolicies(ind, politiquesPubliques).map((p) => ({kind: "politiques", id: p.id, label: p.details || p.theme}))} onNavigate={onNavigate} />
+          </SidebarSection>
+
           {/* Maturité */}
           <SidebarSection label="Maturité · échelle provisoire">
             {ind.maturite === null ? (
@@ -444,7 +541,7 @@ function Sidebar({ ind, onClose }: { ind: FicheIndicateur; onClose: () => void }
           )}
 
           {/* Sources de données */}
-          {(ind.donnee || ind.pointeurDonnees || ind.commentaireDonnees) && (
+          {(ind.donnee || ind.pointeurDonnees) && (
             <SidebarSection label="Sources de données">
               <div className="flex flex-col gap-2">
                 {ind.donnee && <MetaCell label="Donnée" value={ind.donnee} full />}
@@ -454,31 +551,29 @@ function Sidebar({ ind, onClose }: { ind: FicheIndicateur; onClose: () => void }
                     <p className="text-xs leading-relaxed break-words" style={{ color: "var(--color-primary-strong)", wordBreak: "break-word" }}>{ind.pointeurDonnees}</p>
                   </div>
                 )}
-                {ind.commentaireDonnees && <MetaCell label="Commentaire données" value={ind.commentaireDonnees} full />}
               </div>
             </SidebarSection>
           )}
 
           {/* Modes d’action VTT proposés */}
-          {vtt && (
+          {(vtt || secondaryKeys.length > 0) && (
             <SidebarSection label="Rattachement VTT proposé">
               <div className="flex flex-col gap-2">
-                <div className="rounded-xl px-4 py-3" style={{ background: vtt.bg, border: "1px solid var(--color-border-subtle)" }}>
+                {vtt && <div className="rounded-xl px-4 py-3" style={{ background: vtt.bg, border: "1px solid var(--color-border-subtle)" }}>
                   <div>
                     <span className="block text-[11px] uppercase tracking-wide" style={{ color: vtt.accent, opacity: 0.65 }}>Mode d’action principal</span>
                     <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 17, color: vtt.accent }}>{vtt.label}</span>
                   </div>
                   <p className="mt-2 text-xs leading-relaxed" style={{ color: vtt.accent }}>{vtt.question}</p>
-                </div>
-                <div className="rounded-xl px-4 py-3" style={{ background: vttSecondaire?.bg ?? "var(--color-border-faint)", border: "1px solid var(--color-border-subtle)" }}>
-                  <span className="block text-[11px] uppercase tracking-wide" style={{ color: vttSecondaire?.accent ?? "var(--color-text-muted)" }}>Mode d’action secondaire</span>
-                  <span className="text-sm font-semibold" style={{ color: vttSecondaire?.accent ?? "var(--color-primary-strong)" }}>{ind.lienVTTSecondaire}</span>
-                  {!vttSecondaire && (
-                    <p className="mt-1 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-                      À confirmer : ce libellé ne correspond pas à l’un des six modes d’action VTT.
-                    </p>
-                  )}
-                </div>
+                </div>}
+                {secondaryKeys.map((key) => {
+                  const secondary = vttSections.find((section) => section.key === key);
+                  return <div key={key} className="rounded-xl px-4 py-3" style={{ background: secondary?.bg ?? "var(--color-border-faint)" }}>
+                    <span className="block text-xs">Rattachement secondaire proposé</span>
+                    <span className="text-sm font-semibold">{secondary?.label ?? key}</span>
+                    {!secondary && <p className="text-xs mt-1">Libellé source à qualifier : hors des six modes VTT.</p>}
+                  </div>;
+                })}
               </div>
             </SidebarSection>
           )}
@@ -511,30 +606,18 @@ function Sidebar({ ind, onClose }: { ind: FicheIndicateur; onClose: () => void }
                   {ind.debattu ? "Débattu en atelier" : "Non débattu en atelier"}
                 </span>
               </div>
-              {ind.justificationListe && <MetaCell label="Justification liste" value={ind.justificationListe} full />}
             </div>
           </SidebarSection>
 
-          {(ind.statutRaci || ind.commentaireRaci) && (
+          {(ind.droitsDiffusion || ind.statutRaci) && (
             <SidebarSection label="Organisation de la production">
               <div className="flex flex-col gap-2">
+                {ind.droitsDiffusion && <MetaCell label="Droits et diffusion" value={ind.droitsDiffusion} full />}
                 {ind.statutRaci && <MetaCell label="Statut RACI" value={ind.statutRaci} full />}
-                {ind.commentaireRaci && <MetaCell label="Commentaire RACI" value={ind.commentaireRaci} full />}
               </div>
             </SidebarSection>
           )}
 
-          {/* Commentaires */}
-          {ind.commentaire && (
-            <SidebarSection label="Commentaire interne">
-              <p className="text-xs leading-relaxed" style={{ color: "var(--color-text)" }}>{ind.commentaire}</p>
-            </SidebarSection>
-          )}
-          {ind.notesEquipes && (
-            <SidebarSection label="Notes des équipes">
-              <p className="text-xs leading-relaxed" style={{ color: "var(--color-text)" }}>{ind.notesEquipes}</p>
-            </SidebarSection>
-          )}
         </div>
 
         {/* Footer nav */}
@@ -563,6 +646,72 @@ function Sidebar({ ind, onClose }: { ind: FicheIndicateur; onClose: () => void }
 
 // ─── VTT view ─────────────────────────────────────────────────────────────────
 
+function UnclassifiedIndicatorsSection({
+  title,
+  description,
+  items,
+  onSelect,
+}: {
+  title: string;
+  description: string;
+  items: FicheIndicateur[];
+  onSelect: (ind: FicheIndicateur) => void;
+}) {
+  if (items.length === 0) return null;
+
+  return (
+    <details className="catalog-unclassified-section">
+      <summary className="catalog-unclassified-summary">
+        <span className="catalog-unclassified-heading">
+          <strong>{title}</strong>
+          <span>{description}</span>
+        </span>
+        <span className="catalog-unclassified-count">
+          {items.length} indicateur{items.length !== 1 ? "s" : ""}
+        </span>
+        <ChevronDown className="catalog-unclassified-chevron" aria-hidden="true" size={18} strokeWidth={1.8} />
+      </summary>
+
+      <div className="catalog-unclassified-grid">
+        {items.map((ind) => {
+          const pole = poleColors[ind.pole];
+          const reasons = [
+            ind.maturite === null ? "Maturité non renseignée" : "",
+            !hasDefinedVtt(ind) ? "Mode d’action non renseigné" : "",
+          ].filter(Boolean);
+
+          return (
+            <button
+              key={ind.id}
+              type="button"
+              className="catalog-unclassified-item"
+              onClick={() => onSelect(ind)}
+              aria-label={`Ouvrir la fiche ${ind.id} · ${ind.nom}`}
+            >
+              <span className="catalog-unclassified-item-heading">
+                <span style={{ color: pole.accent }}>{ind.id}</span>
+                <strong>{ind.nom}</strong>
+              </span>
+              <span className="catalog-unclassified-meta">
+                <span className="catalog-unclassified-pole" style={{ background: pole.light }} aria-hidden="true" />
+                <span>{ind.pole}</span>
+                <span>·</span>
+                <span>{ind.liste}</span>
+                {reasons.length > 0 && (
+                  <>
+                    <span>·</span>
+                    <span>{reasons.join(" · ")}</span>
+                  </>
+                )}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </details>
+  );
+}
+
 function VTTView({
   items,
   density,
@@ -576,10 +725,14 @@ function VTTView({
   onMaturiteClick: (m: MaturityFilter) => void;
   onSelect: (ind: FicheIndicateur) => void;
 }) {
+  const classifiedItems = items.filter((ind) => ind.maturite !== null && vttKeys(ind).some((key) => VTT_SECTION_KEYS.has(key)));
+  const otherItems = items.filter((ind) => ind.maturite === null || !vttKeys(ind).some((key) => VTT_SECTION_KEYS.has(key)));
+
   return (
     <div className="flex flex-col gap-2">
-      {vttSections.map((section) => {
-        const sectionItems = items.filter((i) => i.lienVTT === section.key);
+      <p className="catalog-count-note">Un indicateur peut apparaître dans plusieurs modes. Le compteur porte sur les indicateurs uniques.</p>
+      {classifiedItems.length > 0 && vttSections.map((section) => {
+        const sectionItems = classifiedItems.filter((i) => vttKeys(i).includes(section.key));
 
         return (
           <div
@@ -605,7 +758,7 @@ function VTTView({
                   {section.label}
                 </h3>
                 <p className="text-xs mt-0.5 font-semibold" style={{ color: section.accent, opacity: 0.55 }}>
-                  {section.axe} · {sectionItems.length} {sectionItems.length === 1 ? "rattachement principal" : "rattachements principaux"}
+                  {section.axe} · {sectionItems.length} {sectionItems.length === 1 ? "indicateur lié" : "indicateurs liés"} (principaux et secondaires)
                 </p>
               </div>
               {/* Maturité legend inline */}
@@ -621,7 +774,7 @@ function VTTView({
                       key={m}
                       onClick={() => onMaturiteClick(filterMaturite === m ? "Tous" : m)}
                       aria-pressed={filterMaturite === m}
-                      className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold transition-all"
+                      className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold transition-colors"
                       style={{
                         background: filterMaturite === m ? maturiteColor[m] : "var(--color-surface-translucent)",
                         color: filterMaturite === m ? "var(--color-surface)" : section.accent,
@@ -641,21 +794,27 @@ function VTTView({
             <div className="px-6 py-5" style={{ background: "var(--color-surface-soft)" }}>
               {sectionItems.length === 0 ? (
                 <div className="rounded-xl px-4 py-3 text-sm" style={{ background: "var(--color-surface)", color: "var(--color-text-muted)", border: "1px solid var(--color-border-subtle)" }}>
-                  Aucun rattachement principal dans la liste de travail actuelle. Ce mode apparaît comme rattachement secondaire pour certains indicateurs.
+                  Aucun rattachement identifié dans la sélection actuelle.
                 </div>
               ) : density === "mini" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {sectionItems.map((ind) => <MiniCard key={ind.id} ind={ind} onClick={() => onSelect(ind)} />)}
+                  {sectionItems.map((ind) => <div key={ind.id}><p className="text-xs mb-2">{ind.lienVTT === section.key ? "Principal" : "Secondaire"} dans ce mode</p><MiniCard ind={ind} onClick={() => onSelect(ind)} /></div>)}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {sectionItems.map((ind) => <EtendueCard key={ind.id} ind={ind} onClick={() => onSelect(ind)} />)}
+                  {sectionItems.map((ind) => <div key={ind.id}><p className="text-xs mb-2">{ind.lienVTT === section.key ? "Principal" : "Secondaire"} dans ce mode</p><EtendueCard ind={ind} onClick={() => onSelect(ind)} /></div>)}
                 </div>
               )}
             </div>
           </div>
         );
       })}
+      <UnclassifiedIndicatorsSection
+        title="Autres indicateurs"
+        description="Maturité non renseignée ou aucun rattachement aux six modes VTT."
+        items={otherItems}
+        onSelect={onSelect}
+      />
     </div>
   );
 }
@@ -666,25 +825,35 @@ function MatriceView({
   items,
   onCellClick,
   activeCell,
+  onSelect,
 }: {
   items: FicheIndicateur[];
   onCellClick: (vtt: string, m: number) => void;
   activeCell: { vtt: string; m: number } | null;
+  onSelect: (ind: FicheIndicateur) => void;
 }) {
+  const matrixItems = items.filter((ind) => ind.maturite !== null && hasDefinedVtt(ind));
+  const outsideMatrixItems = items.filter((ind) => ind.maturite === null || !hasDefinedVtt(ind));
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full border-collapse" style={{ minWidth: 640 }}>
+    <>
+      <p className="catalog-count-note">Rattachements principaux uniquement. Les liens secondaires sont visibles dans la vue Par VTT.</p>
+      <div className="maturity-matrix-scroll" tabIndex={0} aria-label="Matrice VTT, défilement horizontal si nécessaire">
+        <table className="maturity-matrix">
+        <caption className="sr-only">
+          Indicateurs classés par mode d’action VTT principal proposé et niveau de maturité.
+        </caption>
         <thead>
           <tr>
-            <th className="text-left py-3 pr-4 text-xs font-semibold" style={{ color: "var(--color-text)", opacity: 0.5, width: 180 }}>
+            <th className="maturity-matrix-mode-heading">
               Mode d’action VTT principal proposé
             </th>
             {MATURITES.map((m) => (
-              <th key={m} className="py-3 px-2 text-center" style={{ width: "20%" }}>
-                <div className="flex flex-col items-center gap-1">
-                  <span style={{ width: 13, height: 13, borderRadius: "50%", background: maturiteColor[m], display: "inline-block" }} />
-                  <span className="text-xs font-bold" style={{ color: "var(--color-primary-strong)" }}>Maturité {m}</span>
-                  <span className="text-[11px]" style={{ color: "var(--color-text-muted)" }}>{maturiteLabel[m]}</span>
+              <th key={m} className="maturity-matrix-level-heading">
+                <div className="maturity-matrix-level-label">
+                  <span className="maturity-matrix-level-dot" style={{ background: maturiteColor[m] }} />
+                  <strong>Maturité {m}</strong>
+                  <span>{maturiteLabel[m]}</span>
                 </div>
               </th>
             ))}
@@ -692,61 +861,56 @@ function MatriceView({
         </thead>
         <tbody>
           {vttSections.map((section, si) => {
-            const rowItems = items.filter((i) => i.lienVTT === section.key);
+            const rowItems = matrixItems.filter((i) => i.lienVTT === section.key);
             return (
               <tr
                 key={section.key}
-                style={{
-                  borderTop: `1px solid ${
-                    si === 0 ? "var(--color-border)" : "var(--color-border-subtle)"
-                  }`,
-                }}
+                className="maturity-matrix-row"
+                style={{ borderTopColor: si === 0 ? "var(--color-border)" : "var(--color-border-subtle)" }}
               >
-                <td className="py-4 pr-4 align-top">
-                  <div>
-                    <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 14, color: section.accent, display: "block" }}>
+                <th scope="row" className="maturity-matrix-mode-cell">
+                  <div className="maturity-matrix-mode-label">
+                    <span style={{ color: section.accent }}>
                       {section.label}
                     </span>
-                    <span className="text-[11px]" style={{ color: section.accent }}>
+                    <small style={{ color: section.accent }}>
                       {rowItems.length} indicateur{rowItems.length !== 1 ? "s" : ""}
-                    </span>
+                    </small>
                   </div>
-                </td>
+                </th>
                 {MATURITES.map((m) => {
                   const cellItems = rowItems.filter((i) => i.maturite === m);
                   const isActive = activeCell?.vtt === section.key && activeCell?.m === m;
                   const isEmpty = cellItems.length === 0;
                   return (
-                    <td key={m} className="py-4 px-2 align-top">
+                    <td key={m} className="maturity-matrix-data-cell">
                       <button
                         onClick={() => !isEmpty && onCellClick(section.key, m)}
                         disabled={isEmpty}
-                        className="w-full rounded-xl p-3 text-left transition-all"
-                        style={{
-                          background: isEmpty ? "var(--color-border-faint)" : isActive ? section.bg : "var(--color-surface-translucent)",
-                          border: `1.5px solid ${isEmpty ? "var(--color-border-faint)" : isActive ? section.accent : "var(--color-border)"}`,
-                          cursor: isEmpty ? "default" : "pointer",
-                          minHeight: 64,
-                        }}
+                        aria-pressed={!isEmpty ? isActive : undefined}
+                        aria-label={isEmpty ? `${section.label}, maturité ${m} : aucun indicateur` : `${section.label}, maturité ${m} : ${cellItems.length} indicateur${cellItems.length !== 1 ? "s" : ""}`}
+                        className={`maturity-matrix-cell ${isEmpty ? "is-empty" : "is-filled"} ${isActive ? "is-active" : ""}`}
+                        style={isActive ? { background: section.bg, borderColor: section.accent } : undefined}
                       >
                         {isEmpty ? (
-                          <span className="text-xs" style={{ color: "var(--color-text)", opacity: 0.2 }}>·</span>
+                          <span aria-hidden="true">·</span>
                         ) : (
-                          <>
-                            <div className="flex items-center justify-between mb-2">
-                              <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 22, color: isActive ? section.accent : "var(--color-primary-strong)", lineHeight: 1 }}>
-                                {cellItems.length}
-                              </span>
-                              <span style={{ width: 8, height: 8, borderRadius: "50%", background: maturiteColor[m], display: "inline-block" }} />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                              {cellItems.map((ind) => (
-                                <span key={ind.id} className="text-[11px] leading-snug font-medium" style={{ color: isActive ? section.accent : "var(--color-text)" }}>
-                                  {ind.id} · {ind.nom}
+                          <span className="maturity-matrix-indicators" aria-hidden="true">
+                            {cellItems.map((ind) => {
+                              const pole = poleColors[ind.pole];
+                              return (
+                                <span
+                                  key={ind.id}
+                                  className="maturity-matrix-indicator"
+                                  style={{ borderInlineStartColor: pole.light }}
+                                  title={`${ind.id} · ${ind.nom}`}
+                                >
+                                  <span className="maturity-matrix-indicator-id" style={{ color: pole.accent }}>{ind.id}</span>
+                                  <span className="maturity-matrix-indicator-name">{ind.nom}</span>
                                 </span>
-                              ))}
-                            </div>
-                          </>
+                              );
+                            })}
+                          </span>
                         )}
                       </button>
                     </td>
@@ -756,29 +920,43 @@ function MatriceView({
             );
           })}
         </tbody>
-      </table>
-
-      {/* Totals row */}
-      <div className="flex mt-4 rounded-xl overflow-hidden" style={{ border: "1.5px solid var(--color-border-subtle)" }}>
-        <div className="py-3 pr-4 pl-4 flex items-center shrink-0" style={{ width: 180, background: "var(--color-canvas)", borderRight: "1px solid var(--color-border-subtle)" }}>
-          <span className="text-xs font-semibold" style={{ color: "var(--color-text)", opacity: 0.5 }}>Total</span>
-        </div>
-        {MATURITES.map((m) => {
-          const count = items.filter((i) => i.maturite === m).length;
-          return (
-            <div key={m} className="flex-1 py-3 px-2 text-center" style={{ background: "var(--color-canvas)", borderLeft: "1px solid var(--color-border-subtle)" }}>
-              <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 18, color: count > 0 ? maturiteColor[m] : "var(--color-text)", opacity: count > 0 ? 1 : 0.2 }}>
-                {count}
-              </span>
-            </div>
-          );
-        })}
+        <tfoot>
+          <tr>
+            <th scope="row" className="maturity-matrix-total-label">Total</th>
+            {MATURITES.map((m) => {
+              const count = matrixItems.filter((i) => i.maturite === m).length;
+              return (
+                <td key={m} className="maturity-matrix-total-value">
+                  <span style={{ color: count > 0 ? maturiteColor[m] : "var(--color-text)" }}>
+                    {count}
+                  </span>
+                </td>
+              );
+            })}
+          </tr>
+        </tfoot>
+        </table>
       </div>
-    </div>
+      <UnclassifiedIndicatorsSection
+        title="Indicateurs hors matrice"
+        description="Niveau de maturité ou mode d’action VTT principal non renseigné."
+        items={outsideMatrixItems}
+        onSelect={onSelect}
+      />
+    </>
   );
 }
 
 // ─── Données et politiques publiques ─────────────────────────────────────────
+
+function RelationLinks({ label, targets, onNavigate }: { label: string; targets: (CatalogueTarget & {label: string})[]; onNavigate: (target: CatalogueTarget) => void }) {
+  return <div className="catalog-relations">
+    <span className="text-xs">{label}</span>
+    {targets.length ? targets.map((target) => <button key={target.id} type="button" onClick={() => onNavigate(target)}>
+      {target.id} · {target.label}
+    </button>) : <p className="text-xs">Aucun lien identifié dans le classeur.</p>}
+  </div>;
+}
 
 function RegisterValue({ label, value }: { label: string; value: string }) {
   if (!value) return null;
@@ -790,7 +968,7 @@ function RegisterValue({ label, value }: { label: string; value: string }) {
   );
 }
 
-function DonneesView({ items }: { items: DonneeCatalogue[] }) {
+function DonneesView({ items, focusId, onNavigate }: { items: DonneeCatalogue[]; focusId: string; onNavigate: (target: CatalogueTarget) => void }) {
   return (
     <section aria-labelledby="donnees-title">
       <header className="mb-6 max-w-3xl">
@@ -798,7 +976,7 @@ function DonneesView({ items }: { items: DonneeCatalogue[] }) {
           Catalogue de données
         </h2>
         <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-          Sources recensées pour construire ou alimenter les indicateurs. Ouvrez une ligne pour consulter les déclinaisons territoriales et l’organisation de la collecte.
+          Sources mobilisées par les indicateurs. Ouvrez une ligne pour voir leur disponibilité et l’organisation de la collecte.
         </p>
       </header>
 
@@ -807,7 +985,7 @@ function DonneesView({ items }: { items: DonneeCatalogue[] }) {
           <span>ID</span><span>Donnée</span><span>Pôle</span><span>Fournisseur</span><span>Couverture</span>
         </div>
         {items.map((item) => (
-          <details key={item.id} className="catalog-register-row">
+          <details key={item.id} id={`record-${item.id}`} open={focusId === item.id || undefined} className="catalog-register-row">
             <summary className="catalog-register-summary catalog-register-data">
               <span className="text-xs font-bold tracking-wide" style={{ color: "var(--color-primary)" }}>{item.id}</span>
               <span className="font-semibold" style={{ color: "var(--color-text-strong)" }}>{item.titre}</span>
@@ -818,7 +996,7 @@ function DonneesView({ items }: { items: DonneeCatalogue[] }) {
             <div className="catalog-register-detail">
               <div className="grid gap-5 md:grid-cols-3">
                 <RegisterValue label="Homogénéité" value={item.homogeneite} />
-                <RegisterValue label="Indicateurs concernés" value={item.indicateurs} />
+                <RelationLinks label="Indicateurs concernés" targets={FICHES_INDICATEURS.filter((ind) => linkedData(ind, [item]).length).map((ind) => ({kind: "indicateurs", id: ind.id, label: ind.nom}))} onNavigate={onNavigate} />
                 <RegisterValue label="Fournisseur confirmé" value={item.fournisseurConfirme} />
               </div>
               {item.territoires.length > 0 && (
@@ -852,8 +1030,6 @@ function DonneesView({ items }: { items: DonneeCatalogue[] }) {
                 </div>
               )}
               <div className="grid gap-5 mt-5 md:grid-cols-3">
-                <RegisterValue label="Référent POPGG" value={item.referent} />
-                <RegisterValue label="Responsable de collecte" value={item.responsableCollecte} />
                 <RegisterValue label="Droits de diffusion" value={item.droits} />
                 <RegisterValue label="Procédure d’accès" value={item.procedureAcces} />
                 <RegisterValue label="Calendrier de collecte" value={item.calendrierCollecte} />
@@ -867,7 +1043,7 @@ function DonneesView({ items }: { items: DonneeCatalogue[] }) {
   );
 }
 
-function PolitiquesView({ items }: { items: PolitiquePublique[] }) {
+function PolitiquesView({ items, focusId, onNavigate }: { items: PolitiquePublique[]; focusId: string; onNavigate: (target: CatalogueTarget) => void }) {
   return (
     <section aria-labelledby="politiques-title">
       <header className="mb-6 max-w-3xl">
@@ -875,7 +1051,7 @@ function PolitiquesView({ items }: { items: PolitiquePublique[] }) {
           Registre des politiques publiques
         </h2>
         <p className="mt-1 text-sm leading-relaxed" style={{ color: "var(--color-text-muted)" }}>
-          Objectifs et orientations recensés dans les documents de référence. Ouvrez une ligne pour afficher les liens avec les indicateurs et les modes d’action VTT.
+          Objectifs recensés dans les documents de référence. Ouvrez une ligne pour voir les indicateurs et modes d’action associés.
         </p>
       </header>
 
@@ -884,7 +1060,7 @@ function PolitiquesView({ items }: { items: PolitiquePublique[] }) {
           <span>ID</span><span>Objectif ou orientation</span><span>Document</span><span>Mode d’action VTT</span>
         </div>
         {items.map((item) => (
-          <details key={item.id} className="catalog-register-row">
+          <details key={item.id} id={`record-${item.id}`} open={focusId === item.id || undefined} className="catalog-register-row">
             <summary className="catalog-register-summary catalog-register-policy">
               <span className="text-xs font-bold tracking-wide" style={{ color: "var(--color-primary)" }}>{item.id}</span>
               <span className="font-semibold catalog-register-description" style={{ color: "var(--color-text-strong)" }}>{item.details || item.theme}</span>
@@ -894,7 +1070,7 @@ function PolitiquesView({ items }: { items: PolitiquePublique[] }) {
             <div className="catalog-register-detail grid gap-5 md:grid-cols-2">
               <RegisterValue label="Thème" value={item.theme} />
               <RegisterValue label="Sous-thème" value={item.sousTheme} />
-              <RegisterValue label="Indicateurs associés" value={item.indicateurs} />
+              <RelationLinks label="Indicateurs associés" targets={FICHES_INDICATEURS.filter((ind) => linkedPolicies(ind, [item]).length).map((ind) => ({kind: "indicateurs", id: ind.id, label: ind.nom}))} onNavigate={onNavigate} />
               <RegisterValue label="Liste de priorisation" value={item.listePriorisation} />
               <RegisterValue label="Lien avec la Charte de transition" value={item.lienCharteTransition} />
             </div>
@@ -911,13 +1087,14 @@ function PresentationToggle({ value, onChange }: { value: Presentation; onChange
   const options = [
     { id: "mini", label: "Mini", icon: List },
     { id: "etendue", label: "Étendue", icon: Grid2X2 },
-    { id: "graphe", label: "Graphe", icon: Network },
+
   ] as const;
 
   return (
     <div
-      className="flex rounded-full p-0.5"
-      style={{ background: "var(--color-border-subtle)", border: "1px solid var(--color-border-subtle)" }}
+      className="catalog-density-switch"
+      role="group"
+      aria-label="Densité des fiches"
     >
       {options.map(({ id, label, icon: Icon }) => (
         <button
@@ -925,11 +1102,8 @@ function PresentationToggle({ value, onChange }: { value: Presentation; onChange
           type="button"
           onClick={() => onChange(id)}
           aria-pressed={value === id}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-all"
-          style={{
-            background: value === id ? "var(--color-primary)" : "transparent",
-            color: value === id ? "var(--color-surface)" : "var(--color-text)",
-          }}
+          className="catalog-density-option"
+          data-active={value === id || undefined}
           title={`Vue ${label.toLowerCase()}`}
         >
           <Icon aria-hidden="true" size={13} strokeWidth={1.8} />
@@ -953,6 +1127,31 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   const [registerSearch, setRegisterSearch] = useState("");
   const [selected, setSelected] = useState<FicheIndicateur | null>(null);
   const [activeMatrixCell, setActiveMatrixCell] = useState<{ vtt: string; m: number } | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const [focusRecord, setFocusRecord] = useState("");
+  const [trail, setTrail] = useState<{section: CatalogueSection; query: string; record: string; indicator: FicheIndicateur | null; scroll: number}[]>([]);
+  function navigate(target: CatalogueTarget) {
+    setTrail((entries) => [...entries, {section: catalogueSection, query: registerSearch, record: focusRecord, indicator: selected, scroll: window.scrollY}]);
+    if (target.kind === "indicateurs") {
+      setSelected(FICHES_INDICATEURS.find((ind) => ind.id === target.id) ?? null);
+    } else {
+      setSelected(null); setCatalogueSection(target.kind); setRegisterSearch(target.id); setFocusRecord(target.id);
+    }
+  }
+  function returnToContext() {
+    const previous = trail[trail.length - 1];
+    if (!previous) {setSelected(null); return;}
+    setCatalogueSection(previous.section); setRegisterSearch(previous.query); setFocusRecord(previous.record); setSelected(previous.indicator);
+    setTrail((entries) => entries.slice(0, -1));
+    requestAnimationFrame(() => window.scrollTo({top: previous.scroll, behavior: "instant"}));
+  }
+  useEffect(() => {
+    if (focusRecord) document.getElementById(`record-${focusRecord}`)?.querySelector("summary")?.focus();
+  }, [focusRecord, catalogueSection]);
+  function resetFilters() {
+    setSearch(""); setFilterPole("Tous"); setFilterListes(DEFAULT_LISTES); setFilterMaturite("Tous"); setActiveMatrixCell(null);
+  }
 
   const baseFiltered = useMemo(() => {
     return FICHES_INDICATEURS.filter((ind) => {
@@ -962,7 +1161,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
       if (typeof filterMaturite === "number" && ind.maturite !== filterMaturite) return false;
       if (search) {
         const q = search.toLowerCase();
-        const haystack = [ind.nom, ind.id, ind.definition, ind.lienVTT, ind.lienVTTSecondaire, ind.sousTheme, ind.documentPolitique1].filter(Boolean).join(" ").toLowerCase();
+        const haystack = [ind.nom, ind.id, ind.definition, ...vttKeys(ind), ind.sousTheme, ind.documentPolitique1].filter(Boolean).join(" ").toLowerCase();
         if (!haystack.includes(q)) return false;
       }
       return true;
@@ -972,6 +1171,8 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   const filteredDonnees = useMemo(() => {
     const q = registerSearch.trim().toLowerCase();
     if (!q) return donneesCatalogue;
+    const exact = donneesCatalogue.find((item) => item.id.toLowerCase() === q);
+    if (exact) return [exact];
     return donneesCatalogue.filter((item) =>
       [item.id, item.titre, item.pole, item.fournisseurs, item.indicateurs, item.couverture]
         .join(" ")
@@ -983,6 +1184,8 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   const filteredPolitiques = useMemo(() => {
     const q = registerSearch.trim().toLowerCase();
     if (!q) return politiquesPubliques;
+    const exact = politiquesPubliques.find((item) => item.id.toLowerCase() === q);
+    if (exact) return [exact];
     return politiquesPubliques.filter((item) =>
       [item.id, item.document, item.theme, item.sousTheme, item.details, item.indicateurs, item.lienVTT]
         .join(" ")
@@ -1004,7 +1207,10 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   }));
   const allListesSelected = filterListes.length === LISTES.length;
   const hasUnratedIndicators = filterListes.some((liste) => liste === "L3" || liste === "L4");
-  const cardDensity: CardDensity = presentation === "graphe" ? "mini" : presentation;
+  const usesDefaultListes = filterListes.length === DEFAULT_LISTES.length && DEFAULT_LISTES.every((liste) => filterListes.includes(liste));
+  const activeFilterCount = Number(filterPole !== "Tous") + Number(!usesDefaultListes) + Number(filterMaturite !== "Tous");
+  const hasActiveFilters = activeFilterCount > 0 || search.length > 0;
+  const cardDensity: CardDensity = presentation;
 
   const toggleListe = (liste: Liste) => {
     setFilterListes((current) =>
@@ -1022,6 +1228,11 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
       icon: <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/><rect x="7.5" y="0.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/><rect x="0.5" y="7.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/><rect x="7.5" y="7.5" width="5" height="5" rx="1" stroke="currentColor" strokeWidth="1.4"/></svg>,
     },
     {
+      id: "colonnes",
+      label: "Colonnes",
+      icon: <Columns3 aria-hidden="true" size={13} strokeWidth={1.8} />,
+    },
+    {
       id: "vtt",
       label: "Par VTT",
       icon: <svg width="12" height="12" viewBox="0 0 13 13" fill="none"><rect x="0.5" y="0.5" width="12" height="3" rx="1" stroke="currentColor" strokeWidth="1.4"/><rect x="0.5" y="5" width="12" height="3" rx="1" stroke="currentColor" strokeWidth="1.4"/><rect x="0.5" y="9.5" width="12" height="3" rx="1" stroke="currentColor" strokeWidth="1.4"/></svg>,
@@ -1034,17 +1245,17 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
   ];
 
   return (
-    <div className="min-h-full" style={{ background: "var(--color-canvas)", fontFamily: "'Public Sans', sans-serif" }}>
+    <main className="min-h-full" style={{ background: "var(--color-canvas)", fontFamily: "'Public Sans', sans-serif" }}>
 
       {/* Sidebar */}
-      {selected && <Sidebar ind={selected} onClose={() => setSelected(null)} />}
+      {selected && <Sidebar key={selected.id} ind={selected} onClose={returnToContext} onNavigate={navigate} />}
 
       {/* Page header */}
-      <div style={{ background: "var(--color-primary-soft-strong)", borderBottom: "1px solid var(--color-border)" }}>
-        <div className="max-w-6xl mx-auto px-6 py-10">
+      <div className="catalog-page-header" style={{ background: "var(--color-primary-soft-strong)", borderBottom: "1px solid var(--color-border)" }}>
+        <div className="catalog-page-header-inner max-w-6xl mx-auto">
           <button
             onClick={onBack}
-            className="page-back flex items-center gap-2 text-xs font-semibold mb-6 transition-opacity hover:opacity-70"
+            className="page-back flex items-center gap-2 text-xs font-semibold mb-3 transition-opacity hover:opacity-70"
             style={{ color: "var(--color-primary)" }}
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -1057,7 +1268,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
             style={{
               fontFamily: "'Newsreader', serif",
               fontWeight: 700,
-              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontSize: "clamp(2rem, 4vw, 2.75rem)",
               color: "var(--color-text-strong)",
               lineHeight: 1.1,
               letterSpacing: "-0.02em",
@@ -1065,32 +1276,33 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
           >
             Fiches indicateurs
           </h1>
-          <p className="mt-2 text-sm" style={{ color: "var(--color-text)", maxWidth: 520 }}>
-            {FICHES_INDICATEURS.length} indicateurs documentés. Les {indicateurs.length} indicateurs L1 et L2 sont affichés par défaut ; les listes L3 et L4 peuvent être ajoutées à la sélection.
+          <p className="catalog-page-lead mt-2" style={{ color: "var(--color-text)" }}>
+            {FICHES_INDICATEURS.length} fiches · classeur du {catalogueMetadata.sourceDate}. Les listes L1/L2 sont affichées par défaut.
           </p>
-          <p className="mt-3 text-xs leading-relaxed" style={{ color: "var(--color-text-muted)", maxWidth: 720 }}>
-            Le catalogue donne aussi accès aux données nécessaires à la production des indicateurs et au registre des politiques publiques. Les champs non renseignés dans le classeur source restent explicitement signalés.
-          </p>
+          <details className="catalog-reference-summary"><summary>Repères du portefeuille</summary>
 
           {/* Three orientation figures only; VTT detail belongs in the dedicated views. */}
-          <div className="flex gap-8 mt-7 flex-wrap items-end" style={{ borderTop: "1px solid var(--color-border)", paddingTop: 20 }}>
+          <div className="catalog-summary-stats">
             {[
-              { label: "fiches disponibles", value: FICHES_INDICATEURS.length },
-              ...statsMaturite,
+              { label: "indicateurs L1 + L2", value: indicateurs.length },
               { label: "L3/L4 · maturité non renseignée", value: indicateursComplementaires.length },
+              ...statsMaturite,
             ].map((s) => (
-              <div key={s.label} className="flex items-baseline gap-2">
-                <span style={{ fontFamily: "'Newsreader', serif", fontWeight: 700, fontSize: 28, color: "var(--color-primary-strong)", lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>
+              <div key={s.label} className="catalog-summary-stat">
+                <span className="catalog-summary-value">
                   {s.value}
                 </span>
-                <span className="text-xs" style={{ color: "var(--color-text-muted)", maxWidth: 150 }}>{s.label}</span>
+                <span className="catalog-summary-label">{s.label}</span>
               </div>
             ))}
           </div>
+          <p className="text-xs">Totaux avant filtrage. La maturité porte sur la production des indicateurs, pas sur les résultats des politiques.</p>
+          </details>
         </div>
       </div>
 
-      <nav aria-label="Contenu du catalogue" style={{ background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
+      {trail.length > 0 && <div className="catalog-context-back"><button onClick={returnToContext}>Retour au contexte précédent</button><span>Les filtres de consultation sont conservés.</span></div>}
+      <nav className="catalog-section-nav" aria-label="Contenu du catalogue" style={{ background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
         <div className="catalog-section-tabs max-w-6xl mx-auto px-6">
           {([
             { id: "indicateurs", label: "Indicateurs", count: FICHES_INDICATEURS.length, icon: FileText },
@@ -1104,7 +1316,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
               onClick={() => {
                 setCatalogueSection(id);
                 setSelected(null);
-                setRegisterSearch("");
+                setRegisterSearch(""); setFocusRecord(""); setTrail([]);
               }}
               className="catalog-section-tab"
               style={{ color: catalogueSection === id ? "var(--color-primary-strong)" : "var(--color-text-muted)" }}
@@ -1119,25 +1331,23 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
 
       {/* Toolbar */}
       {catalogueSection === "indicateurs" ? (
-      <div className="catalog-toolbar sticky top-0 z-40" style={{ background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)", boxShadow: "var(--shadow-sm)" }}>
-        <div className="max-w-6xl mx-auto px-6 py-3 flex flex-wrap gap-3 items-center">
-
-          {/* View toggle */}
-          <div className="flex rounded-full p-0.5 shrink-0" style={{ background: "var(--color-border-subtle)", border: "1px solid var(--color-border-subtle)" }}>
+      <div className="catalog-toolbar sticky top-0 z-40" style={{ background: "var(--color-surface)", borderBottom: "1px solid var(--color-border)" }}>
+        <div className="catalog-commandbar max-w-6xl mx-auto px-6">
+          <div className="catalog-commandbar-main">
+          <div className="catalog-view-switch" role="group" aria-label="Vue du catalogue">
             {viewButtons.map((v) => (
               <button
+                type="button"
                 key={v.id}
                 onClick={() => {
                   setViewMode(v.id);
                   setActiveMatrixCell(null);
-                  if (v.id === "grille" && presentation === "graphe") setPresentation("mini");
+                  if (v.id === "matrice") setFilterMaturite("Tous");
+
                 }}
                 aria-pressed={viewMode === v.id}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
-                style={{
-                  background: viewMode === v.id ? "var(--color-primary)" : "transparent",
-                  color: viewMode === v.id ? "var(--color-surface)" : "var(--color-text)",
-                }}
+                className="catalog-view-option"
+                data-active={viewMode === v.id || undefined}
               >
                 {v.icon}
                 {v.label}
@@ -1145,59 +1355,79 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
             ))}
           </div>
 
-          {/* Card density and graph presentation · only in grille and vtt modes */}
-          {viewMode !== "matrice" && (
-            <PresentationToggle
-              value={presentation}
-              onChange={(next) => {
-                setPresentation(next);
-                if (next === "graphe") {
-                  setViewMode("vtt");
-                  setActiveMatrixCell(null);
-                }
-              }}
-            />
-          )}
+          {(viewMode === "grille" || viewMode === "vtt") && <div className="catalog-density"><span>Affichage</span><PresentationToggle value={presentation} onChange={setPresentation} /></div>}
 
-          {/* Search */}
-          <div className="relative min-w-40 max-w-56 flex-1">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2" width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <circle cx="5.5" cy="5.5" r="4" stroke="var(--color-text)" strokeWidth="1.3" opacity="0.4"/>
-              <path d="M9 9l2.5 2.5" stroke="var(--color-text)" strokeWidth="1.3" strokeLinecap="round" opacity="0.4"/>
-            </svg>
+          <div className="catalog-search">
+            <Search aria-hidden="true" size={15} strokeWidth={1.8} />
             <input
-              type="text"
-              placeholder="Rechercher…"
+              type="search"
+              placeholder="Rechercher un indicateur"
+              aria-label="Rechercher un indicateur"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-full outline-none"
-              style={{ background: "var(--color-surface)", border: "1.5px solid var(--color-border)", color: "var(--color-primary-strong)", fontFamily: "'Public Sans', sans-serif" }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") setSearch("");
+              }}
             />
+            {search && (
+              <button type="button" onClick={() => setSearch("")} aria-label="Effacer la recherche" className="catalog-search-clear">
+                <X aria-hidden="true" size={14} />
+              </button>
+            )}
           </div>
 
-          {/* Filters */}
-          <div className="flex flex-wrap gap-1.5 items-center">
-            <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-muted)" }}>Pôle</span>
+          <button
+            type="button"
+            className="catalog-filter-toggle"
+            aria-expanded={filtersOpen}
+            aria-controls="indicator-filters"
+            onClick={() => setFiltersOpen((open) => !open)}
+          >
+            <SlidersHorizontal aria-hidden="true" size={15} />
+            Filtres
+            {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
+          </button>
+
+          <output className="catalog-result-count" aria-live="polite">
+            {baseFiltered.length} résultat{baseFiltered.length !== 1 ? "s" : ""}
+          </output>
+          </div>
+
+          <div id="indicator-filters" className={`catalog-filter-panel${filtersOpen ? " is-open" : ""}`}>
+          <fieldset className="catalog-filter-group">
+            <legend>Pôle thématique</legend>
+            <div className="catalog-filter-options">
             <FilterChip active={filterPole === "Tous"} onClick={() => setFilterPole("Tous")}>Tous</FilterChip>
             {POLES.map((p) => (
-              <FilterChip key={p} active={filterPole === p} onClick={() => setFilterPole(p)} color={poleColors[p].accent}>{p}</FilterChip>
+              <FilterChip
+                key={p}
+                active={filterPole === p}
+                onClick={() => setFilterPole(p)}
+                color={poleColors[p].accent}
+              >
+                {p}
+              </FilterChip>
             ))}
-          </div>
+            </div>
+          </fieldset>
 
-          <div className="flex flex-wrap gap-1.5 items-center">
-            <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-muted)" }}>Liste</span>
+          <fieldset className="catalog-filter-group catalog-filter-group-listes">
+            <legend>Liste de travail</legend>
+            <div className="catalog-filter-options">
             <FilterChip active={allListesSelected} onClick={() => setFilterListes(LISTES)}>Tous</FilterChip>
             {LISTES.map((l) => (
               <FilterChip key={l} active={filterListes.includes(l)} onClick={() => toggleListe(l)} color={LISTE_COLORS[l]}>{l}</FilterChip>
             ))}
-          </div>
+            </div>
+          </fieldset>
 
           {viewMode !== "matrice" && (
-            <div className="flex flex-wrap gap-1.5 items-center">
-              <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: "var(--color-text-muted)" }}>Maturité provisoire</span>
+            <fieldset className="catalog-filter-group catalog-filter-group-maturity">
+              <legend>Maturité provisoire</legend>
+              <div className="catalog-filter-options">
               <FilterChip active={filterMaturite === "Tous"} onClick={() => setFilterMaturite("Tous")}>Tous</FilterChip>
               {MATURITES.map((m) => (
-                <FilterChip key={m} active={filterMaturite === m} onClick={() => setFilterMaturite(filterMaturite === m ? "Tous" : m)} color={maturiteColor[m]}>{m}</FilterChip>
+                <FilterChip key={m} active={filterMaturite === m} onClick={() => setFilterMaturite(filterMaturite === m ? "Tous" : m)} color={maturiteColor[m]}>{m} · {maturiteLabel[m]}</FilterChip>
               ))}
               {hasUnratedIndicators && (
                 <FilterChip
@@ -1208,13 +1438,16 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
                   Non renseignée
                 </FilterChip>
               )}
-            </div>
+              </div>
+            </fieldset>
           )}
-
-          <span className="text-xs ml-auto shrink-0" style={{ color: "var(--color-text-muted)" }}>
-            {baseFiltered.length} résultat{baseFiltered.length !== 1 ? "s" : ""}
-          </span>
+          </div>
         </div>
+
+        {hasActiveFilters && <div className="catalog-filter-summary" role="status">
+          <span>{baseFiltered.length} indicateurs uniques · {filterPole === "Tous" ? "Tous les pôles" : filterPole} · {filterListes.length ? filterListes.join(" + ") : "Aucune liste"} · {filterMaturite === "Tous" ? "Toutes maturités" : typeof filterMaturite === "number" ? maturiteLabel[filterMaturite] : filterMaturite}{search && ` · « ${search} »`}</span>
+          <button onClick={resetFilters}>Réinitialiser les filtres (L1/L2)</button>
+        </div>}
 
         {/* Matrix active cell pill */}
         {viewMode === "matrice" && activeMatrixCell && (
@@ -1251,6 +1484,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
               <input
                 type="search"
                 placeholder={catalogueSection === "donnees" ? "Rechercher une donnée, un fournisseur ou un indicateur…" : "Rechercher un objectif, un document ou un indicateur…"}
+                aria-label="Rechercher dans le registre"
                 value={registerSearch}
                 onChange={(event) => setRegisterSearch(event.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-sm rounded-full outline-none"
@@ -1265,7 +1499,8 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
       )}
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="catalog-content max-w-6xl mx-auto">
+        {catalogueSection === "indicateurs" && <h2 className="sr-only">Catalogue des indicateurs</h2>}
         {/* Grille */}
         {catalogueSection === "indicateurs" && viewMode === "grille" && (
           baseFiltered.length === 0 ? (
@@ -1288,20 +1523,12 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
           )
         )}
 
-        {/* VTT */}
-        {catalogueSection === "indicateurs" && viewMode === "vtt" && (
-          presentation === "graphe" ? (
-            <IndicatorGraphView items={baseFiltered} onSelect={setSelected} />
-          ) : (
-            <VTTView
-              items={baseFiltered}
-              density={cardDensity}
-              filterMaturite={filterMaturite}
-              onMaturiteClick={(m) => setFilterMaturite(m)}
-              onSelect={setSelected}
-            />
-          )
+        {/* Colonnes */}
+        {catalogueSection === "indicateurs" && viewMode === "colonnes" && (
+          <ColumnsView items={baseFiltered} onSelect={setSelected} />
         )}
+
+        {catalogueSection === "indicateurs" && viewMode === "vtt" && <VTTView items={baseFiltered} density={cardDensity} filterMaturite={filterMaturite} onMaturiteClick={setFilterMaturite} onSelect={setSelected} />}
 
         {/* Matrice */}
         {catalogueSection === "indicateurs" && viewMode === "matrice" && (
@@ -1310,6 +1537,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
               items={baseFiltered}
               onCellClick={(vtt, m) => setActiveMatrixCell((p) => p?.vtt === vtt && p?.m === m ? null : { vtt, m })}
               activeCell={activeMatrixCell}
+              onSelect={setSelected}
             />
 
             {activeMatrixCell && matrixFiltered.length > 0 && (
@@ -1334,7 +1562,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
 
         {catalogueSection === "donnees" && (
           filteredDonnees.length > 0 ? (
-            <DonneesView items={filteredDonnees} />
+            <DonneesView items={filteredDonnees} focusId={focusRecord} onNavigate={navigate} />
           ) : (
             <div className="text-center py-20" style={{ color: "var(--color-text-muted)" }}>
               <p style={{ fontFamily: "'Newsreader', serif", fontSize: 22, fontWeight: 700 }}>Aucune donnée trouvée</p>
@@ -1345,7 +1573,7 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
 
         {catalogueSection === "politiques" && (
           filteredPolitiques.length > 0 ? (
-            <PolitiquesView items={filteredPolitiques} />
+            <PolitiquesView items={filteredPolitiques} focusId={focusRecord} onNavigate={navigate} />
           ) : (
             <div className="text-center py-20" style={{ color: "var(--color-text-muted)" }}>
               <p style={{ fontFamily: "'Newsreader', serif", fontSize: 22, fontWeight: 700 }}>Aucune politique publique trouvée</p>
@@ -1355,8 +1583,10 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
         )}
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-        <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>Source : Classeurs indicateur POPGG · mise à jour du 7 septembre 2026</span>
+      <div className="catalog-footer max-w-6xl mx-auto flex items-center justify-between">
+        <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+          Source : {catalogueMetadata.sourceFile} · mise à jour du {catalogueMetadata.sourceDate}
+        </span>
         <button onClick={onBack} className="flex items-center gap-1 text-xs font-semibold hover:opacity-70 transition-opacity" style={{ color: "var(--color-primary)" }}>
           <svg aria-hidden="true" width="13" height="13" viewBox="0 0 16 16" fill="none">
             <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -1364,6 +1594,6 @@ export default function IndicateursPage({ onBack }: { onBack: () => void }) {
           Retour à l'accueil
         </button>
       </div>
-    </div>
+    </main>
   );
 }
